@@ -1,0 +1,17 @@
+>>> data/class/<class_code>/student.txt
+
+- First line is the number of student's information blocks.
+
+- Each block will be like this:
+Student ID
+Fullname
+DoB
+Class
+
+- The first line and each blocks will be seperated by a single line.
+
+>>> data/class/class.txt
+
+- First line is the number of classes.
+
+- Each line is a class code.
