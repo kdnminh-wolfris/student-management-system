@@ -1,8 +1,3 @@
->>> data/config.txt
-
-- First line is the login status // 0: out; 1: in
-- If first line = 1, second line is the username. Otherwise ignore second line.
-
 >>> data/class/class.txt
 
 - First line is the number of classes.
@@ -18,5 +13,34 @@ Student ID
 Fullname
 DoB
 Class
+
+- The first line and each blocks will be seperated by a single line.
+
+>>> data/config.txt
+
+Login status // 0: out; 1: in
+UserID // ignore this line if login status = 0
+Position // 0: Staff; 1: Lecturer; 2: Student
+
+>>> data/account.txt
+
+- First line is the number of information blocks.
+
+- Each block will be like this:
+UserID
+Password
+Position // 0: Staff; 1: Lecturer; 2: Student
+
+- The first line and each blocks will be seperated by a single line.
+
+>>> data/academic_staff.txt
+
+- First line is the number of information blocks.
+
+- Each block will be like this:
+UserID
+Fullname
+DoB // yyyy mm dd
+Sex // 0: Female; 1: Male
 
 - The first line and each blocks will be seperated by a single line.
