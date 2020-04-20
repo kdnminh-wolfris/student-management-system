@@ -137,3 +137,4 @@ bool get_info(User& _user) {
 	fi.close();
 	return false;
 }
+
