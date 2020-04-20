@@ -1,29 +1,21 @@
 #include "function.h"
 
-bool login(User& _user) {
-	ifstream fi;
-	fi.open("data/config.txt");
-	if (!fi.is_open()) {
-		cout << "Error: Missing config.txt file\n" << endl;
-		return false;
-	}
+bool login(User& user) {
+	Config config;
+	load_config(config);
 
-	int logged_in = 0;
-	fi >> logged_in;
-	fi.ignore();
-
-	if (logged_in) {
-		getline(fi, _user.ID);
-		fi >> _user.position;
+	if (config.login_status) {
+		user.ID = config.curID;
+		user.position = config.curPosition;
 	}
 	else {
 		string pw;
 		do {
 			cout << "User ID: ";
-			cin >> _user.ID;
+			cin >> user.ID;
 			cout << "Password: ";
 			cin >> pw;
-			int err = verified(_user, pw);
+			int err = verified(user, pw);
 			if (err == 1)
 				cout << "Incorrect ID or password.\n" << endl;
 			else if (err == 2) return false;
@@ -33,21 +25,19 @@ bool login(User& _user) {
 		cout << "Sucessfully login!\n" << endl;
 	}
 
-	fi.close();
+	bool err = get_info(user); // true: no error / false: error
 
-	bool err = get_info(_user); // true: no error / false: error
-
-	if (err && !logged_in) {
-		ofstream fo;
-		fo.open("data/config.txt");
-		fo << "1\n" << _user.ID << "\n" << _user.position;
-		fo.close();
+	if (err && !config.login_status && config.keep_login) {
+		config.login_status = 1;
+		config.curID = user.ID;
+		config.curPosition = user.position;
+		update_config(config);
 	}
-
+	
 	return err;
 }
 
-int verified(User& _user, string& pw) {
+int verified(User& user, string& pw) {
 	ifstream fi;
 	fi.open("data/account.txt");
 	if (!fi.is_open()) {
@@ -65,8 +55,8 @@ int verified(User& _user, string& pw) {
 		getline(fi, tmp_ID);
 		getline(fi, tmp_pw);
 
-		if (tmp_ID == _user.ID && tmp_pw == pw) {
-			fi >> _user.position;
+		if (tmp_ID == user.ID && tmp_pw == pw) {
+			fi >> user.position;
 
 			fi.close();
 			return 0;
@@ -79,9 +69,9 @@ int verified(User& _user, string& pw) {
 	return 1;
 }
 
-bool get_info(User& _user) {
+bool get_info(User& user) {
 	ifstream fi;
-	switch (_user.position) {
+	switch (user.position) {
 	case 0: {
 		fi.open("data/academic_staff.txt");
 		if (!fi.is_open()) {
@@ -98,14 +88,14 @@ bool get_info(User& _user) {
 			fi.ignore(100, '\n');
 			getline(fi, tmpID);
 
-			if (tmpID == _user.ID) {
-				getline(fi, _user.fullname);
+			if (tmpID == user.ID) {
+				getline(fi, user.fullname);
 
-				fi >> _user.DoB.year;
-				fi >> _user.DoB.month;
-				fi >> _user.DoB.day;
+				fi >> user.DoB.year;
+				fi >> user.DoB.month;
+				fi >> user.DoB.day;
 
-				fi >> _user.sex;
+				fi >> user.sex;
 
 				fi.close();
 				return true;
@@ -148,7 +138,7 @@ bool get_info(User& _user) {
 	return false;
 }
 
-void menu(User& _user) {
+void menu(User& user) {
 	/*
 		View profile
 		Functions
@@ -157,7 +147,7 @@ void menu(User& _user) {
 	*/
 
 	cout << "[ 0 ] Profile\n";
-	int numberFunction = menuFunction(_user.position);
+	int numberFunction = menuFunction(user.position);
 	cout << "[ " << numberFunction + 1 << " ] Change password\n";
 	cout << "[ " << numberFunction + 2 << " ] Logout\n";
 
@@ -170,7 +160,7 @@ void menu(User& _user) {
 			fo.close();
 			return;
 		}
-		else return menu(_user);
+		else return menu(user);
 	}
 }
 

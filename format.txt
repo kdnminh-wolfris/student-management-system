@@ -21,6 +21,7 @@ Class
 Login status // 0: out; 1: in
 UserID // ignore this line if login status = 0
 Position // 0: Staff; 1: Lecturer; 2: Student
+Keep login // 0: no; 1: yes
 
 >>> data/account.txt
 
