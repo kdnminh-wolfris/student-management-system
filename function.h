@@ -21,27 +21,12 @@ struct User {
 	} DoB;
 	int sex; // 0: Female; 1: Male
 };
-struct date{
-    int year, month,day;
-};
-
-struct student{
-    string ID;
-    string password;
-    string fullname;
-    date DoB;
-    string Class;
-    int status;
-};
 
 // administration
 bool login(User& _user);
 int verified(User& _user, string& pw);
 bool get_info(User& _user);
 
-bool edit_a_student(ifstream &fi, ofstream &fo);
-void read_a_class(ifstream &fi, student editing_class[], int &numberStudent,int class_num);
-void rewrite_a_class(ofstream &fo,student editing_class[],int &numberStudent,int class_num);
 // tools
 int choose_option(int high = 9); // using getch() for one-click choosing
 
