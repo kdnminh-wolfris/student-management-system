@@ -28,6 +28,18 @@ struct User {
 	} DoB;
 	int sex = -1; // 0: Female; 1: Male
 };
+struct date{
+    int year, month,day;
+};
+
+struct student{
+    string ID;
+    string password;
+    string fullname;
+    date DoB;
+    string Class;
+    int status;
+};
 
 // administration
 bool login(User& user); // (1/3) Staff done
@@ -35,6 +47,11 @@ int verified(User& user, string& pw);
 bool get_info(User& user);
 void menu(User& user);
 int menuFunction(int user_position);
+//academic staff-class
+bool edit_a_student(ifstream &fi, ofstream &fo);
+void read_a_class(ifstream &fi, student editing_class[], int &numberStudent,int class_num);
+void rewrite_a_class(ofstream &fo,student editing_class[],int &numberStudent,int class_num);
+
 
 // tools
 bool load_config(Config& config);
