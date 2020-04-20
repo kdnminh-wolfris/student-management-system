@@ -1,3 +1,14 @@
+>>> data/config.txt
+
+- First line is the login status // 0: out; 1: in
+- If first line = 1, second line is the username. Otherwise ignore second line.
+
+>>> data/class/class.txt
+
+- First line is the number of classes.
+
+- Each line is a class code.
+
 >>> data/class/<class_code>/student.txt
 
 - First line is the number of student's information blocks.
@@ -9,9 +20,3 @@ DoB
 Class
 
 - The first line and each blocks will be seperated by a single line.
-
->>> data/class/class.txt
-
-- First line is the number of classes.
-
-- Each line is a class code.
