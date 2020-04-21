@@ -11,7 +11,10 @@
 #include <string>
 
 using namespace std;
-
+struct node{
+	Student student;
+	node*next,*prev;
+};
 struct Config {
 	int login_status = 0;
 	string curID;

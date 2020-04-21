@@ -1,7 +1,31 @@
 
 
 #include "function.h"
-
+void read_a_class(ifstream &in,ofstream &out,node*pHead,int choice)
+{
+    //list of choice:
+    //0:19APCS1
+    switch (choice)
+    {
+        case 0:{
+            in.open("19APCS1-Student.csv");
+            if(!in) cout<<"There is an error trying to open 19APCS1-Student.csv"<<endl;
+            else
+            {
+                for (int i=0;i<5;++i)
+                {
+                    in.ignore(1000,','||'\n');
+                }
+                while (!in.eof())
+                {
+                    in.ignore(100,',');
+                    
+                }
+            }
+                
+        }
+    }
+}
 bool edit_a_student(ifstream &fi, ofstream &fo){
     fi.open("data/Class.txt");
     if (!fi) {
