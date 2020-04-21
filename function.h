@@ -87,5 +87,7 @@ int int_option(int numberChoice = 10); // using getch() for one-click choosing
 bool bool_option(string operation); // using getch() for one-click choosing
 bool load_account(int& numberAccount, nodeAccount*& listAccount);
 void update_account(int numberAccount, nodeAccount* listAccount);
+void view_class_list();
+void view_list_of_student_in_class(string class_code); //Take the code of the class and print out the students in that class
 
 #endif FUNC_H

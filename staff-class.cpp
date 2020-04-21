@@ -351,3 +351,64 @@ void deleteNodeClass(nodeClass *&pHead){
 }
 
 
+void view_class_list()
+{
+    ifstream in;
+    in.open("data/class/class.gulu");
+    if(!in.is_open())
+    {
+        cout << "Cannot open file\n";
+        return;
+    }
+    int x; in>>x;
+    cout << "There are " << x << " classes: \n";
+    string class_code;
+    for(int i=0; i<x; i++)
+    {
+        in>>class_code;
+        cout << class_code << '\n';
+    }
+    in.close();
+}
+
+void view_list_of_student_in_class(string class_code) //Take the code of the class and print out the students in that class
+{
+    ifstream fi;
+    fi.open("data/class/class.gulu");
+    if(!fi.is_open())
+    {
+        cout << "Cannot open file\n";
+        return;
+    }
+    int x; fi>>x;
+    bool flag = false;
+    for(int i=0; i<x; i++)
+    {
+        string class_code0;
+        fi>>class_code0;
+        if(class_code0==class_code) flag = true;
+    }
+    fi.close();
+    if(!flag)
+    {
+        cout << "The class you enter does not exist\n";
+        return;
+    }
+    string link = "data/class/"+class_code+"/student.gulu";
+    fi.open(link);
+    if(!fi.is_open())
+    {
+        cout << "Cannot open file\n";
+        return;
+    }
+    fi>>x;
+    cout << "This is the information in class\n";
+    cout << "There are "<<x<<" students in this class\n";
+    while(!fi.eof())
+    {
+        string info;
+        getline(fi, info, '\n');
+        cout << info << '\n';
+    }
+    fi.close();
+}
