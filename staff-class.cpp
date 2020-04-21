@@ -27,7 +27,13 @@ void import_student_from_csv(node*pHead)
                     in.ignore(100,',');
                     in>>cur->student.general.ID;
                     in.ignore(100,',');
-                    in.getline(cur->student.general.fullname,100);
+                    getline(in,cur->student.general.fullname);
+                    in.ignore(100,',');
+                    in>>cur->student.general.sex;
+                    cur->student.general.position=2;
+                    in>>cur->student.general.DoB.year;
+                    in>>cur->student.general.DoB.month;
+                    in>>cur->student.general.DoB.day;
                 }
             }
                 
