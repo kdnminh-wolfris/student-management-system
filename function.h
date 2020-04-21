@@ -19,26 +19,21 @@ struct Config {
 	int keep_login = 1;
 };
 
+struct Date {
+	int year = -1, month = -1, day = -1;
+};
 struct User {
 	string ID;
 	int position = -1; // 0: Staff; 1: Lecturer; 2: Student
 	string fullname;
-	struct Date {
-		int year = -1, month = -1, day = -1;
-	} DoB;
+	Date DoB;
 	int sex = -1; // 0: Female; 1: Male
 };
-struct date{
-    int year, month,day;
-};
 
-struct student{
-    string ID;
-    string password;
-    string fullname;
-    date DoB;
-    string Class;
-    int status;
+struct Student {
+	User general;
+	string class_;
+	int status; // 0: graduted; 1: studying; 2: reserved
 };
 
 // administration
@@ -47,10 +42,11 @@ int verified(User& user, string& pw);
 bool get_info(User& user);
 void menu(User& user);
 int menuFunction(int user_position);
+
 //academic staff-class
-bool edit_a_student(ifstream &fi, ofstream &fo);
-void read_a_class(ifstream &fi, student editing_class[], int &numberStudent,int class_num);
-void rewrite_a_class(ofstream &fo,student editing_class[],int &numberStudent,int class_num);
+bool edit_a_student(ifstream& fi, ofstream& fo);
+void read_a_class(ifstream& fi, student editing_class[], int& numberStudent, int class_num);
+void rewrite_a_class(ofstream& fo, student editing_class[], int& numberStudent, int class_num);
 
 
 // tools
