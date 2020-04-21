@@ -38,43 +38,6 @@ void update_config(Config& config) {
 	fo.close();
 }
 
-int int_option(int numberChoice) {
-	cout << "\nChoose an option to continue...: ";
-	cout.flush();
-
-	char ch; int ret = 0;
-
-	do {
-		ch = _getch();
-		if ('0' <= ch && ch <= '9') {
-			if (numberChoice > 1 && ch == '1' && ret == 0) {
-				ret = 1;
-				cout << 1;
-				if (numberChoice <= 10)
-					break;
-			}
-			else if (ret == 1) {
-				if (10 + ch - '0' < numberChoice) {
-					ret = 10 + ch - '0';
-					cout << ch;
-					break;
-				}
-			}
-			else if (ch - '0' < numberChoice) {
-				ret = ch - '0';
-				cout << ch;
-				break;
-			}
-		}
-		else if (ch == 13 && ret == 1)
-			break;
-	} while (true);
-
-	cout << '\n' << endl;
-
-	return ret;
-}
-
 bool load_account(int& numberAccount, nodeAccount*& listAccount) {
 	ifstream fi;
 	fi.open("data/account.gulu");
@@ -126,6 +89,43 @@ void update_account(int numberAccount, nodeAccount* listAccount) {
 	}
 
 	fo.close();
+}
+
+int int_option(int numberChoice) {
+	cout << "\nChoose an option to continue...: ";
+	cout.flush();
+
+	char ch; int ret = 0;
+
+	do {
+		ch = _getch();
+		if ('0' <= ch && ch <= '9') {
+			if (numberChoice > 1 && ch == '1' && ret == 0) {
+				ret = 1;
+				cout << 1;
+				if (numberChoice <= 10)
+					break;
+			}
+			else if (ret == 1) {
+				if (10 + ch - '0' < numberChoice) {
+					ret = 10 + ch - '0';
+					cout << ch;
+					break;
+				}
+			}
+			else if (ch - '0' < numberChoice) {
+				ret = ch - '0';
+				cout << ch;
+				break;
+			}
+		}
+		else if (ch == 13 && ret == 1)
+			break;
+	} while (true);
+
+	cout << '\n' << endl;
+
+	return ret;
 }
 
 bool bool_option(string operation) {

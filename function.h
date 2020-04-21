@@ -57,9 +57,11 @@ struct nodeStudent {
 bool login(User& user, Config& config); // (1/3) Staff done
 int verified(User& user, string& pw);
 bool get_info(User& user);
+bool changePassword(User& user, Config& config);
+
+// menu
 void menu(User& user, Config& config);
 int menuFunction(int start, int user_position);
-bool changePassword(User& user, Config& config);
 
 /*
 //academic staff-class
