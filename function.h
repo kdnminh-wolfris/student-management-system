@@ -65,6 +65,8 @@ void import_student_from_csv(node*pHead);
 bool edit_a_student();
 void read_a_class(ifstream & fi, node *&_student , int& numberStudent, int class_num);
 void rewrite_a_class(ofstream & fo, node *& _student, int& numberStudent, int class_num);
+bool remove_a_student();
+void deleteAll(node *&pHead);
 */
 
 // tools
