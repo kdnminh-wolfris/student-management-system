@@ -1,9 +1,6 @@
 #include "function.h"
 
-bool login(User& user) {
-	Config config;
-	load_config(config);
-
+bool login(User& user, Config& config) {
 	if (config.login_status) {
 		user.ID = config.curID;
 		user.position = config.curPosition;
@@ -15,6 +12,8 @@ bool login(User& user) {
 			cin >> user.ID;
 			cout << "Password: ";
 			cin >> pw;
+			cout << endl;
+
 			int err = verified(user, pw);
 			if (err == 1)
 				cout << "Incorrect ID or password.\n" << endl;
@@ -138,7 +137,7 @@ bool get_info(User& user) {
 	return false;
 }
 
-void menu(User& user) {
+void menu(User& user, Config& config) {
 	/*
 		View profile
 		Functions
@@ -147,31 +146,132 @@ void menu(User& user) {
 	*/
 
 	cout << "[ 0 ] Profile\n";
-	int numberFunction = menuFunction(user.position);
-	cout << "[ " << numberFunction + 1 << " ] Change password\n";
-	cout << "[ " << numberFunction + 2 << " ] Logout\n";
+	int numberFunction = menuFunction(1, user.position);
+	numtag(numberFunction + 1); cout << "Settings\n";
+	numtag(numberFunction + 2); cout << "Change password\n";
+	numtag(numberFunction + 3); cout << "Logout\n";
+	
+	int option = int_option(numberFunction + 4);
 
-	int option = int_option(numberFunction + 3);
 	if (option == numberFunction + 2) {
+		if (changePassword(user, config))
+			cout << "Password changed sucessfully!\n" << endl;
+	}
+
+	if (option == numberFunction + 3) {
 		if (bool_option("logout")) {
-			ofstream fo;
-			fo.open("data/config.gulu");
-			fo << "0\n\n";
-			fo.close();
+			Config config;
+			load_config(config);
+			config.login_status = 0;
+			update_config(config);
+
+			cout << "Logged out.\n" << endl;
 			return;
 		}
-		else return menu(user);
+		else return menu(user, config);
 	}
 }
 
-int menuFunction(int user_position) {
+int menuFunction(int start, int user_position) {
 	if (user_position == 0) {
-		cout << "[ 1 ] Class\n";
-		cout << "[ 2 ] Course\n";
-		cout << "[ 3 ] Scoreboard\n";
-		cout << "[ 4 ] Attendance list\n";
+		numtag(start + 0); cout << "Class\n";
+		numtag(start + 1); cout << "Course\n";
+		numtag(start + 2); cout << "Scoreboard\n";
+		numtag(start + 3); cout << "Attendance list\n";
 		return 4;
 	}
 	else if (user_position == 1) return 7;
 	else return 4;
+}
+
+bool changePassword(User& user, Config& config) {
+	string pw;
+	int turn = 0;
+	do {
+		++turn;
+		cout << "Please enter your current password to continue:\n";
+		cin >> pw;
+		cout << endl;
+
+		int err = verified(user, pw);
+		if (err == 1)
+			cout << "Incorrect password.\n" << endl;
+		else if (err == 2) return false;
+		else break;
+		
+		if (turn == 3) {
+			cout << "You have entered the password incorrectly " << config.max_enterpw_turn << " time";
+			if (config.max_enterpw_turn > 1) cout << "s";
+			cout << "! Failed to change password.\n" << endl;
+			return false;
+		}
+	} while (true);
+
+	do {
+		cout << "New password: ";
+		cin >> pw;
+		cout << endl;
+
+		string confirm_pw;
+		cout << "Confirm new password: ";
+		cin >> confirm_pw;
+		cout << endl;
+
+		if (pw != confirm_pw)
+			cout << "New password and confirm password don't match!\n" << endl;
+		else break;
+	} while (true);
+
+	ifstream fi;
+	fi.open("data/account.gulu");
+	if (!fi.is_open()) {
+		cout << "Error: Missing account.gulu file\n" << endl;
+		return false;
+	}
+
+	int numberAccount;
+	fi >> numberAccount;
+
+	AccountNode* list, * cur;
+	list = cur = nullptr;
+
+	fi.ignore(100, '\n');
+
+	for (int i = 0; i < numberAccount; ++i) {
+		if (i == 0)
+			list = cur = new AccountNode,
+			cur->next = nullptr;
+		else
+			cur->next = new AccountNode,
+			cur = cur->next,
+			cur->next = nullptr;
+
+		fi.ignore(100, '\n');
+		getline(fi, cur->data.userID);
+		getline(fi, cur->data.password);
+		fi >> cur->data.position;
+		fi.ignore(100, '\n');
+
+		if (cur->data.userID == user.ID)
+			cur->data.password = pw;
+	}
+
+	fi.close();
+
+	ofstream fo;
+	fo.open("data/account.gulu");
+	
+	fo << numberAccount << "\n";
+	while (list != nullptr) {
+		fo << "\n" << list->data.userID;
+		fo << "\n" << list->data.password;
+		fo << "\n" << list->data.position;
+		fo << '\n';
+		cur = list;
+		list = list->next;
+		delete cur;
+	}
+
+	fo.close();
+	return true;
 }

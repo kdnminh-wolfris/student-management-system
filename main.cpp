@@ -1,13 +1,19 @@
 #include "function.h"
 
 int main() {
-	cout << "|||||||||||||||||||||||||||||||||\n";
-	cout << "||| Student Management System |||\n";
-	cout << "|||||||||||||||||||||||||||||||||\n";
+	cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||||\n";
+	cout << "|||                                                   |||\n";
+	cout << "|||             Student Management System             |||\n";
+	cout << "|||                                                   |||\n";
+	cout << "||||||||||||||||||||CS162|||Final|Project|||gulugulu|||||\n";
 	cout << endl;
 
+	Config* config = new Config;
+	if (!load_config(*config))
+		return 0;
+
 	User* user = new User;
-	if (!login(*user)) return 0;
+	if (!login(*user, *config)) return 0;
 
 	// greeting
 	if (user->position < 2) {
@@ -18,6 +24,6 @@ int main() {
 	else cout << "Hi, ";
 	cout << user->fullname << "!\n" << endl;
 
-	menu(*user);
+	menu(*user, *config);
 	return main();
 }

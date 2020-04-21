@@ -17,6 +17,17 @@ struct Config {
 	string curID;
 	int curPosition = -1;
 	int keep_login = 1;
+	int max_enterpw_turn = 3;
+};
+
+struct Account {
+	string userID, password;
+	int position = -1; // 0: Staff; 1: Lecturer; 2: Student
+};
+
+struct AccountNode {
+	Account data;
+	AccountNode* next, * prev;
 };
 
 struct Date {
@@ -38,21 +49,24 @@ struct Student {
 };
 
 // administration
-bool login(User& user); // (1/3) Staff done
+bool login(User& user, Config& config); // (1/3) Staff done
 int verified(User& user, string& pw);
 bool get_info(User& user);
-void menu(User& user);
-int menuFunction(int user_position);
+void menu(User& user, Config& config);
+int menuFunction(int start, int user_position);
+bool changePassword(User& user, Config& config);
 
+/*
 //academic staff-class
 bool edit_a_student(ifstream& fi, ofstream& fo);
 void read_a_class(ifstream& fi, student editing_class[], int& numberStudent, int class_num);
 void rewrite_a_class(ofstream& fo, student editing_class[], int& numberStudent, int class_num);
-
+*/
 
 // tools
+void numtag(int num);
 bool load_config(Config& config);
-bool update_config(Config& config);
+void update_config(Config& config);
 int int_option(int numberChoice = 10); // using getch() for one-click choosing
 bool bool_option(string operation); // using getch() for one-click choosing
 
