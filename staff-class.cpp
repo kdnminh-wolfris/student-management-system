@@ -1,27 +1,33 @@
 
 
 #include "function.h"
-void import_student_from_csv(node*pHead)
+void import_student_from_csv()
 {
     ifstream in;
+    ifstream inacc;//in as input for student list, inacc as input for creating student account
     ofstream out;
+    ofstream outacc;//out as output for student list, outacc as output for creating student account
     //list of choice:
     //0:19APCS1
     int choice;
-    cout<<"Please type in the number of the class you wish to import from the following:"
-        <<"0.19APCS1"<<endl;
+    cout<<"Please type in the number of the class you wish to import from the following:"<<endl;
+    cout<<"0.19APCS1"<<endl;
+    inacc.open("data/account.gulu");
     switch (choice)
     {
         case 0:{
+            
             in.open("19APCS1-Student.csv");
             if(!in) cout<<"There is an error trying to open 19APCS1-Student.csv"<<endl;
             else
             {
+                nodeStudent*pHead;
+                int count=0;
                 for (int i=0;i<5;++i)
                 {
                     in.ignore(1000,','||'\n');
                 }
-                node*cur=pHead;
+                nodeStudent*cur=pHead;
                 while (!in.eof())
                 {
                     in.ignore(100,',');
@@ -34,18 +40,22 @@ void import_student_from_csv(node*pHead)
                     in>>cur->student.general.DoB.year;
                     in>>cur->student.general.DoB.month;
                     in>>cur->student.general.DoB.day;
+                    in.ignore (100,',');
+                    in>>cur->student.class_;
+                    cur->student.status=1;
+                    cur->student.general.position=2;
+                    count++;
                 }
+
+                in.close();
             }
                 
         }
     }
+    inacc.close();
 }
-
-bool edit_a_student(){
-    ifstream fi;
-    ofstream fo;
-    
-    fi.open("data/class/class.gulu");
+bool edit_a_student(ifstream &fi, ofstream &fo){
+    fi.open("data/Class.txt");
     if (!fi) {
         cout <<"Error! Missing Class.txt file";
         return false;
@@ -65,46 +75,46 @@ bool edit_a_student(){
     getline(cin,tmp_Class,'\n');
     int i=0,class_num=0;
     while (Classes[class_num] != tmp_Class) ++class_num;
-    
-    node * _student=nullptr;
+    cout <<class_num;
+    student editing_class[10];
     int numberStudent=0;
-    read_a_class(fi,_student,numberStudent,class_num);
+    read_a_class(fi,editing_class,numberStudent,class_num);
     string tmp_ID;
     cout <<"The ID of the student you want to edit : ";
     getline(cin,tmp_ID,'\n');
-    
-    node *cur= _student;
     for (i=0;i<numberStudent;++i)
-        if (cur->student.general.ID == tmp_ID) break;
-    if (cur->student.general.ID != tmp_ID){
+        if (editing_class[i].ID == tmp_ID) break;
+    if (editing_class[i].ID != tmp_ID){
         cout <<"This student is not exist in this class !!! "
         <<"Please choose again";
-        edit_a_student();
+        edit_a_student(fi,fo);
     }
     else {
-        cout <<"Fullname : "<<cur->student.general.fullname<<endl
-        <<"Date of birt : "<<cur->student.general.DoB.year<<"/"<<cur->student.general.DoB.month
-        <<"/"<<cur->student.general.DoB.day<<endl;
-        if (!bool_option("edit this student ")) return false;
-        else{
-            cin.get();
-            cout <<"Full name : ";
-            getline(cin,cur->student.general.fullname,'\n');
-            Date tmp_DoB;
-            cout <<"Date of Birth (YYYY/MM/DD) : "<<endl;
-            cin>>tmp_DoB.year>>tmp_DoB.month>>tmp_DoB.day;
-            if (tmp_DoB.day != cur->student.general.DoB.day || tmp_DoB.month != cur->student.general.DoB.month|| tmp_DoB.year != cur->student.general.DoB.year) {
-                cout <<"This student's password has changed ! "<<endl;
-                cur->student.general.DoB=tmp_DoB;
-            }
+        cout <<"Fullname : "<<editing_class[i].fullname<<endl
+        <<"Date of birt : "<<editing_class[i].DoB.year<<"/"<<editing_class[i].DoB.month
+        <<"/"<<editing_class[i].DoB.day<<endl
+        <<"You want to edit this student ? "<<endl
+        <<"1. Yes"<<endl<<"2.No"<<endl;
+        int choose;
+        cin>>choose;
+        cin.get();
+        if (choose == 2) return false;
+        cout <<"Full name : ";
+        getline(cin,editing_class[i].fullname,'\n');
+        date tmp_DoB;
+        cout <<"Date of Birth (YYYY/MM/DD) : "<<endl;
+        cin>>tmp_DoB.year>>tmp_DoB.month>>tmp_DoB.day;
+        if (tmp_DoB.day != editing_class[i].DoB.day || tmp_DoB.month != editing_class[i].DoB.month|| tmp_DoB.year != editing_class[i].DoB.year) {
+            cout <<"This student's password has changed ! "<<endl;
+            editing_class[i].DoB=tmp_DoB;
         }
     }
     fi.close();
-    rewrite_a_class(fo,_student,numberStudent,class_num);
+    rewrite_a_class(fo,editing_class,numberStudent,class_num);
     return true;
 }
 
-void read_a_class(ifstream &fi, node *& _student, int &numberStudent, int class_num){
+void read_a_class(ifstream &fi, student editing_class[], int &numberStudent, int class_num){
     switch(class_num){
         case 0:{
             fi.open("data/class/Student-19APCS1.txt");
@@ -117,31 +127,24 @@ void read_a_class(ifstream &fi, node *& _student, int &numberStudent, int class_
     }
     fi>>numberStudent;
     fi.get();
-    node *cur=_student;
     for (int i=0;i<numberStudent;++i){
-        if (_student == nullptr) {
-            cur=new node;
-            _student = cur;
-        }
-        getline(fi,cur->student.general.ID,'\n');
-        getline(fi,cur->student.general.fullname,'\n');
-        fi>>cur->student.general.DoB.year>>cur->student.general           .DoB.month>>cur->student.general.DoB.day;
+        getline(fi,editing_class[i].ID,'\n');
+        cout <<editing_class[i].ID<<endl;
+        getline(fi,editing_class[i].password,'\n');
+        getline(fi,editing_class[i].fullname,'\n');
+        fi>>editing_class[i].DoB.year>>editing_class[i].DoB.month>>editing_class[i].DoB.day;
+        cout <<editing_class[i].DoB.year<<" "<<editing_class[i].DoB.month<<" "
+        <<editing_class[i].DoB.day<<endl;
         fi.get();
-        getline(fi,cur->student.class_,'\n');
-        fi>>cur->student.status;
+        getline(fi,editing_class[i].Class,'\n');
+        fi>>editing_class[i].status;
         fi.get();
         fi.ignore(1000,'\n');
-        if (i<numberStudent-1) {
-            cur->next=new node;
-            cur->next->prev= cur;
-            cur=cur->next;
-        }
-        else cur->next = nullptr;
     }
     fi.close();
 }
 
-void rewrite_a_class(ofstream &fo,node *&_student,int &numberStudent,int class_num){
+void rewrite_a_class(ofstream &fo, student editing_class[],int &numberStudent,int class_num){
     switch(class_num){
         case 0:{
             fo.open("data/class/Student-19APCS1.txt");
@@ -149,15 +152,13 @@ void rewrite_a_class(ofstream &fo,node *&_student,int &numberStudent,int class_n
         }
     }
     fo<<class_num<<endl<<endl;
-    node *cur=_student;
     for (int i=0;i<numberStudent;++i){
-        fo<<cur->student.general.ID<<endl
-        <<cur->student.general.fullname<<endl
-        <<cur->student.general.DoB.year<<" "<<cur->student.general.DoB.month<<                      " "<<cur->student.general.DoB.day<<endl
-        <<cur->student.class_<<endl
-        <<cur->student.status<<endl<<endl;
+        fo<<editing_class[i].ID<<endl
+        <<editing_class[i].password<<endl
+        <<editing_class[i].fullname<<endl
+        <<editing_class[i].DoB.year<<" "<<editing_class[i].DoB.month<<                      " "<<editing_class[i].DoB.day<<endl
+        <<editing_class[i].Class<<endl
+        <<editing_class[i].status<<endl<<endl;
     }
     fo.close();
 }
-
-
