@@ -1,10 +1,15 @@
 
 
 #include "function.h"
-void read_a_class(ifstream &in,ofstream &out,node*pHead,int choice)
+void import_student_from_csv(node*pHead)
 {
+    ifstream in;
+    ofstream out;
     //list of choice:
     //0:19APCS1
+    int choice;
+    cout<<"Please type in the number of the class you wish to import from the following:"
+        <<"0.19APCS1"<<endl;
     switch (choice)
     {
         case 0:{
@@ -16,10 +21,13 @@ void read_a_class(ifstream &in,ofstream &out,node*pHead,int choice)
                 {
                     in.ignore(1000,','||'\n');
                 }
+                node*cur=pHead;
                 while (!in.eof())
                 {
                     in.ignore(100,',');
-                    
+                    in>>cur->student.general.ID;
+                    in.ignore(100,',');
+                    in.getline(cur->student.general.fullname,100);
                 }
             }
                 
