@@ -53,6 +53,11 @@ struct nodeStudent {
 	nodeStudent* next, * prev;
 };
 
+struct nodeClass{
+    string name;
+    nodeClass *next,*prev;
+};
+
 // administration
 bool login(User& user, Config& config); // (1/3) Staff done
 int verified(User& user, string& pw);
@@ -67,10 +72,11 @@ int menuFunction(int start, int user_position);
 //academic staff-class
 void import_student_from_csv(node*pHead);
 bool edit_a_student();
-void read_a_class(ifstream & fi, node *&_student , int& numberStudent, int class_num);
-void rewrite_a_class(ofstream & fo, node *& _student, int& numberStudent, int class_num);
 bool remove_a_student();
-void deleteAll(node *&pHead);
+void read_a_class(ifstream & fi, nodeStudent *&_student , int& numberStudent, int class_num);
+void rewrite_a_class(ofstream & fo, nodeStudent *& _student, int& numberStudent, int class_num);
+void deleteNodeStudent(nodeStudent *&pHead);
+void deleteNodeClass(nodeClass *&pHead);
 */
 
 // tools
