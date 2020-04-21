@@ -7,21 +7,15 @@ void import_student_from_csv()
     ifstream inacc;//in as input for student list, inacc as input for creating student account
     ofstream out;
     ofstream outacc;//out as output for student list, outacc as output for creating student account
-    //list of choice:
-    //0:19APCS1
-    int choice;
-    cout<<"Please type in the number of the class you wish to import from the following:"<<endl;
-    cout<<"0.19APCS1"<<endl;
-    inacc.open("data/account.gulu");
-    switch (choice)
-    {
-        case 0:{
-            
-            in.open("19APCS1-Student.csv");
+    string choice;
+    cout<<"Please type in the name of the class you wish to import:"<<endl;
+    getline(cin,choice);
+    choice.append("-Student.csv");
+            in.open(choice);
             if(!in) cout<<"There is an error trying to open 19APCS1-Student.csv"<<endl;
             else
             {
-                nodeStudent*pHead;
+                nodeStudent*pHead=nullptr;
                 int count=0;
                 for (int i=0;i<5;++i)
                 {
@@ -30,6 +24,34 @@ void import_student_from_csv()
                 nodeStudent*cur=pHead;
                 while (!in.eof())
                 {
+                    if (pHead==nullptr)//input 1st node
+                    {
+                        pHead=new nodeStudent;
+                         in.ignore(100,',');
+                        in>>pHead->student.general.ID;
+                        in.ignore(100,',');
+                        getline(in,pHead->student.general.fullname);
+                        in.ignore(100,',');
+                        in>>pHead->student.general.sex;
+                        pHead->student.general.position=2;
+                        in>>pHead->student.general.DoB.year;
+                        in>>pHead->student.general.DoB.month;
+                        in>>pHead->student.general.DoB.day;
+                        in.ignore (100,',');
+                        in>>pHead->student.class_;
+                        pHead->student.status=1;
+                        pHead->student.general.position=2;
+                        count++;
+                        cur=pHead;
+                        pHead->next=nullptr;
+                        pHead->prev=nullptr;
+                    }
+
+                    else{//input other nodes
+                    cur->next=new nodeStudent;
+                    nodeStudent*temp=cur;
+                    cur=cur->next;
+                    cur->prev=temp;
                     in.ignore(100,',');
                     in>>cur->student.general.ID;
                     in.ignore(100,',');
@@ -45,14 +67,49 @@ void import_student_from_csv()
                     cur->student.status=1;
                     cur->student.general.position=2;
                     count++;
+                    cur->next=nullptr;
+                    }
                 }
-
                 in.close();
+                inacc.open("data/account.gulu");
+                cur=pHead;
+                nodeAccount*pHeadaccount=nullptr;
+                nodeAccount*curacc=pHeadaccount;
+                while (cur!=nullptr)
+                {
+                     if (pHeadaccount==nullptr)
+                     {
+                     pHeadaccount=new nodeAccount;
+                     pHeadaccount->data.userID=cur->student.general.ID;
+                     string pass=to_string(cur->student.general.DoB.year);
+                     pass.append(to_string(cur->student.general.DoB.month));
+                     pass.append(to_string(cur->student.general.DoB.day));
+                     pHeadaccount->data.password=pass;
+                     pHeadaccount->prev=nullptr;
+                     pHeadaccount->next=nullptr;
+                     curacc=pHeadaccount;
+                     cur=cur->next;                  
+                     }
+                     else{
+                      curacc->next=new nodeAccount;
+                      nodeAccount*tempacc=curacc;
+                      curacc=curacc->next;
+                      curacc->data.userID=cur->student.general.ID;
+                     string pass=to_string(cur->student.general.DoB.year);
+                     pass.append(to_string(cur->student.general.DoB.month));
+                     pass.append(to_string(cur->student.general.DoB.day));
+                     curacc->data.password=pass;
+                     curacc->prev=tempacc;
+                     curacc->next=nullptr;
+                     ;  
+                     }
+                }            
+                inacc.close();
             }
-                
-        }
-    }
-    inacc.close();
+      
+}
+void create_account(){//Pls put pHeadacc=nullptr outside function
+
 }
 
 bool edit_a_student(){
