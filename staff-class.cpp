@@ -1,7 +1,39 @@
 
 
 #include "function.h"
-
+void import_student_from_csv(node*pHead)
+{
+    ifstream in;
+    ofstream out;
+    //list of choice:
+    //0:19APCS1
+    int choice;
+    cout<<"Please type in the number of the class you wish to import from the following:"
+        <<"0.19APCS1"<<endl;
+    switch (choice)
+    {
+        case 0:{
+            in.open("19APCS1-Student.csv");
+            if(!in) cout<<"There is an error trying to open 19APCS1-Student.csv"<<endl;
+            else
+            {
+                for (int i=0;i<5;++i)
+                {
+                    in.ignore(1000,','||'\n');
+                }
+                node*cur=pHead;
+                while (!in.eof())
+                {
+                    in.ignore(100,',');
+                    in>>cur->student.general.ID;
+                    in.ignore(100,',');
+                    in.getline(cur->student.general.fullname,100);
+                }
+            }
+                
+        }
+    }
+}
 bool edit_a_student(ifstream &fi, ofstream &fo){
     fi.open("data/Class.txt");
     if (!fi) {

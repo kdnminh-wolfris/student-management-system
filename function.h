@@ -11,7 +11,10 @@
 #include <string>
 
 using namespace std;
-
+struct node{
+	Student student;
+	node*next,*prev;
+};
 struct Config {
 	int login_status = 0;
 	string curID;
@@ -58,6 +61,7 @@ bool changePassword(User& user, Config& config);
 
 /*
 //academic staff-class
+void import_student_from_csv(node*pHead);
 bool edit_a_student(ifstream& fi, ofstream& fo);
 void read_a_class(ifstream& fi, student editing_class[], int& numberStudent, int class_num);
 void rewrite_a_class(ofstream& fo, student editing_class[], int& numberStudent, int class_num);
