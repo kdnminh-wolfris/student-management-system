@@ -10,6 +10,8 @@ void import_student_from_csv()
     string choice;
     cout<<"Please type in the name of the class you wish to import:"<<endl;
     getline(cin,choice);
+    string address="data/";
+    address.append(choice);
     choice.append("-Student.csv");
             in.open(choice);
             if(!in) cout<<"There is an error trying to open 19APCS1-Student.csv"<<endl;
@@ -105,6 +107,7 @@ void import_student_from_csv()
                      }
                 }            
                 inacc.close();
+                mkdir(c_str(address));
             }
       
 }
