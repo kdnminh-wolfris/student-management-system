@@ -11,10 +11,7 @@
 #include <string>
 
 using namespace std;
-struct node{
-	Student student;
-	node*next,*prev;
-};
+
 struct Config {
 	int login_status = 0;
 	string curID;
@@ -28,9 +25,9 @@ struct Account {
 	int position = -1; // 0: Staff; 1: Lecturer; 2: Student
 };
 
-struct AccountNode {
+struct nodeAccount {
 	Account data;
-	AccountNode* next, * prev;
+	nodeAccount* next, * prev;
 };
 
 struct Date {
@@ -49,6 +46,11 @@ struct Student {
 	User general;
 	string class_;
 	int status; // 0: graduted; 1: studying; 2: reserved
+};
+
+struct nodeStudent {
+	Student student;
+	nodeStudent* next, * prev;
 };
 
 // administration
@@ -75,5 +77,7 @@ bool load_config(Config& config);
 void update_config(Config& config);
 int int_option(int numberChoice = 10); // using getch() for one-click choosing
 bool bool_option(string operation); // using getch() for one-click choosing
+bool load_account(int& numberAccount, nodeAccount*& listAccount);
+void update_account(int numberAccount, nodeAccount* listAccount);
 
 #endif FUNC_H
