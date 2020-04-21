@@ -222,56 +222,17 @@ bool changePassword(User& user, Config& config) {
 		else break;
 	} while (true);
 
-	ifstream fi;
-	fi.open("data/account.gulu");
-	if (!fi.is_open()) {
-		cout << "Error: Missing account.gulu file\n" << endl;
-		return false;
-	}
-
 	int numberAccount;
-	fi >> numberAccount;
-
-	AccountNode* list, * cur;
-	list = cur = nullptr;
-
-	fi.ignore(100, '\n');
-
-	for (int i = 0; i < numberAccount; ++i) {
-		if (i == 0)
-			list = cur = new AccountNode,
-			cur->next = nullptr;
-		else
-			cur->next = new AccountNode,
-			cur = cur->next,
-			cur->next = nullptr;
-
-		fi.ignore(100, '\n');
-		getline(fi, cur->data.userID);
-		getline(fi, cur->data.password);
-		fi >> cur->data.position;
-		fi.ignore(100, '\n');
-
-		if (cur->data.userID == user.ID)
-			cur->data.password = pw;
-	}
-
-	fi.close();
-
-	ofstream fo;
-	fo.open("data/account.gulu");
+	nodeAccount* listAccount;
 	
-	fo << numberAccount << "\n";
-	while (list != nullptr) {
-		fo << "\n" << list->data.userID;
-		fo << "\n" << list->data.password;
-		fo << "\n" << list->data.position;
-		fo << '\n';
-		cur = list;
-		list = list->next;
-		delete cur;
-	}
+	if (!load_account(numberAccount, listAccount))
+		return false;
 
-	fo.close();
+	for (nodeAccount* p = listAccount; p != nullptr; p = p->next)
+		if (p->data.userID == user.ID) {
+			p->data.password = pw; break;
+		}
+
+	update_account(numberAccount, listAccount);
 	return true;
 }
