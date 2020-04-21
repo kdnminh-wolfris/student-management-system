@@ -39,9 +39,9 @@ bool login(User& user) {
 
 int verified(User& user, string& pw) {
 	ifstream fi;
-	fi.open("data/account.txt");
+	fi.open("data/account.gulu");
 	if (!fi.is_open()) {
-		cout << "Error: Missing account.txt file\n" << endl;
+		cout << "Error: Missing account.gulu file\n" << endl;
 		return 2;
 	}
 
@@ -73,9 +73,9 @@ bool get_info(User& user) {
 	ifstream fi;
 	switch (user.position) {
 	case 0: {
-		fi.open("data/academic_staff.txt");
+		fi.open("data/academic_staff.gulu");
 		if (!fi.is_open()) {
-			cout << "Error: Missing academic_staff.txt file\n" << endl;
+			cout << "Error: Missing academic_staff.gulu file\n" << endl;
 			return false;
 		}
 
@@ -107,9 +107,9 @@ bool get_info(User& user) {
 		}
 	}
 	case 1: {
-		fi.open("data/lecturer.txt");
+		fi.open("data/lecturer.gulu");
 		if (!fi.is_open()) {
-			cout << "Error: Missing lecturer.txt file\n" << endl;
+			cout << "Error: Missing lecturer.gulu file\n" << endl;
 			return false;
 		}
 
@@ -119,9 +119,9 @@ bool get_info(User& user) {
 		break;
 	}
 	case 2: {
-		fi.open("data/student.txt");
+		fi.open("data/student.gulu");
 		if (!fi.is_open()) {
-			cout << "Error: Missing student.txt file\n" << endl;
+			cout << "Error: Missing student.gulu file\n" << endl;
 			return false;
 		}
 
@@ -155,7 +155,7 @@ void menu(User& user) {
 	if (option == numberFunction + 2) {
 		if (bool_option("logout")) {
 			ofstream fo;
-			fo.open("data/config.txt");
+			fo.open("data/config.gulu");
 			fo << "0\n\n";
 			fo.close();
 			return;

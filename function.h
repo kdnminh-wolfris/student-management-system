@@ -22,6 +22,7 @@ struct Config {
 struct Date {
 	int year = -1, month = -1, day = -1;
 };
+
 struct User {
 	string ID;
 	int position = -1; // 0: Staff; 1: Lecturer; 2: Student

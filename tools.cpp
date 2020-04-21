@@ -2,9 +2,9 @@
 
 bool load_config(Config& config) {
 	ifstream fi;
-	fi.open("data/config.txt");
+	fi.open("data/config.gulu");
 	if (!fi.is_open()) {
-		cout << "Error: Missing config.txt file\n" << endl;
+		cout << "Error: Missing config.gulu file\n" << endl;
 		return false;
 	}
 
@@ -19,9 +19,9 @@ bool load_config(Config& config) {
 
 bool update_config(Config& config) {
 	ofstream fo;
-	fo.open("data/config.txt");
+	fo.open("data/config.gulu");
 	if (!fo.is_open()) {
-		cout << "Error: Missing config.txt file\n" << endl;
+		cout << "Error: Missing config.gulu file\n" << endl;
 		return false;
 	}
 
