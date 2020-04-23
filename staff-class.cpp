@@ -10,6 +10,8 @@ void import_student_from_csv()
     string choice;
     cout<<"Please type in the name of the class you wish to import:"<<endl;
     getline(cin,choice);
+    string classname;
+    classname=choice;
     string address="data/";
     address.append(choice);
     choice.append("-Student.csv");
@@ -107,8 +109,18 @@ void import_student_from_csv()
                      }
                 }            
                 inacc.close();
-                mkdir(c_str(address));
+               //_mkdir(c_str(address)); //pls fix in order to create new directory
+
             }
+    string dest="data/class/";
+    dest.append(classname);
+    dest.append(".gulu");
+    out.open(dest);
+    if (out.is_open())
+    {
+        
+    }
+    else cout<<"The file cannot be created."<<endl;
       
 }
 void create_account(){//Pls put pHeadacc=nullptr outside function
