@@ -12,8 +12,17 @@
 Student ID
 Fullname
 Sex // 0: Female; 1: Male
-Class
 Status // 0: gratuated; 1: studying; 2: reserved
+
+- The first line and each blocks will be seperated by a single line.
+
+>>> data/student.gulu
+
+- First line is the number of information blocks.
+
+- Each block will be like this:
+Student ID
+Class code
 
 - The first line and each blocks will be seperated by a single line.
 
