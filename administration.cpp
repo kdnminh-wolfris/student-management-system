@@ -72,8 +72,16 @@ bool changePassword(User& user, Config& config) {
 	string pw;
 	int turn = 0;
 	do {
-		++turn;
-		cout << "Please enter your current password to continue:\n";
+		cout << "Please enter your current password to continue:";
+
+		if (turn) {
+			cout << " (you have " << config.max_enterpw_turn - turn << " turn";
+			if (config.max_enterpw_turn - turn > 1) cout << "s";
+			cout << " left)";
+		}
+
+		cout << '\n';
+
 		cin >> pw;
 		cout << endl;
 
@@ -82,15 +90,17 @@ bool changePassword(User& user, Config& config) {
 			cout << "Incorrect password.\n" << endl;
 		else if (err == 2) return false;
 		else break;
+		++turn;
+	} while (turn < config.max_enterpw_turn);
 
-		if (turn == 3) {
-			cout << "You have entered the password incorrectly " << config.max_enterpw_turn << " time";
-			if (config.max_enterpw_turn > 1) cout << "s";
-			cout << "! Failed to change password.\n" << endl;
-			return false;
-		}
-	} while (true);
+	if (turn == config.max_enterpw_turn) {
+		cout << "You have entered the password incorrectly " << config.max_enterpw_turn << " time";
+		if (config.max_enterpw_turn > 1) cout << "s";
+		cout << "! Failed to change password.\n" << endl;
+		return false;
+	}
 
+	turn = 0;
 	do {
 		cout << "New password: ";
 		cin >> pw;
@@ -104,7 +114,22 @@ bool changePassword(User& user, Config& config) {
 		if (pw != confirm_pw)
 			cout << "New password and confirm password don't match!\n" << endl;
 		else break;
-	} while (true);
+		++turn;
+
+		if (turn) {
+			cout << "You have " << config.max_enterpw_turn - turn << " turn";
+			if (config.max_enterpw_turn - turn > 1) cout << "s";
+			cout << " left to confirm new password.\n" << endl;
+		}
+	} while (turn < config.max_enterpw_turn);
+
+	if (turn == config.max_enterpw_turn) {
+		cout << "Confirmation failed after " << config.max_enterpw_turn;
+		if (config.max_enterpw_turn > 1) cout << " tries";
+		else cout << "try";
+		cout << ".\n" << endl;
+		return false;
+	}
 
 	int numberAccount;
 	nodeAccount* listAccount;
