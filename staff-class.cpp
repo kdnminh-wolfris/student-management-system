@@ -12,10 +12,7 @@ void import_student_from_csv()
     getline(cin,choice);
     string classname;
     classname=choice;
-    string address="data/";
-    address.append(choice);
-    choice.append("-Student.csv");
-            in.open(choice);
+            in.open(choice+"-Student.csv");
             if(!in) cout<<"There is an error trying to open 19APCS1-Student.csv"<<endl;
             else
             {
@@ -112,10 +109,7 @@ void import_student_from_csv()
                //_mkdir(c_str(address)); //pls fix in order to create new directory
 
             }
-    string dest="data/class/";
-    dest.append(classname);
-    dest.append(".gulu");
-    out.open(dest);
+    
     if (out.is_open())
     {
         
