@@ -11,6 +11,7 @@
 - Each block will be like this:
 Student ID
 Fullname
+DoB // yyyy mm dd
 Sex // 0: Female; 1: Male
 Status // 0: gratuated; 1: studying; 2: reserved
 

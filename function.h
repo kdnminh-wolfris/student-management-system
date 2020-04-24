@@ -61,22 +61,29 @@ struct nodeClass{
 // administration
 bool login(User& user, Config& config); // (1/3) Staff done
 int verified(User& user, string& pw);
-bool get_info(User& user);
 bool changePassword(User& user, Config& config);
 
 // menu
 void menu(User& user, Config& config);
 int menuFunction(int start, int user_position);
 
+//profile
+void profileStaff(string& ID);
+void profileLecturer(string& ID);
+void profileStudent(string& ID);
+
 /*
 //academic staff-class
 void import_student_from_csv(node*pHead);
 bool edit_a_student();
+void read_a_class(ifstream & fi, node *&_student , int& numberStudent, int class_num);
+void rewrite_a_class(ofstream & fo, node *& _student, int& numberStudent, int class_num);
 bool remove_a_student();
 void read_a_class(ifstream & fi, nodeStudent *&_student , int& numberStudent, int class_num);
 void rewrite_a_class(ofstream & fo, nodeStudent *& _student, int& numberStudent, int class_num);
 void deleteNodeStudent(nodeStudent *&pHead);
 void deleteNodeClass(nodeClass *&pHead);
+void deleteAll(node *&pHead);
 */
 
 // tools
@@ -89,5 +96,6 @@ bool load_account(int& numberAccount, nodeAccount*& listAccount);
 void update_account(int numberAccount, nodeAccount* listAccount);
 void view_class_list();
 void view_list_of_student_in_class(string class_code); //Take the code of the class and print out the students in that class
+bool get_info(User& user);
 
 #endif FUNC_H

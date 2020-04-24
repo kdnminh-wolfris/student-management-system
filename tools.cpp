@@ -138,3 +138,121 @@ bool bool_option(string operation) {
 	while (!(ch == 'Y' || ch == 'y' || ch == 'N' || ch == 'n'));
 	return ch == 'Y' || ch == 'y';
 }
+
+bool get_info(User& user) {
+	ifstream fi;
+	switch (user.position) {
+		case 0: {
+			fi.open("data/academic_staff.gulu");
+			if (!fi.is_open()) {
+				cout << "Error: Missing academic_staff.gulu file\n" << endl;
+				return false;
+			}
+
+			int numberStaff;
+			fi >> numberStaff;
+			fi.ignore(100, '\n');
+
+			string tmpID = user.ID;
+
+			while (numberStaff--) {
+				fi.ignore(100, '\n');
+				getline(fi, user.ID);
+				getline(fi, user.fullname);
+
+				fi >> user.DoB.year;
+				fi >> user.DoB.month;
+				fi >> user.DoB.day;
+
+				fi >> user.sex;
+				fi.ignore(100, '\n');
+
+				if (tmpID == user.ID) {
+					fi.close(); return true;
+				}
+			}
+
+			fi.close();
+			cout << "Error: Missing this user in academic_staff.gulu\n" << endl;
+			return false;
+		}
+		case 1: {
+			fi.open("data/lecturer.gulu");
+			if (!fi.is_open()) {
+				cout << "Error: Missing lecturer.gulu file\n" << endl;
+				return false;
+			}
+
+
+
+			break;
+		}
+		case 2: {
+			fi.open("data/student.gulu");
+			if (!fi.is_open()) {
+				cout << "Error: Missing student.gulu file\n" << endl;
+				return false;
+			}
+
+			int numberStudent;
+			fi >> numberStudent;
+			fi.ignore(100, '\n');
+
+			string tmpID, tmpClassCode;
+			bool found = false;
+
+			while (numberStudent--) {
+				fi.ignore(100, '\n');
+				getline(fi, tmpID);
+				getline(fi, tmpClassCode);
+				if (tmpID == user.ID) {
+					found = true;
+				}
+			}
+
+			fi.close();
+			if (!found) {
+				cout << "Error: Missing this user in student.gulu\n" << endl;
+				return false;
+			}
+
+			fi.open("data/class/" + tmpClassCode + "/student.gulu");
+			if (!fi.is_open()) {
+				cout << "Error: Missing " << tmpClassCode << "/student.gulu file\n" << endl;
+				return false;
+			}
+
+			fi >> numberStudent;
+			fi.ignore(100, '\n');
+
+			tmpID = user.ID;
+
+			while (numberStudent--) {
+				fi.ignore(100, '\n');
+				getline(fi, user.ID);
+				getline(fi, user.fullname);
+
+				fi >> user.DoB.year;
+				fi >> user.DoB.month;
+				fi >> user.DoB.day;
+
+				fi >> user.sex;
+				fi.ignore(100, '\n');
+				fi.ignore(100, '\n');
+
+				if (tmpID == user.ID) {
+					fi.close(); return true;
+				}
+			}
+
+			fi.close();
+			cout << "Error: Missing this user in " << tmpClassCode << "/student.gulu\n" << endl;
+			return false;
+		}
+	}
+
+	cout << "Error: User infomation not found\n" << endl;
+
+	fi.close();
+	return false;
+}
