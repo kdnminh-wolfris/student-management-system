@@ -72,7 +72,7 @@ void import_student_from_csv()
                     }
                 }
                 in.close();
-                inacc.open("data/account.gulu");
+                inacc.open("data/account.gulu",std::fstream::app);
                 cur=pHead;
                 nodeAccount*pHeadaccount=nullptr;
                 nodeAccount*curacc=pHeadaccount;
@@ -106,8 +106,11 @@ void import_student_from_csv()
                      }
                 }            
                 inacc.close();
-               //_mkdir(c_str(address)); //pls fix in order to create new directory
+                //_mkdir("/data/class/"+classname);
+                out.open("/data/class/"+classname+"/"+classname+"-Student.gulu");
+                {
 
+                }
             }
     
     if (out.is_open())
