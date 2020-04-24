@@ -128,7 +128,7 @@ bool edit_a_student(){
     ifstream fi;
     ofstream fo;
     
-    fi.open("/Users/nguyennguyenkhanh/Documents/GitHub/CS162-19APCS2-gulugulu/data/class/class.gulu");
+    fi.open("data/class/class.gulu");
     if (!fi) {
         cout <<"Error! Missing Class.txt file";
         return false;
@@ -160,14 +160,9 @@ bool edit_a_student(){
     getline(cin,tmp_Class,'\n');
     int i=0,class_num=0;
     temp=Classes;
-    while (temp->name != tmp_Class) {
-       ++class_num;
-        temp=temp->next;
-    }
-    
     nodeStudent * _student=nullptr;
     int numberStudent=0;
-    read_a_class(fi,_student,numberStudent,class_num);
+    read_a_class(fi,_student,numberStudent,tmp_Class);
     string tmp_ID;
     cout <<"The ID of the student you want to edit : ";
     getline(cin,tmp_ID,'\n');
@@ -197,28 +192,37 @@ bool edit_a_student(){
             if (tmp_DoB.day != cur->student.general.DoB.day || tmp_DoB.month != cur->student.general.DoB.month|| tmp_DoB.year != cur->student.general.DoB.year) {
                 cout <<"This student's password has changed ! "<<endl;
                 cur->student.general.DoB=tmp_DoB;
+                string new_pw= to_string(tmp_DoB.year*10000+tmp_DoB.month*100+tmp_DoB.day);
+                int numberAccount=0;
+                nodeAccount *listAccount;
+                load_account(numberAccount,listAccount);
+                nodeAccount *temp = listAccount;
+                for (int i=0;i<numberAccount;++i){
+                    if (temp->data.userID==cur->student.general.ID){
+                        temp->data.password=new_pw;
+                        break;
+                    }
+                    temp=temp->next;
+                }
+                update_account(numberAccount,listAccount);
             }
         }
     }
     fi.close();
-    rewrite_a_class(fo,_student,numberStudent,class_num);
+    rewrite_a_class(fo,_student,numberStudent,tmp_Class);
     deleteNodeStudent(_student);
     deleteNodeClass(Classes);
     return true;
 }
 
-void read_a_class(ifstream &fi, nodeStudent *& _student, int &numberStudent, int class_num){
-    switch(class_num){
-        case 0:{
-            fi.open("/Users/nguyennguyenkhanh/Documents/GitHub/CS162-19APCS2-gulugulu/data/class/Student-19APCS1.txt");
-            if (!fi) {
-                cout <<"Error! Missing  file";
-                return ;
-            }
-            break;
-        }
+void read_a_class(ifstream &fi, nodeStudent *& _student, int &numberStudent, string tmp_class){
+    fi.open("data/class/"+tmp_class+"/student.gulu");
+    if (!fi) {
+        cout <<"Error! Missing  file";
+        return ;
     }
     fi>>numberStudent;
+    fi.get();
     fi.get();
     nodeStudent *cur=_student;
     for (int i=0;i<numberStudent;++i){
@@ -245,14 +249,9 @@ void read_a_class(ifstream &fi, nodeStudent *& _student, int &numberStudent, int
     fi.close();
 }
 
-void rewrite_a_class(ofstream &fo,nodeStudent *&_student,int &numberStudent,int class_num){
-    switch(class_num){
-        case 0:{
-            fo.open("/Users/nguyennguyenkhanh/Documents/GitHub/CS162-19APCS2-gulugulu/data/class/Student-19APCS1.txt");
-            break;
-        }
-    }
-    fo<<numberStudent<<endl;
+void rewrite_a_class(ofstream &fo,nodeStudent *&_student,int &numberStudent,string tmp_class){
+    fo.open("data/class/"+tmp_class+"/student.gulu");
+    fo<<numberStudent<<endl<<endl;
     nodeStudent *cur=_student;
     for (int i=0;i<numberStudent;++i){
         fo<<cur->student.general.ID<<endl
@@ -269,7 +268,7 @@ bool remove_a_student(){
     ifstream fi;
     ofstream fo;
     
-    fi.open("/Users/nguyennguyenkhanh/Documents/GitHub/CS162-19APCS2-gulugulu/data/class/class.gulu");
+    fi.open("data/class/class.gulu");
     if (!fi) {
         cout <<"Error! Missing Class.txt file";
         return false;
@@ -299,15 +298,10 @@ bool remove_a_student(){
     string tmp_Class;
     cout <<"Enter the student's class :";
     getline(cin,tmp_Class,'\n');
-    int i=0,class_num=0;
-    while (temp->name != tmp_Class) {
-       ++class_num;
-        temp=temp->next;
-    }
-    
+    int i=0;
     nodeStudent * _student=nullptr;
     int numberStudent=0;
-    read_a_class(fi,_student,numberStudent,class_num);
+    read_a_class(fi,_student,numberStudent,tmp_Class);
     string tmp_ID;
     cout <<"The ID of the student you want to edit : ";
     getline(cin,tmp_ID,'\n');
@@ -334,31 +328,12 @@ bool remove_a_student(){
             if (choose ==1) cur->student.status=0;
             else cur->student.status=2;
         }
-        rewrite_a_class(fo,_student,numberStudent,class_num);
+        rewrite_a_class(fo,_student,numberStudent,tmp_Class);
     }
     deleteNodeStudent(_student);
     deleteNodeClass(Classes);
     return true;
 }
-
-void deleteNodeStudent(nodeStudent *&pHead){
-    nodeStudent *cur=pHead;
-    while (cur!=nullptr){
-        cur=cur->next;
-        delete pHead;
-        pHead= cur;
-    }
-}
-
-void deleteNodeClass(nodeClass *&pHead){
-    nodeClass *cur=pHead;
-    while (cur!=nullptr){
-        cur=cur->next;
-        delete pHead;
-        pHead= cur;
-    }
-}
-
 
 void view_class_list()
 {

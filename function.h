@@ -79,8 +79,8 @@ bool edit_a_student();
 void read_a_class(ifstream & fi, node *&_student , int& numberStudent, int class_num);
 void rewrite_a_class(ofstream & fo, node *& _student, int& numberStudent, int class_num);
 bool remove_a_student();
-void read_a_class(ifstream & fi, nodeStudent *&_student , int& numberStudent, int class_num);
-void rewrite_a_class(ofstream & fo, nodeStudent *& _student, int& numberStudent, int class_num);
+void rewrite_a_class(ifstream &fi, nodeStudent *& _student, int &numberStudent, string tmp_class)
+void read_a_class(ifstream &fi, nodeStudent *& _student, int &numberStudent, string tmp_class)
 void deleteNodeStudent(nodeStudent *&pHead);
 void deleteNodeClass(nodeClass *&pHead);
 void deleteAll(node *&pHead);
