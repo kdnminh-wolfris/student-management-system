@@ -68,9 +68,10 @@ void menu(User& user, Config& config);
 int menuFunction(int start, int user_position);
 
 //profile
-void profileStaff(string& ID);
-void profileLecturer(string& ID);
-void profileStudent(string& ID);
+void view_profile(User& user);
+void profileStaff(User& user);
+void profileLecturer(User& user);
+void profileStudent(User& user);
 
 /*
 //academic staff-class
@@ -97,5 +98,8 @@ void update_account(int numberAccount, nodeAccount* listAccount);
 void view_class_list();
 void view_list_of_student_in_class(string class_code); //Take the code of the class and print out the students in that class
 bool get_info(User& user);
+void month_in_text(int num);
+bool valid_date(int year, int month, int day);
+bool loadStudent(Student& student);
 
 #endif FUNC_H

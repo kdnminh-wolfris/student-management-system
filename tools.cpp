@@ -173,7 +173,7 @@ bool get_info(User& user) {
 			}
 
 			fi.close();
-			cout << "Error: Missing this user in academic_staff.gulu\n" << endl;
+			cout << "Error: Missing << " << user.ID << " in academic_staff.gulu\n" << endl;
 			return false;
 		}
 		case 1: {
@@ -254,5 +254,158 @@ bool get_info(User& user) {
 	cout << "Error: User infomation not found\n" << endl;
 
 	fi.close();
+	return false;
+}
+
+void month_in_text(int num) {
+	switch (num) {
+		case 1: {
+			cout << "January";
+			break;
+		}
+		case 2: {
+			cout << "February";
+			break;
+		}
+		case 3: {
+			cout << "March";
+			break;
+		}
+		case 4: {
+			cout << "April";
+			break;
+		}
+		case 5: {
+			cout << "May";
+			break;
+		}
+		case 6: {
+			cout << "June";
+			break;
+		}
+		case 7: {
+			cout << "July";
+			break;
+		}
+		case 8: {
+			cout << "August";
+			break;
+		}
+		case 9: {
+			cout << "September";
+			break;
+		}
+		case 10: {
+			cout << "October";
+			break;
+		}
+		case 11: {
+			cout << "November";
+			break;
+		}
+		case 12: {
+			cout << "December";
+			break;
+		}
+	}
+}
+
+bool valid_date(int year, int month, int day) {
+	if (year % 4 == 0 && month == 2 && day == 29)
+		return true;
+
+	if (day < 1) return false;
+
+	switch (month) {
+		case 1:
+		case 3:
+		case 5:
+		case 7:
+		case 8:
+		case 10:
+		case 12: {
+			if (day <= 31) return true;
+			else return false;
+			break;
+		}
+		case 4:
+		case 6:
+		case 9:
+		case 11: {
+			if (day <= 30) return true;
+			else return false;
+			break;
+		}
+		case 2: {
+			if (day <= 28) return true;
+			else return false;
+			break;
+		}
+		default: {
+			return false;
+		}
+	}
+}
+
+bool loadStudent(Student& student) {
+	ifstream fi;
+	fi.open("data/student.gulu");
+	if (!fi.is_open()) {
+		cout << "Error: Missing student.gulu file\n" << endl;
+		return false;
+	}
+
+	int numberStudent;
+	fi >> numberStudent;
+	fi.ignore(100, '\n');
+
+	bool found = false;
+
+	while (numberStudent--) {
+		fi.ignore(100, '\n');
+
+		string tmpID;
+		getline(fi, tmpID);
+		getline(fi, student.class_);
+
+		if (tmpID == student.general.ID) {
+			found = true; break;
+		}
+	}
+
+	fi.close();
+	if (!found) {
+		cout << "Error: Missing " << student.general.ID << " in student.gulu\n" << endl;
+		return false;
+	}
+
+	fi.open("data/class/" + student.class_ + "/student.gulu");
+	if (!fi.is_open()) {
+		cout << "Error: Missing " << student.class_ << "/student.gulu file\n" << endl;
+		return false;
+	}
+
+	fi >> numberStudent;
+	fi.ignore(100, '\n');
+
+	while (numberStudent--) {
+		fi.ignore(100, '\n');
+
+		string tmpID;
+		getline(fi, tmpID);
+
+		fi.ignore(100, '\n');
+		fi.ignore(100, '\n');
+		fi.ignore(100, '\n');
+
+		fi >> student.status;
+		fi.ignore(100, '\n');
+
+		if (tmpID == student.general.ID) {
+			fi.close(); return true;
+		}
+	}
+
+	cout << "Error: Missing " << student.general.ID << " in " << student.class_ << "/student.gulu\n" << endl;
 	return false;
 }

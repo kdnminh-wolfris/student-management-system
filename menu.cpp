@@ -16,11 +16,7 @@ void menu(User& user, Config& config) {
 
 	int option = int_option(numberFunction + 4);
 
-	if (option == 0) {
-		if (user.position == 0) profileStaff(user.ID);
-		else if (user.position == 1) profileLecturer(user.ID);
-		else if (user.position == 2) profileStudent(user.ID);
-	}
+	if (option == 0) view_profile(user);
 
 	if (option == numberFunction + 2) {
 		if (changePassword(user, config))
