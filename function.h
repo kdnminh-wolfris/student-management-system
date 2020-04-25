@@ -96,7 +96,9 @@ bool bool_option(string operation); // using getch() for one-click choosing
 bool load_account(int& numberAccount, nodeAccount*& listAccount);
 void update_account(int numberAccount, nodeAccount* listAccount);
 void view_class_list();
-void view_list_of_student_in_class(string class_code); //Take the code of the class and print out the students in that class
+void view_list_of_student_in_class(string class_code);
+void move_a_student_from_classA_to_classB(string codeA, string codeB, string Student_id);
+//Take the code of the class and print out the students in that class
 bool get_info(User& user);
 void month_in_text(int num);
 bool valid_date(int year, int month, int day);

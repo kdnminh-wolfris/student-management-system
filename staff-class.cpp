@@ -396,3 +396,129 @@ void view_list_of_student_in_class(string class_code) //Take the code of the cla
     }
     fi.close();
 }
+
+void move_a_student_from_classA_to_classB(string codeA, string codeB, string Student_id)
+{
+    //Editing the file student.gulu in data
+    chdir("data");
+    ifstream ifs;
+    ifs.open("student.gulu");
+    if(!ifs.is_open())
+    {
+        cout << "Cannot open file\n";
+        return;
+    }
+    int x; ifs>>x;
+    bool flag = false;
+    while(x--)
+    {
+        string sid, cc;
+        ifs>>sid>>cc;
+        if(sid==Student_id and cc==codeB)
+        {
+            cout << "This student has already been in class " << codeB << '\n';
+            ifs.close();
+            return;
+        }
+        if(sid==Student_id and cc==codeA) flag = true;
+    }
+    if(!flag)
+    {
+        cout << "This student is not in class A\n";
+        ifs.close();
+        return;
+    }
+    ifs.close();
+    ifs.open("student.gulu");
+    ofstream ofs;
+    ofs.open("tmp.gulu");
+    int cnt_block; ifs>>cnt_block;
+    ofs<<cnt_block<<"\n\n";
+    while(cnt_block--)
+    {
+        string sid, cc;
+        ifs>>sid>>cc;
+        if(sid!=Student_id or codeA!=cc)
+        {
+            ofs<<sid<<'\n'<<cc<<"\n\n";
+        }
+        else
+        {
+            ofs<<sid<<'\n'<<codeB<<"\n\n";
+        }
+    }
+    ofs.close();
+    ifs.close();
+    remove("student.gulu");
+    rename("tmp.gulu", "student.gulu");
+    //Now editing the student list in classA - delete the student from this class
+    string link = "class/"+codeA;
+    chdir(link.c_str());
+
+    ifs.open("student.gulu");
+    if(!ifs.is_open())
+    {
+        cout << "Cannot open file\n";
+        cout << 2 <<'\n';
+        return;
+    }
+    ofs.open("tmp.gulu");
+    string cnt;
+    ifs>>cnt_block;
+    ofs<<cnt_block-1<<'\n'<<'\n';
+    ifs.ignore(1);
+    string info_block;
+    while(cnt_block--)
+    {
+        ifs.ignore(1);
+        string sid, name, dob, sex, status;
+        getline(ifs, sid, '\n');
+        getline(ifs, name, '\n');
+        getline(ifs, dob, '\n');
+        getline(ifs, sex, '\n');
+        getline(ifs, status, '\n');
+        if(sid!=Student_id)
+        {
+            ofs<<sid<<'\n'<<name<<'\n'<<dob<<'\n'<<sex<<'\n'<<status<<"\n\n";        }
+        else
+        {
+            info_block =sid+'\n'+name+'\n'+dob+'\n'+sex+'\n'+status+"\n\n";
+        }
+    }
+
+    ifs.close();
+    ofs.close();
+    remove("student.gulu");
+    rename("tmp.gulu", "student.gulu");
+
+    //Now move to class B and add the student to the student list of class B
+    chdir("..");
+    chdir(codeB.c_str());
+    ifs.open("student.gulu");
+    if(!ifs.is_open())
+    {
+        cout << "Cannot open file\n";
+        cout << 3 << '\n';
+        return;
+    }
+    ofs.open("tmp.gulu");
+    ifs>>cnt_block;
+    ofs<<cnt_block+1<<'\n'<<'\n';
+    ifs.ignore(1);
+    while(cnt_block--)
+    {
+        ifs.ignore(1);
+        string sid, name, dob, sex, status;
+        getline(ifs, sid, '\n');
+        getline(ifs, name, '\n');
+        getline(ifs, dob, '\n');
+        getline(ifs, sex, '\n');
+        getline(ifs, status, '\n');
+        ofs<<sid<<'\n'<<name<<'\n'<<dob<<'\n'<<sex<<'\n'<<status<<"\n\n";
+    }
+    ofs<< info_block;
+    ifs.close();
+    ofs.close();
+    remove("student.gulu");
+    rename("tmp.gulu", "student.gulu");
+}
