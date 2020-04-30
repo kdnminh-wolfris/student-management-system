@@ -12,11 +12,12 @@ void import_student_from_csv()
     getline(cin,choice);
     string classname;
     classname=choice;
-            in.open(choice+"-Student.csv");
-            if(!in) cout<<"There is an error trying to open "<<classname<<".csv"<<endl;
+    nodeStudent*pHead=nullptr;
+    nodeStudent*cur=pHead;
+    in.open(choice+"-Student.csv");
+    if(!in) cout<<"There is an error trying to open "<<classname<<".csv"<<endl;
             else
             {
-                nodeStudent*pHead=nullptr;
                 int count=0;
                 for (int i=0;i<5;++i)
                 {
@@ -106,33 +107,64 @@ void import_student_from_csv()
                      }
                 }            
                 inacc.close();
-                _mkdir("/data/class/"+classname+"/");
+                _wmkdir("/data/class/"+classname+"/");
                 out.open("/data/class/"+classname+"/"+classname+"-Student.gulu");
                  if (out.is_open())
                 {
-                int n=0;
-                cur=pHead;
-                while (cur!=nullptr)
+                    int n=0;
+                    cur=pHead;
+                    while (cur!=nullptr)
+                    {
+                        cur=cur->next;
+                        n++;
+                    }
+                        out<<n<<endl<<endl;//print the number of students in the gulu file
+                        cur=pHead;//reset current pointer to the first student
+                        while (cur!=nullptr)
+                        {
+                        out<<cur->student.general.ID<<endl;
+                        out<<cur->student.general.fullname<<endl;
+                        out<<cur->student.general.DoB.year<<" "<<cur->student.general.DoB.month<<" "<<cur->student.general.DoB.day<<endl;
+                        out<<cur->student.general.sex<<endl;
+                        out<<cur->student.status<<endl<<endl;
+                        cur=cur->next;
+                        }
+                        out.close();
+                }
+                else cout<<"The file cannot be created."<<endl;//end of creating folder and write to classname-Student.gulu
+                out.open("/data/student.gulu",std::fstream::app);
+                if (!out){
+                cout<<"File student.gulu cannot be opened."<<endl;
+                }
+                else
                 {
-                    cur=cur->next;
-                    n++;
+                    cur=pHead;
+                    while (cur!=nullptr)
+                    {
+                        out<<cur->student.general.ID<<endl;
+                        out<<classname<<endl<<endl;
+                        cur=cur->next;
+                    }
+                    out.close();
                 }
-                out<<n<<endl<<endl;//print the number of students in the gulu file
-                cur=pHead;//reset current pointer to the first student
-                while (cur!=nullptr)
-                {
-                out<<
-                }
-                }
-    
-   
-        
-    }
-    else cout<<"The file cannot be created."<<endl;
-      
-}
-void create_account(){//Pls put pHeadacc=nullptr outside function
 
+            //begin to delete all nodes from student account node
+            curacc=pHeadaccount; 
+            while(curacc!=nullptr)
+            {
+                nodeAccount*temp=curacc;
+                curacc=curacc->next;
+                delete temp;
+            }
+            delete pHeadaccount;
+            //end of delete all nodes from student account node
+
+            //begin to delete all nodes from student node 
+            
+            }
+            
+    
+      
 }
 
 bool edit_a_student(){
