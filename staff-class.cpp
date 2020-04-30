@@ -13,7 +13,7 @@ void import_student_from_csv()
     string classname;
     classname=choice;
             in.open(choice+"-Student.csv");
-            if(!in) cout<<"There is an error trying to open 19APCS1-Student.csv"<<endl;
+            if(!in) cout<<"There is an error trying to open "<<classname<<".csv"<<endl;
             else
             {
                 nodeStudent*pHead=nullptr;
@@ -106,15 +106,26 @@ void import_student_from_csv()
                      }
                 }            
                 inacc.close();
-                //_mkdir("/data/class/"+classname);
+                _mkdir("/data/class/"+classname+"/");
                 out.open("/data/class/"+classname+"/"+classname+"-Student.gulu");
+                 if (out.is_open())
                 {
-
+                int n=0;
+                cur=pHead;
+                while (cur!=nullptr)
+                {
+                    cur=cur->next;
+                    n++;
                 }
-            }
+                out<<n<<endl<<endl;//print the number of students in the gulu file
+                cur=pHead;//reset current pointer to the first student
+                while (cur!=nullptr)
+                {
+                out<<
+                }
+                }
     
-    if (out.is_open())
-    {
+   
         
     }
     else cout<<"The file cannot be created."<<endl;
