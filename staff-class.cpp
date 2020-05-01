@@ -404,9 +404,8 @@ void view_list_of_student_in_class(string class_code) //Take the code of the cla
 void move_a_student_from_classA_to_classB(string codeA, string codeB, string Student_id)
 {
     //Editing the file student.gulu in data
-    chdir("data");
     ifstream ifs;
-    ifs.open("student.gulu");
+    ifs.open("data/student.gulu");
     if(!ifs.is_open())
     {
         cout << "Cannot open file\n";
@@ -433,7 +432,7 @@ void move_a_student_from_classA_to_classB(string codeA, string codeB, string Stu
         return;
     }
     ifs.close();
-    ifs.open("student.gulu");
+    ifs.open("data/student.gulu");
     ofstream ofs;
     ofs.open("tmp.gulu");
     int cnt_block; ifs>>cnt_block;
@@ -453,13 +452,12 @@ void move_a_student_from_classA_to_classB(string codeA, string codeB, string Stu
     }
     ofs.close();
     ifs.close();
-    remove("student.gulu");
-    rename("tmp.gulu", "student.gulu");
+    remove("data/student.gulu");
+    rename("tmp.gulu", "data/student.gulu");
     //Now editing the student list in classA - delete the student from this class
-    string link = "class/"+codeA;
-    chdir(link.c_str());
+    string link = "data/class/"+codeA+"/student.gulu";
 
-    ifs.open("student.gulu");
+    ifs.open(link.c_str());
     if(!ifs.is_open())
     {
         cout << "Cannot open file\n";
@@ -492,13 +490,12 @@ void move_a_student_from_classA_to_classB(string codeA, string codeB, string Stu
 
     ifs.close();
     ofs.close();
-    remove("student.gulu");
-    rename("tmp.gulu", "student.gulu");
+    remove(link.c_str());
+    rename("tmp.gulu", link.c_str());
 
     //Now move to class B and add the student to the student list of class B
-    chdir("..");
-    chdir(codeB.c_str());
-    ifs.open("student.gulu");
+    link = "data/class/"+codeB+"/student.gulu";
+    ifs.open(link);
     if(!ifs.is_open())
     {
         cout << "Cannot open file\n";
@@ -523,6 +520,6 @@ void move_a_student_from_classA_to_classB(string codeA, string codeB, string Stu
     ofs<< info_block;
     ifs.close();
     ofs.close();
-    remove("student.gulu");
-    rename("tmp.gulu", "student.gulu");
+    remove(link.c_str());
+    rename("tmp.gulu", link.c_str());
 }
