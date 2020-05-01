@@ -470,3 +470,53 @@ bool loadLecturer(Lecturer& lecturer) {
 
 	return true;
 }
+
+
+void read_a_class(ifstream &fi, nodeStudent *& _student, int &numberStudent, string tmp_class){
+    fi.open("data/class/"+tmp_class+"/student.gulu");
+    if (!fi) {
+        cout <<"Error! Missing  file";
+        return ;
+    }
+    fi>>numberStudent;
+    fi.get();
+    fi.get();
+    nodeStudent *cur=_student;
+    for (int i=0;i<numberStudent;++i){
+        if (_student == nullptr) {
+            cur=new nodeStudent;
+            cur->prev=nullptr;
+            _student = cur;
+        }
+        getline(fi,cur->student.general.ID,'\n');
+        getline(fi,cur->student.general.fullname,'\n');
+        fi>>cur->student.general.DoB.year>>cur->student.general           .DoB.month>>cur->student.general.DoB.day;
+        fi.get();
+        getline(fi,cur->student.class_,'\n');
+        fi>>cur->student.status;
+        fi.get();
+        fi.ignore(1000,'\n');
+        if (i<numberStudent-1) {
+            cur->next=new nodeStudent;
+            cur->next->prev= cur;
+            cur=cur->next;
+        }
+        else cur->next = nullptr;
+    }
+    fi.close();
+}
+
+void rewrite_a_class(ofstream &fo,nodeStudent *&_student,int &numberStudent,string tmp_class){
+    fo.open("data/class/"+tmp_class+"/student.gulu");
+    fo<<numberStudent<<endl<<endl;
+    nodeStudent *cur=_student;
+    for (int i=0;i<numberStudent;++i){
+        fo<<cur->student.general.ID<<endl
+        <<cur->student.general.fullname<<endl
+        <<cur->student.general.DoB.year<<" "<<cur->student.general.DoB.month<<                      " "<<cur->student.general.DoB.day<<endl
+        <<cur->student.class_<<endl
+        <<cur->student.status<<endl<<endl;
+        cur=cur->next;
+    }
+    fo.close();
+}

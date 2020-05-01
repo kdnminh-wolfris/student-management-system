@@ -88,13 +88,7 @@ void profileStudent(User& user);
 //academic staff-class
 void import_student_from_csv(node*pHead);
 bool edit_a_student();
-void read_a_class(ifstream & fi, node *&_student , int& numberStudent, int class_num);
-void rewrite_a_class(ofstream & fo, node *& _student, int& numberStudent, int class_num);
 bool remove_a_student();
-void rewrite_a_class(ifstream &fi, nodeStudent *& _student, int &numberStudent, string tmp_class)
-void read_a_class(ifstream &fi, nodeStudent *& _student, int &numberStudent, string tmp_class)
-void deleteNodeStudent(nodeStudent *&pHead);
-void deleteNodeClass(nodeClass *&pHead);
 void deleteAll(node *&pHead);
 */
 
@@ -106,6 +100,8 @@ int int_option(int numberChoice = 10); // using getch() for one-click choosing
 bool bool_option(string operation); // using getch() for one-click choosing
 bool load_account(int& numberAccount, nodeAccount*& listAccount);
 void update_account(int numberAccount, nodeAccount* listAccount);
+void rewrite_a_class(ofstream &fo, nodeStudent *& _student, int &numberStudent, string tmp_class)
+void read_a_class(ifstream &fi, nodeStudent *& _student, int &numberStudent, string tmp_class)
 void view_class_list();
 void view_list_of_student_in_class(string class_code);
 void move_a_student_from_classA_to_classB(string codeA, string codeB, string Student_id);
