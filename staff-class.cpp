@@ -72,7 +72,7 @@ void import_student_from_csv()
 			}
 		}
 		in.close();
-		inacc.open("data/account.gulu", std::fstream::app);
+		outacc.open("data/account.gulu", std::fstream::app);
 		cur = pHead;
 		nodeAccount* pHeadaccount = nullptr;
 		nodeAccount* curacc = pHeadaccount;
@@ -88,6 +88,8 @@ void import_student_from_csv()
 				if (cur->student.general.DoB.day < 10) pass.append("0");
 				pass.append(to_string(cur->student.general.DoB.day));
 				pHeadaccount->data.password = pass;
+				outacc << pHeadaccount->data.userID << endl;
+				outacc << pHeadaccount->data.password << endl << endl;
 				pHeadaccount->prev = nullptr;
 				pHeadaccount->next = nullptr;
 				curacc = pHeadaccount;
@@ -104,6 +106,8 @@ void import_student_from_csv()
 				if (cur->student.general.DoB.day < 10) pass.append("0");
 				pass.append(to_string(cur->student.general.DoB.day));
 				curacc->data.password = pass;
+				outacc << curacc->data.userID << endl;
+				outacc << curacc->data.password << endl << endl;
 				curacc->prev = tempacc;
 				cur = cur->next;
 				curacc->next = nullptr;
@@ -114,7 +118,7 @@ void import_student_from_csv()
 		string destination = "data/class/" + classname + "/";
 		const char* cstr = destination.c_str();
 		_mkdir(cstr);
-		out.open("data/class/" + classname + "/" + classname + "-Student.gulu");
+		out.open("data/class/" + classname + "/student.gulu");
 		if (out.is_open())
 		{
 			int n = 0;
@@ -175,11 +179,62 @@ void import_student_from_csv()
 		}
 		delete curacc;
 	}
-
-
-
 }
+void add_a_student(){
+	string classname;
+	cout << "Please type in the class of the student you want to add:" << endl;
+	getline(cin, classname);
+	ofstream out;
+	out.open("data/class/" + classname + "/student.gulu", std::fstream::app);
+	nodeStudent* newstudent = nullptr;
+	if (!out.is_open()) { cout << "Cannot open " << classname << "-Student.gulu" << endl; }
+	else {
+		newstudent = new nodeStudent;
+		cout << "Please type in ID of new student:" << endl;
+		getline(cin, newstudent->student.general.ID);
+		cout << "Please type in the full name of new student:" << endl;
+		getline(cin, newstudent->student.general.fullname);
+		cout << "Please type in the gender of student with 0 for female, 1 for male:" << endl;
+		cin >> newstudent->student.general.sex;
+		cout << "Date of birth:YYYY MM DD:" << endl;
+		cin >> newstudent->student.general.DoB.year;
+		cin >> newstudent->student.general.DoB.month;
+		cin >> newstudent->student.general.DoB.day;
+		newstudent->student.status = 1;
+		newstudent->student.class_ = classname;
+		newstudent->student.general.position = 2;
 
+		out << newstudent->student.general.ID << endl;
+		out << newstudent->student.general.fullname << endl;
+		out << newstudent->student.general.DoB.year << " " << newstudent->student.general.DoB.month << " " << newstudent->student.general.DoB.day << endl;
+		out << newstudent->student.general.sex << endl;
+		out << 1 << endl << endl;
+		out.close();
+	}
+	if (newstudent == nullptr) return;
+	else {
+		ofstream out;
+		out.open("data/student.gulu", std::fstream::app);
+		if (!out) cout << "The file student.gulu containing list of all students cannot be opened" << endl;
+		else {
+			out << newstudent->student.general.ID << endl;
+			out << classname << endl << endl;
+			out.close();
+		}
+		out.open("data/account.gulu", std::fstream::app);
+		if (!out) cout << "The account.gulu file cannot be opened" << endl;
+		else
+		{
+			out << newstudent->student.general.ID << endl;
+			string pass = to_string(newstudent->student.general.DoB.year);
+			if (newstudent->student.general.DoB.month < 10) pass.append("0");
+			pass.append(to_string(newstudent->student.general.DoB.month));
+			if (newstudent->student.general.DoB.day < 10) pass.append("0");
+			pass.append(to_string(newstudent->student.general.DoB.day));
+			out << pass << endl << endl;
+		}
+	}
+}
 bool edit_a_student(){
     ifstream fi;
     ofstream fo;
