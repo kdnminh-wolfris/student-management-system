@@ -3,168 +3,181 @@
 #include "function.h"
 void import_student_from_csv()
 {
-    ifstream in;
-    ifstream inacc;//in as input for student list, inacc as input for creating student account
-    ofstream out;
-    ofstream outacc;//out as output for student list, outacc as output for creating student account
-    string choice;
-    cout<<"Please type in the name of the class you wish to import:"<<endl;
-    getline(cin,choice);
-    string classname;
-    classname=choice;
-    nodeStudent*pHead=nullptr;
-    nodeStudent*cur=pHead;
-    in.open(choice+"-Student.csv");
-    if(!in) cout<<"There is an error trying to open "<<classname<<".csv"<<endl;
-            else
-            {
-                int count=0;
-                for (int i=0;i<5;++i)
-                {
-                    in.ignore(1000,','||'\n');
-                }
-                nodeStudent*cur=pHead;
-                while (!in.eof())
-                {
-                    if (pHead==nullptr)//input 1st node
-                    {
-                        pHead=new nodeStudent;
-                         in.ignore(100,',');
-                        in>>pHead->student.general.ID;
-                        in.ignore(100,',');
-                        getline(in,pHead->student.general.fullname);
-                        in.ignore(100,',');
-                        in>>pHead->student.general.sex;
-                        pHead->student.general.position=2;
-                        in>>pHead->student.general.DoB.year;
-                        in>>pHead->student.general.DoB.month;
-                        in>>pHead->student.general.DoB.day;
-                        in.ignore (100,',');
-                        in>>pHead->student.class_;
-                        pHead->student.status=1;
-                        pHead->student.general.position=2;
-                        count++;
-                        cur=pHead;
-                        pHead->next=nullptr;
-                        pHead->prev=nullptr;
-                    }
+	ifstream in;
+	ifstream inacc;//in as input for student list, inacc as input for creating student account
+	ofstream out;
+	ofstream outacc;//out as output for student list, outacc as output for creating student account
+	string choice;
+	cout << "Please type in the name of the class you wish to import:" << endl;
+	getline(cin, choice);
+	string classname;
+	classname = choice;
+	nodeStudent* pHead = nullptr;
+	nodeStudent* cur = pHead;
+	in.open(choice + "-Student.csv");
+	if (!in) cout << "There is an error trying to open " << classname << "-Student.csv" << endl;
+	else
+	{
+		int count = 0;
+		for (int i = 0; i < 4; ++i)
+		{
+			in.ignore(1000, ',');
+		}
+		nodeStudent* cur = pHead;
+		while (!in.eof())
+		{
+			if (pHead == nullptr)//input 1st node
+			{
+				pHead = new nodeStudent;
+				in.ignore(100, '\n');
+				getline(in, pHead->student.general.ID, ',');
+				getline(in, pHead->student.general.fullname,',');
+				in >> pHead->student.general.sex;
+				in.ignore(10, ',');
+				pHead->student.general.position = 2;
+				in >> pHead->student.general.DoB.year;
+				in.ignore(10, '-');
+				in >> pHead->student.general.DoB.month;
+				in.ignore(10, '-');
+				in >> pHead->student.general.DoB.day;
+				pHead->student.class_=classname;
+				pHead->student.status = 1;
+				count++;
+				cur = pHead;
+				pHead->next = nullptr;
+				pHead->prev = nullptr;
+			}
 
-                    else{//input other nodes
-                    cur->next=new nodeStudent;
-                    nodeStudent*temp=cur;
-                    cur=cur->next;
-                    cur->prev=temp;
-                    in.ignore(100,',');
-                    in>>cur->student.general.ID;
-                    in.ignore(100,',');
-                    getline(in,cur->student.general.fullname);
-                    in.ignore(100,',');
-                    in>>cur->student.general.sex;
-                    cur->student.general.position=2;
-                    in>>cur->student.general.DoB.year;
-                    in>>cur->student.general.DoB.month;
-                    in>>cur->student.general.DoB.day;
-                    in.ignore (100,',');
-                    in>>cur->student.class_;
-                    cur->student.status=1;
-                    cur->student.general.position=2;
-                    count++;
-                    cur->next=nullptr;
-                    }
-                }
-                in.close();
-                inacc.open("data/account.gulu",std::fstream::app);
-                cur=pHead;
-                nodeAccount*pHeadaccount=nullptr;
-                nodeAccount*curacc=pHeadaccount;
-                while (cur!=nullptr)
-                {
-                     if (pHeadaccount==nullptr)
-                     {
-                     pHeadaccount=new nodeAccount;
-                     pHeadaccount->data.userID=cur->student.general.ID;
-                     string pass=to_string(cur->student.general.DoB.year);
-                     pass.append(to_string(cur->student.general.DoB.month));
-                     pass.append(to_string(cur->student.general.DoB.day));
-                     pHeadaccount->data.password=pass;
-                     pHeadaccount->prev=nullptr;
-                     pHeadaccount->next=nullptr;
-                     curacc=pHeadaccount;
-                     cur=cur->next;                  
-                     }
-                     else{
-                      curacc->next=new nodeAccount;
-                      nodeAccount*tempacc=curacc;
-                      curacc=curacc->next;
-                      curacc->data.userID=cur->student.general.ID;
-                     string pass=to_string(cur->student.general.DoB.year);
-                     pass.append(to_string(cur->student.general.DoB.month));
-                     pass.append(to_string(cur->student.general.DoB.day));
-                     curacc->data.password=pass;
-                     curacc->prev=tempacc;
-                     curacc->next=nullptr;
-                     ;  
-                     }
-                }            
-                inacc.close();
-                _wmkdir("/data/class/"+classname+"/");
-                out.open("/data/class/"+classname+"/"+classname+"-Student.gulu");
-                 if (out.is_open())
-                {
-                    int n=0;
-                    cur=pHead;
-                    while (cur!=nullptr)
-                    {
-                        cur=cur->next;
-                        n++;
-                    }
-                        out<<n<<endl<<endl;//print the number of students in the gulu file
-                        cur=pHead;//reset current pointer to the first student
-                        while (cur!=nullptr)
-                        {
-                        out<<cur->student.general.ID<<endl;
-                        out<<cur->student.general.fullname<<endl;
-                        out<<cur->student.general.DoB.year<<" "<<cur->student.general.DoB.month<<" "<<cur->student.general.DoB.day<<endl;
-                        out<<cur->student.general.sex<<endl;
-                        out<<cur->student.status<<endl<<endl;
-                        cur=cur->next;
-                        }
-                        out.close();
-                }
-                else cout<<"The file cannot be created."<<endl;//end of creating folder and write to classname-Student.gulu
-                out.open("/data/student.gulu",std::fstream::app);
-                if (!out){
-                cout<<"File student.gulu cannot be opened."<<endl;
-                }
-                else
-                {
-                    cur=pHead;
-                    while (cur!=nullptr)
-                    {
-                        out<<cur->student.general.ID<<endl;
-                        out<<classname<<endl<<endl;
-                        cur=cur->next;
-                    }
-                    out.close();
-                }
+			else {//input other nodes
+				cur->next = new nodeStudent;
+				nodeStudent* temp = cur;
+				cur = cur->next;
+				cur->prev = temp;
+				in.ignore(100, '\n');
+				getline(in, cur->student.general.ID, ',');
+				getline(in, cur->student.general.fullname,',');
+				in >> cur->student.general.sex;
+				in.ignore(10, ',');
+				cur->student.general.position = 2;
+				in >> cur->student.general.DoB.year;
+				in.ignore(10, '-');
+				in >> cur->student.general.DoB.month;
+				in.ignore(10, '-');
+				in >> cur->student.general.DoB.day;
+				in.ignore(100, ',');
+				cur->student.class_=classname;
+				cur->student.status = 1;
+				count++;
+				cur->next = nullptr;
+			}
+		}
+		in.close();
+		inacc.open("data/account.gulu", std::fstream::app);
+		cur = pHead;
+		nodeAccount* pHeadaccount = nullptr;
+		nodeAccount* curacc = pHeadaccount;
+		while (cur != nullptr)
+		{
+			if (pHeadaccount == nullptr)
+			{
+				pHeadaccount = new nodeAccount;
+				pHeadaccount->data.userID = cur->student.general.ID;
+				string pass = to_string(cur->student.general.DoB.year);
+				if (cur->student.general.DoB.month < 10) pass.append("0");
+				pass.append(to_string(cur->student.general.DoB.month));
+				if (cur->student.general.DoB.day < 10) pass.append("0");
+				pass.append(to_string(cur->student.general.DoB.day));
+				pHeadaccount->data.password = pass;
+				pHeadaccount->prev = nullptr;
+				pHeadaccount->next = nullptr;
+				curacc = pHeadaccount;
+				cur = cur->next;
+			}
+			else {
+				curacc->next = new nodeAccount;
+				nodeAccount* tempacc = curacc;
+				curacc = curacc->next;
+				curacc->data.userID = cur->student.general.ID;
+				string pass = to_string(cur->student.general.DoB.year);
+				if (cur->student.general.DoB.month < 10) pass.append("0");
+				pass.append(to_string(cur->student.general.DoB.month));
+				if (cur->student.general.DoB.day < 10) pass.append("0");
+				pass.append(to_string(cur->student.general.DoB.day));
+				curacc->data.password = pass;
+				curacc->prev = tempacc;
+				cur = cur->next;
+				curacc->next = nullptr;
+				;
+			}
+		}
+		inacc.close();
+		string destination = "data/class/" + classname + "/";
+		const char* cstr = destination.c_str();
+		_mkdir(cstr);
+		out.open("data/class/" + classname + "/" + classname + "-Student.gulu");
+		if (out.is_open())
+		{
+			int n = 0;
+			cur = pHead;
+			while (cur != nullptr)
+			{
+				cur = cur->next;
+				n++;
+			}
+			out << n << endl << endl;//print the number of students in the gulu file
+			cur = pHead;//reset current pointer to the first student
+			while (cur != nullptr)
+			{
+				out << cur->student.general.ID << endl;
+				out << cur->student.general.fullname << endl;
+				out << cur->student.general.DoB.year << " " << cur->student.general.DoB.month << " " << cur->student.general.DoB.day << endl;
+				out << cur->student.general.sex << endl;
+				out << cur->student.status << endl << endl;
+				cur = cur->next;
+			}
+			out.close();
+		}
+		else cout << "The file cannot be created." << endl;//end of creating folder and write to classname-Student.gulu
+		out.open("data/student.gulu", std::fstream::app);
+		if (!out) {
+			cout << "File student.gulu cannot be opened." << endl;
+		}
+		else
+		{
+			cur = pHead;
+			while (cur != nullptr)
+			{
+				out << cur->student.general.ID << endl;
+				out << classname << endl << endl;
+				cur = cur->next;
+			}
+			out.close();
+		}
 
-            //begin to delete all nodes from student account node
-            curacc=pHeadaccount; 
-            while(curacc!=nullptr)
-            {
-                nodeAccount*temp=curacc;
-                curacc=curacc->next;
-                delete temp;
-            }
-            delete pHeadaccount;
-            //end of delete all nodes from student account node
+		//begin to delete all nodes from student account node
+		curacc = pHeadaccount;
+		while (curacc != nullptr)
+		{
+			nodeAccount* temp = curacc;
+			curacc = curacc->next;
+			delete temp;
+		}
+		delete curacc;
+		//end of delete all nodes from student account node
 
-            //begin to delete all nodes from student node 
-            
-            }
-            
-    
-      
+		//begin to delete all nodes from student node 
+		cur = pHead;
+		while (curacc != nullptr)
+		{
+			nodeStudent* temp = cur;
+			cur = cur->next;
+			delete temp;
+		}
+		delete curacc;
+	}
+
+
+
 }
 
 bool edit_a_student(){
