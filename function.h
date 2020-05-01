@@ -76,6 +76,7 @@ bool changePassword(User& user, Config& config);
 // menu
 void menu(User& user, Config& config);
 int menuFunction(int start, int user_position);
+void optionFunction(int option, int user_position);
 
 //profile
 void view_profile(User& user);

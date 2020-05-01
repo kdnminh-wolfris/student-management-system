@@ -9,7 +9,9 @@ void menu(User& user, Config& config) {
 	*/
 
 	cout << "[ 0 ] Profile\n";
+
 	int numberFunction = menuFunction(1, user.position);
+
 	numtag(numberFunction + 1); cout << "Settings\n";
 	numtag(numberFunction + 2); cout << "Change password\n";
 	numtag(numberFunction + 3); cout << "Logout\n";
@@ -17,13 +19,16 @@ void menu(User& user, Config& config) {
 	int option = int_option(numberFunction + 4);
 
 	if (option == 0) view_profile(user);
+	else if (option == numberFunction + 1) {
 
-	if (option == numberFunction + 2) {
+
+
+	}
+	else if (option == numberFunction + 2) {
 		if (changePassword(user, config))
 			cout << "Password changed sucessfully!\n" << endl;
 	}
-
-	if (option == numberFunction + 3) {
+	else if (option == numberFunction + 3) {
 		if (bool_option("logout")) {
 			Config config;
 			load_config(config);
@@ -35,6 +40,7 @@ void menu(User& user, Config& config) {
 		}
 		else return menu(user, config);
 	}
+	else optionFunction(option - 1, user.position);
 }
 
 int menuFunction(int start, int user_position) {
@@ -61,5 +67,62 @@ int menuFunction(int start, int user_position) {
 		numtag(start + 2); cout << "View schedules\n";
 		numtag(start + 3); cout << "View course scores\n";
 		return 4;
+	}
+}
+
+void optionFunction(int option, int user_position) {
+	if (user_position == 0) {
+		switch (option) {
+			case 0: {
+				cout << "Class Manangement\n" << endl;
+
+				numtag(0); cout << "Import students of a class\n";
+				numtag(1); cout << "Add a new student to a class\n";
+				numtag(2); cout << "Edit a student infomation\n";
+				numtag(3); cout << "Remove a student\n";
+				numtag(4); cout << "Change students from class A to class B\n";
+				numtag(5); cout << "View list of classes\n";
+				numtag(6); cout << "View list of students in a class\n";
+
+				option = int_option(7);
+
+				switch (option) {
+					case 0: {
+
+						break;
+					}
+					case 1: {
+
+						break;
+					}
+					case 2: {
+
+						break;
+					}
+					case 3: {
+
+						break;
+					}
+					case 4: {
+
+						break;
+					}
+					case 5: {
+
+						break;
+					}
+					case 6: {
+
+						break;
+					}
+				}
+			}
+		}
+	}
+	else if (user_position == 1) {
+
+	}
+	else if (user_position == 2) {
+
 	}
 }
