@@ -176,6 +176,7 @@ bool get_info(User& user) {
 			cout << "Error: Missing << " << user.ID << " in academic_staff.gulu\n" << endl;
 			return false;
 		}
+
 		case 1: {
 			fi.open("data/lecturer.gulu");
 			if (!fi.is_open()) {
@@ -183,10 +184,31 @@ bool get_info(User& user) {
 				return false;
 			}
 
+			int numberLecturer;
+			fi >> numberLecturer;
+			fi.ignore(100, '\n');
 
+			while (numberLecturer--) {
+				fi.ignore(100, '\n');
 
-			break;
+				string tmpID;
+				getline(fi, tmpID);
+				getline(fi, user.fullname);
+				fi >> user.DoB.year >> user.DoB.month >> user.DoB.day;
+				fi >> user.sex;
+				fi.ignore(100, '\n');
+				fi.ignore(100, '\n');
+
+				if (tmpID == user.ID) {
+					fi.close(); return true;
+				}
+			}
+
+			fi.close();
+			cout << "Error: Missing " << user.ID << " in lecturer.gulu\n" << endl;
+			return false;
 		}
+
 		case 2: {
 			fi.open("data/student.gulu");
 			if (!fi.is_open()) {
@@ -408,4 +430,43 @@ bool loadStudent(Student& student) {
 
 	cout << "Error: Missing " << student.general.ID << " in " << student.class_ << "/student.gulu\n" << endl;
 	return false;
+}
+
+bool loadLecturer(Lecturer& lecturer) {
+	ifstream fi;
+	fi.open("data/lecturer.gulu");
+	if (!fi.is_open()) {
+		cout << "Error: Missing lecturer.gulu file\n" << endl;
+		return false;
+	}
+
+	int numberLecturer;
+	fi >> numberLecturer;
+	fi.ignore(100, '\n');
+
+	bool found = false;
+
+	while (numberLecturer--) {
+		fi.ignore(100, '\n');
+
+		string tmpID;
+		getline(fi, tmpID);
+		getline(fi, lecturer.general.fullname);
+		fi >> lecturer.general.DoB.year >> lecturer.general.DoB.month >> lecturer.general.DoB.day;
+		fi >> lecturer.general.sex;
+		fi.ignore(100, '\n');		
+		getline(fi, lecturer.degree);
+
+		if (tmpID == lecturer.general.ID) {
+			found = true; break;
+		}
+	}
+
+	fi.close();
+	if (!found) {
+		cout << "Error: Missing " << lecturer.general.ID << " in lecturer.gulu\n" << endl;
+		return false;
+	}
+
+	return true;
 }

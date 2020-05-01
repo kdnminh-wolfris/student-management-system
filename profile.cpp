@@ -40,15 +40,20 @@ void profileStaff(User& user) {
 void profileLecturer(User& user) {
 	cout << "Lecturer\n";
 
+	Lecturer lecturer;
+	lecturer.general = user;
+	loadLecturer(lecturer);
+
+	cout << "Degree: " << lecturer.degree << '\n';
 }
 
 void profileStudent(User& user) {
-	Student* student = new Student;
-	student->general = user;
-	loadStudent(*student);
+	Student student;
+	student.general = user;
+	loadStudent(student);
 
 	cout << "Student (";
-	switch (student->status) {
+	switch (student.status) {
 		case 0: {
 			cout << "graduated";
 			break;
@@ -64,8 +69,8 @@ void profileStudent(User& user) {
 	}
 	cout << ")\n";
 
-	cout << "Class: " << student->class_ << '\n';
+	cout << "Class: " << student.class_ << '\n';
 
-	int graduated_year = (student->class_[0] - 48) * 10 + (student->class_[1] - 48) + 4;
-	cout << "Graduated year: " << graduated_year << "\n";
+	int graduation_year = (student.class_[0] - 48) * 10 + (student.class_[1] - 48) + 4;
+	cout << "Graduation year: " << graduation_year << "\n";
 }

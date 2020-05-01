@@ -53,6 +53,16 @@ struct nodeStudent {
 	nodeStudent* next, * prev;
 };
 
+struct Lecturer {
+	User general;
+	string degree;
+};
+
+struct nodeLecturer {
+	Lecturer lecturer;
+	nodeLecturer* next, * prev;
+};
+
 struct nodeClass{
     string name;
     nodeClass *next,*prev;
@@ -103,5 +113,6 @@ bool get_info(User& user);
 void month_in_text(int num);
 bool valid_date(int year, int month, int day);
 bool loadStudent(Student& student);
+bool loadLecturer(Lecturer& lecturer);
 
 #endif FUNC_H

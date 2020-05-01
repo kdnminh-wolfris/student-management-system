@@ -57,3 +57,16 @@ DoB // yyyy mm dd
 Sex // 0: Female; 1: Male
 
 - The first line and each blocks will be seperated by a single line.
+
+>>> data/lecturer.gulu
+
+- First line is the number of information blocks.
+
+- Each block will be like this:
+UserID
+Fullname
+DoB // yyyy mm dd
+Sex // 0: Female; 1: Male
+Degree // text
+
+- The first line and each blocks will be seperated by a single line.

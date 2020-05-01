@@ -45,6 +45,21 @@ int menuFunction(int start, int user_position) {
 		numtag(start + 3); cout << "Attendance list\n";
 		return 4;
 	}
-	else if (user_position == 1) return 7;
-	else return 4;
+	else if (user_position == 1) {
+		numtag(start + 0); cout << "View course list\n";
+		numtag(start + 1); cout << "View course's student list\n";
+		numtag(start + 2); cout << "View course's attendance list\n";
+		numtag(start + 3); cout << "Edit an attendance\n";
+		numtag(start + 4); cout << "Import scoreboard\n";
+		numtag(start + 5); cout << "Edit student grade\n";
+		numtag(start + 6); cout << "View scoreboard\n";
+		return 7;
+	}
+	else {
+		numtag(start + 0); cout << "Check-in\n";
+		numtag(start + 1); cout << "View check-in result\n";
+		numtag(start + 2); cout << "View schedules\n";
+		numtag(start + 3); cout << "View course scores\n";
+		return 4;
+	}
 }
