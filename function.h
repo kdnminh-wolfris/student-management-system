@@ -3,12 +3,12 @@
 
 #include <iostream>
 #include <fstream>
-#include <conio.h>
 #include <iomanip>
 #include <algorithm>
 #include <math.h>
 #include <string.h>
 #include <string>
+#include <direct.h>
 
 using namespace std;
 
@@ -100,8 +100,8 @@ int int_option(int numberChoice = 10); // using getch() for one-click choosing
 bool bool_option(string operation); // using getch() for one-click choosing
 bool load_account(int& numberAccount, nodeAccount*& listAccount);
 void update_account(int numberAccount, nodeAccount* listAccount);
-void rewrite_a_class(ofstream &fo, nodeStudent *& _student, int &numberStudent, string tmp_class)
-void read_a_class(ifstream &fi, nodeStudent *& _student, int &numberStudent, string tmp_class)
+void rewrite_a_class(ofstream& fo, nodeStudent*& _student, int& numberStudent, string tmp_class);
+void read_a_class(ifstream& fi, nodeStudent*& _student, int& numberStudent, string tmp_class);
 void view_class_list();
 void view_list_of_student_in_class(string class_code);
 void move_a_student_from_classA_to_classB(string codeA, string codeB, string Student_id);

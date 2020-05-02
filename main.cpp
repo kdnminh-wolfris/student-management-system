@@ -1,6 +1,8 @@
 #include "function.h"
 
 int main() {
+	system("cls"); // Clear screen
+
 	cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||||\n";
 	cout << "|||                                                   |||\n";
 	cout << "|||             Student Management System             |||\n";
