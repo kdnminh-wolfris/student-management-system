@@ -499,7 +499,7 @@ void read_a_class(ifstream &fi, nodeStudent *& _student, int &numberStudent, str
         getline(fi,cur->student.general.fullname,'\n');
         fi>>cur->student.general.DoB.year>>cur->student.general           .DoB.month>>cur->student.general.DoB.day;
         fi.get();
-        getline(fi,cur->student.class_,'\n');
+        fi>>cur->student.general.sex;
         fi>>cur->student.status;
         fi.get();
         fi.ignore(1000,'\n');
@@ -521,7 +521,7 @@ void rewrite_a_class(ofstream &fo,nodeStudent *&_student,int &numberStudent,stri
         fo<<cur->student.general.ID<<endl
         <<cur->student.general.fullname<<endl
         <<cur->student.general.DoB.year<<" "<<cur->student.general.DoB.month<<                      " "<<cur->student.general.DoB.day<<endl
-        <<cur->student.class_<<endl
+        <<cur->student.general.sex<<endl
         <<cur->student.status<<endl<<endl;
         cur=cur->next;
     }
