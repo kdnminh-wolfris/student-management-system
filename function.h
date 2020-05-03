@@ -3,12 +3,12 @@
 
 #include <iostream>
 #include <fstream>
-#include <conio.h>
 #include <iomanip>
 #include <algorithm>
 #include <math.h>
 #include <string.h>
 #include <string>
+#include <direct.h>
 
 using namespace std;
 
@@ -69,7 +69,7 @@ struct nodeClass{
 };
 
 // administration
-bool login(User& user, Config& config); // (1/3) Staff done
+bool login(User& user, Config& config);
 int verified(User& user, string& pw);
 bool changePassword(User& user, Config& config);
 
@@ -84,13 +84,10 @@ void profileStaff(User& user);
 void profileLecturer(User& user);
 void profileStudent(User& user);
 
-/*
 //academic staff-class
-void import_student_from_csv(node*pHead);
+void import_student_from_csv();
 bool edit_a_student();
 bool remove_a_student();
-void deleteAll(node *&pHead);
-*/
 
 // tools
 void numtag(int num);
@@ -100,8 +97,8 @@ int int_option(int numberChoice = 10); // using getch() for one-click choosing
 bool bool_option(string operation); // using getch() for one-click choosing
 bool load_account(int& numberAccount, nodeAccount*& listAccount);
 void update_account(int numberAccount, nodeAccount* listAccount);
-void rewrite_a_class(ofstream &fo, nodeStudent *& _student, int &numberStudent, string tmp_class)
-void read_a_class(ifstream &fi, nodeStudent *& _student, int &numberStudent, string tmp_class)
+void rewrite_a_class(ofstream& fo, nodeStudent*& _student, int& numberStudent, string tmp_class);
+void read_a_class(ifstream& fi, nodeStudent*& _student, int& numberStudent, string tmp_class);
 void view_class_list();
 void view_list_of_student_in_class(string class_code);
 void move_a_student_from_classA_to_classB(string codeA, string codeB, string Student_id);

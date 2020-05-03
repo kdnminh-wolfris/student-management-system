@@ -92,38 +92,32 @@ void update_account(int numberAccount, nodeAccount* listAccount) {
 }
 
 int int_option(int numberChoice) {
-	cout << "\nChoose an option to continue...: ";
-	cout.flush();
+	int ret;
+	string tmp;
 
-	char ch; int ret = 0;
+	while (true) {
+		cout << "\nChoose an option to continue...: ";
+		cout.flush();
 
-	do {
-		ch = _getch();
-		if ('0' <= ch && ch <= '9') {
-			if (numberChoice > 1 && ch == '1' && ret == 0) {
-				ret = 1;
-				cout << 1;
-				if (numberChoice <= 10)
-					break;
+		cin >> tmp;
+
+		ret = 0;
+
+		for (int i = int(tmp.length()) - 1; i >= 0; --i)
+			if ('0' <= tmp[i] && tmp[i] <= '9') {
+				ret = ret * 10 + (tmp[i] - 48);
 			}
-			else if (ret == 1) {
-				if (10 + ch - '0' < numberChoice) {
-					ret = 10 + ch - '0';
-					cout << ch;
-					break;
-				}
+			else {
+				ret = -1; break;
 			}
-			else if (ch - '0' < numberChoice) {
-				ret = ch - '0';
-				cout << ch;
-				break;
-			}
-		}
-		else if (ch == 13 && ret == 1)
+		
+		if (tmp.length() && 0 <= ret && ret < numberChoice)
 			break;
-	} while (true);
+		
+		cout << "Invalid option! Please type again your option.\n" << endl;
+	}
 
-	cout << '\n' << endl;
+	cout << endl;
 
 	return ret;
 }
@@ -132,11 +126,24 @@ bool bool_option(string operation) {
 	if (operation != "")
 		cout << "Are you sure you want to " << operation << "?\n";
 	cout << "[Y]ES          [N]O\n\n";
-	cout << "Press Y/N to continue...\n" << endl;
-	char ch;
-	do ch = _getch();
-	while (!(ch == 'Y' || ch == 'y' || ch == 'N' || ch == 'n'));
-	return ch == 'Y' || ch == 'y';
+
+	string tmp;
+
+	while (true) {
+		cout << "Enter Y/N to continue... ";
+		cout.flush();
+
+		cin >> tmp;
+
+		if (tmp == "Y" || tmp == "y" || tmp == "N" || tmp == "n")
+			break;
+
+		cout << "Invalid option! Please type again your option.\n" << endl;
+	}
+
+	cout << endl;
+
+	return tmp[0] == 'Y' || tmp[0] == 'y';
 }
 
 bool get_info(User& user) {
@@ -492,7 +499,7 @@ void read_a_class(ifstream &fi, nodeStudent *& _student, int &numberStudent, str
         getline(fi,cur->student.general.fullname,'\n');
         fi>>cur->student.general.DoB.year>>cur->student.general           .DoB.month>>cur->student.general.DoB.day;
         fi.get();
-        getline(fi,cur->student.class_,'\n');
+        fi>>cur->student.general.sex;
         fi>>cur->student.status;
         fi.get();
         fi.ignore(1000,'\n');
@@ -514,7 +521,7 @@ void rewrite_a_class(ofstream &fo,nodeStudent *&_student,int &numberStudent,stri
         fo<<cur->student.general.ID<<endl
         <<cur->student.general.fullname<<endl
         <<cur->student.general.DoB.year<<" "<<cur->student.general.DoB.month<<                      " "<<cur->student.general.DoB.day<<endl
-        <<cur->student.class_<<endl
+        <<cur->student.general.sex<<endl
         <<cur->student.status<<endl<<endl;
         cur=cur->next;
     }

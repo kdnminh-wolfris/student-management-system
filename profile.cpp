@@ -29,8 +29,8 @@ void view_profile(User& user) {
 	cout << endl;
 
 	cout << "=========================================================\n";
-	cout << "Press any key to continue...\n";
-	cout << endl; _getch(); // Pause the console for reading purpose
+	
+	system("pause");// Pause the console for reading purpose
 }
 
 void profileStaff(User& user) {
