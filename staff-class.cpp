@@ -346,8 +346,11 @@ void view_class_list()
     in.close();
 }
 
-void view_list_of_student_in_class(string class_code) //Take the code of the class and print out the students in that class
+void view_list_of_student_in_class() //Take the code of the class and print out the students in that class
 {
+    string class_code;
+    cout << "Please enter the code of the class that you want to view?\n";
+    cin>>class_code;
     ifstream fi;
     fi.open("data/class/class.gulu");
     if(!fi.is_open())
@@ -388,8 +391,15 @@ void view_list_of_student_in_class(string class_code) //Take the code of the cla
     fi.close();
 }
 
-void move_a_student_from_classA_to_classB(string codeA, string codeB, string Student_id)
+void move_a_student_from_classA_to_classB()
 {
+	string codeA, codeB, Student_id;
+	cout << "Please enter the ID number of the student you want to move?\n";
+	cin>>Student_id;
+	cout << "Please enter the code of the class this student is currently in?\n";
+	cin>>codeA;
+	cout << "Please enter the code of the class to which you want to move this student?\n";
+	cin>>codeB;
     //Editing the file student.gulu in data
     ifstream ifs;
     ifs.open("data/student.gulu");
