@@ -78,9 +78,9 @@ void optionFunction(int option, int user_position) {
 
 				numtag(0); cout << "Import students of a class\n";
 				numtag(1); cout << "Add a new student to a class\n";
-				numtag(2); cout << "Edit a student infomation\n";
+				numtag(2); cout << "Edit student infomation\n";
 				numtag(3); cout << "Remove a student\n";
-				numtag(4); cout << "Change students from class A to class B\n";
+				numtag(4); cout << "Change a student from class A to class B\n";
 				numtag(5); cout << "View list of classes\n";
 				numtag(6); cout << "View list of students in a class\n";
 
@@ -88,7 +88,7 @@ void optionFunction(int option, int user_position) {
 
 				switch (option) {
 					case 0: {
-
+						import_student_from_csv();
 						break;
 					}
 					case 1: {
@@ -96,11 +96,11 @@ void optionFunction(int option, int user_position) {
 						break;
 					}
 					case 2: {
-
+						edit_a_student();
 						break;
 					}
 					case 3: {
-
+						remove_a_student();
 						break;
 					}
 					case 4: {
@@ -108,11 +108,11 @@ void optionFunction(int option, int user_position) {
 						break;
 					}
 					case 5: {
-
+						view_class_list();
 						break;
 					}
 					case 6: {
-
+						
 						break;
 					}
 				}

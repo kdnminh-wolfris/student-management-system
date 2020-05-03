@@ -69,7 +69,7 @@ struct nodeClass{
 };
 
 // administration
-bool login(User& user, Config& config); // (1/3) Staff done
+bool login(User& user, Config& config);
 int verified(User& user, string& pw);
 bool changePassword(User& user, Config& config);
 
@@ -84,13 +84,10 @@ void profileStaff(User& user);
 void profileLecturer(User& user);
 void profileStudent(User& user);
 
-/*
 //academic staff-class
-void import_student_from_csv(node*pHead);
+void import_student_from_csv();
 bool edit_a_student();
 bool remove_a_student();
-void deleteAll(node *&pHead);
-*/
 
 // tools
 void numtag(int num);
