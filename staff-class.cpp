@@ -14,7 +14,7 @@ void import_student_from_csv()
 	classname = choice;
 	nodeStudent* pHead = nullptr;
 	nodeStudent* cur = pHead;
-	in.open(choice + "-Student.csv");
+	in.open("csv files/"+choice + "-Student.csv");
 	if (!in) cout << "There is an error trying to open " << classname << "-Student.csv" << endl;
 	else
 	{
@@ -71,6 +71,7 @@ void import_student_from_csv()
 				cur->next = nullptr;
 			}
 		}
+        cout<<classname<<"-Student.csv was successfully imported."<<endl;
 		in.close();
 		outacc.open("data/account.gulu", std::fstream::app);
 		cur = pHead;
@@ -114,13 +115,15 @@ void import_student_from_csv()
 				;
 			}
 		}
-		inacc.close();
+		outacc.close();
+        cout<<"The account.gulu file has been updated"<<endl;
 		string destination = "data/class/" + classname + "/";
 		const char* cstr = destination.c_str();
 		_mkdir(cstr);
 		out.open("data/class/" + classname + "/student.gulu");
 		if (out.is_open())
 		{
+            cout<<"File created successfully in data/class/"<<classname<<"/student.gulu"<<endl;
 			int n = 0;
 			cur = pHead;
 			while (cur != nullptr)
@@ -155,6 +158,7 @@ void import_student_from_csv()
 				out << classname << endl << endl;
 				cur = cur->next;
 			}
+            cout<<"Student data has been updated in student.gulu"<<endl;
 			out.close();
 		}
 
@@ -210,6 +214,7 @@ void add_a_student(){
 		out << newstudent->student.general.sex << endl;
 		out << 1 << endl << endl;
 		out.close();
+        cout<<"The new student was added succesfully."<<endl;
 	}
 	if (newstudent == nullptr) return;
 	else {
