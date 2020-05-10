@@ -479,11 +479,11 @@ bool loadLecturer(Lecturer& lecturer) {
 }
 
 
-void read_a_class(ifstream &fi, nodeStudent *& _student, int &numberStudent, string tmp_class){
+bool read_a_class(ifstream &fi, nodeStudent *& _student, int &numberStudent, string tmp_class){
     fi.open("data/class/"+tmp_class+"/student.gulu");
     if (!fi) {
-        cout <<"Error! Missing  file";
-        return ;
+        cout <<"Error! The class doesn't exist !"<<endl;
+        return false;
     }
     fi>>numberStudent;
     fi.get();
@@ -511,6 +511,7 @@ void read_a_class(ifstream &fi, nodeStudent *& _student, int &numberStudent, str
         else cur->next = nullptr;
     }
     fi.close();
+    return true;
 }
 
 void rewrite_a_class(ofstream &fo,nodeStudent *&_student,int &numberStudent,string tmp_class){
@@ -526,4 +527,17 @@ void rewrite_a_class(ofstream &fo,nodeStudent *&_student,int &numberStudent,stri
         cur=cur->next;
     }
     fo.close();
+}
+
+bool input_date(Date &date){
+    cout <<"YYYY: ";
+    cin>>date.year;
+    if (date.year>2020 ||date.year<1) return false;
+    cout <<"MM: ";
+    cin>>date.month;
+    if( date.month>12||date.month<1) return false;
+    cout <<"DD: ";
+    cin>>date.day;
+    if ( date.day>31||date.day<1) return false;
+    return true;
 }

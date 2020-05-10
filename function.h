@@ -8,7 +8,7 @@
 #include <math.h>
 #include <string.h>
 #include <string>
-#include <direct.h>
+//#include <direct.h>
 
 using namespace std;
 
@@ -102,6 +102,7 @@ void read_a_class(ifstream& fi, nodeStudent*& _student, int& numberStudent, stri
 void view_class_list();
 void view_list_of_student_in_class(string class_code);
 void move_a_student_from_classA_to_classB(string codeA, string codeB, string Student_id);
+bool input_date(Date &date);
 //Take the code of the class and print out the students in that class
 bool get_info(User& user);
 void month_in_text(int num);

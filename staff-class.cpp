@@ -240,33 +240,44 @@ void add_a_student(){
 		}
 	}
 }
+
 bool edit_a_student(){
     ifstream fi;
         ofstream fo;
         
         string tmp_Class;
+        cin.ignore(100,'\n');
         cout <<"Enter the student's class :";
         getline(cin,tmp_Class,'\n');
         nodeStudent * _student=nullptr;
         int numberStudent=0;
-        read_a_class(fi,_student,numberStudent,tmp_Class);
+        if(!read_a_class(fi,_student,numberStudent,tmp_Class)){
+            if(bool_option("continue to edit ")) {
+                edit_a_student() ;
+                return true;
+            }
+            else return false;
+        }
         string tmp_ID;
         cout <<"The ID of the student you want to edit : ";
         getline(cin,tmp_ID,'\n');
-        
+
         nodeStudent *cur= _student;
         for (int i=0;i<numberStudent;++i){
             if (cur->student.general.ID == tmp_ID) break;
             cur=cur->next;
         }
-        if (cur==nullptr){
-            cout <<"This student is not exist in this class !!! "
-            <<"Please choose again"<<endl;
-            edit_a_student();
+        if (cur==nullptr || cur->student.status!=1){
+            cout <<"This student is not exist in this class !!! "<<endl;
+            if(bool_option("continue to edit ")){
+                edit_a_student();
+                return true;
+            }
+            else return false;
         }
         else {
             cout <<"Fullname : "<<cur->student.general.fullname<<endl
-            <<"Date of birt : "<<cur->student.general.DoB.year<<"/"<<cur->student.general.DoB.month
+            <<"Date of birth : "<<cur->student.general.DoB.year<<"/"<<cur->student.general.DoB.month
             <<"/"<<cur->student.general.DoB.day<<endl;
             if (!bool_option("edit this student ")) return false;
             else{
@@ -274,8 +285,11 @@ bool edit_a_student(){
                 cout <<"Full name : ";
                 getline(cin,cur->student.general.fullname,'\n');
                 Date tmp_DoB;
-                cout <<"Date of Birth (YYYY/MM/DD) : "<<endl;
-                cin>>tmp_DoB.year>>tmp_DoB.month>>tmp_DoB.day;
+                cout <<"Date of Birth : "<<endl;
+                while(!input_date(tmp_DoB)){
+                    cout <<"Invalid date !!"<<endl
+                    <<"Please input again "<<endl;
+                }
                 if (tmp_DoB.day != cur->student.general.DoB.day || tmp_DoB.month != cur->student.general.DoB.month|| tmp_DoB.year != cur->student.general.DoB.year) {
                     cout <<"This student's password has changed ! "<<endl;
                     cur->student.general.DoB=tmp_DoB;
@@ -294,6 +308,9 @@ bool edit_a_student(){
                     update_account(numberAccount,listAccount);
                 }
                 cout <<"Edit successfully ! "<<endl;
+                cout <<"Fullname : "<<cur->student.general.fullname<<endl
+                <<"Date of birth : "<<cur->student.general.DoB.year<<"/"<<cur->student.general.DoB.month
+                <<"/"<<cur->student.general.DoB.day<<endl;
             }
         }
         fi.close();
@@ -303,32 +320,42 @@ bool edit_a_student(){
 
 
 bool remove_a_student(){
+    system("cls");
     ifstream fi;
-        ofstream fo;
+    ofstream fo;
         
-        string tmp_Class;
-        cout <<"Enter the student's class :";
-        getline(cin,tmp_Class,'\n');
-        int i=0;
-        nodeStudent * _student=nullptr;
-        int numberStudent=0;
-        read_a_class(fi,_student,numberStudent,tmp_Class);
-        string tmp_ID;
-        cout <<"The ID of the student you want to remove : ";
-        getline(cin,tmp_ID,'\n');
-        nodeStudent *cur= _student;
-        for (i=0;i<numberStudent;++i){
-            if (cur->student.general.ID == tmp_ID) break;
-            cur=cur->next;
+    string tmp_Class;
+    cout <<"Enter the student's class :";
+    cin.ignore(100,'\n');
+    getline(cin,tmp_Class,'\n');
+    nodeStudent * _student=nullptr;
+    int numberStudent=0;
+    if(!read_a_class(fi,_student,numberStudent,tmp_Class)){
+        if(bool_option("continue to remove ")) {
+            remove_a_student() ;
+            return true;
         }
-        if (cur==nullptr){
-            cout <<"This student is not exist in this class !!! "
-            <<"Please choose again"<<endl;
-            remove_a_student();
+        else return false;
+    }
+    string tmp_ID;
+    cout <<"The ID of the student you want to remove : ";
+    getline(cin,tmp_ID,'\n');
+    nodeStudent *cur= _student;
+    for (int i=0;i<numberStudent;++i){
+        if (cur->student.general.ID == tmp_ID) break;
+        cur=cur->next;
+    }
+        if (cur==nullptr || cur->student.status!=1){
+            cout <<"This student is not exist in this class !!! "<<endl;
+            if(bool_option("continue to remove ")){
+                remove_a_student();
+                return true;
+            }
+            else return false;
         }
         else {
             cout <<"Fullname : "<<cur->student.general.fullname<<endl
-            <<"Date of birt : "<<cur->student.general.DoB.year<<"/"<<cur->student.general.DoB.month
+            <<"Date of birth : "<<cur->student.general.DoB.year<<"/"<<cur->student.general.DoB.month
             <<"/"<<cur->student.general.DoB.day<<endl;
             if (!bool_option("remove this student ")) return false;
             else {
@@ -344,7 +371,6 @@ bool remove_a_student(){
         }
         return true;
 }
-
 void view_class_list()
 {
     ifstream in;
