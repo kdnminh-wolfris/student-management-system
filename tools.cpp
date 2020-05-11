@@ -478,7 +478,7 @@ bool loadLecturer(Lecturer& lecturer) {
 	return true;
 }
 
-
+/*
 bool read_a_class(ifstream &fi, nodeStudent *& _student, int &numberStudent, string tmp_class){
     fi.open("data/class/"+tmp_class+"/student.gulu");
     if (!fi) {
@@ -528,7 +528,7 @@ void rewrite_a_class(ofstream &fo,nodeStudent *&_student,int &numberStudent,stri
     }
     fo.close();
 }
-
+*/
 bool input_date(Date &date){
     cout <<"YYYY: ";
     cin>>date.year;

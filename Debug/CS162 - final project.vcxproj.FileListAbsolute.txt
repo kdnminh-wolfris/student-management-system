@@ -1,0 +1,2 @@
+D:\.vs\source\repos\CS162 - final project\Debug\CS162 - final project.exe
+D:\.vs\source\repos\CS162 - final project\Debug\CS162 - final project.pdb

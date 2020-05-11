@@ -1,6 +1,6 @@
-
-
 #include "function.h"
+
+/*
 void import_student_from_csv()
 {
 	ifstream in;
@@ -185,6 +185,8 @@ void import_student_from_csv()
 		delete curacc;
 	}
 }
+*/
+
 void add_a_student(){
 	string classname;
 	cout << "Please type in the class of the student you want to add:" << endl;
@@ -242,6 +244,7 @@ void add_a_student(){
 	}
 }
 
+/*
 bool edit_a_student(){
     ifstream fi;
         ofstream fo;
@@ -318,8 +321,8 @@ bool edit_a_student(){
         rewrite_a_class(fo,_student,numberStudent,tmp_Class);
         return true;
     }
-
-
+*/
+/*
 bool remove_a_student(){
     system("cls");
     ifstream fi;
@@ -372,6 +375,8 @@ bool remove_a_student(){
         }
         return true;
 }
+*/
+
 void view_class_list()
 {
     ifstream in;

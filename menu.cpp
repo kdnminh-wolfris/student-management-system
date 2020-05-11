@@ -88,7 +88,7 @@ void optionFunction(int option, int user_position) {
 
 				switch (option) {
 					case 0: {
-						import_student_from_csv();
+						//import_student_from_csv();
 						break;
 					}
 					case 1: {
@@ -96,11 +96,11 @@ void optionFunction(int option, int user_position) {
 						break;
 					}
 					case 2: {
-						edit_a_student();
+						//edit_a_student();
 						break;
 					}
 					case 3: {
-						remove_a_student();
+						//remove_a_student();
 						break;
 					}
 					case 4: {
