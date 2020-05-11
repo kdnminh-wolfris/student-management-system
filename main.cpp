@@ -1,4 +1,4 @@
-#include "function.h"
+#include "menu.h"
 
 int main() {
 	system("cls"); // Clear screen
@@ -11,7 +11,7 @@ int main() {
 	cout << endl;
 
 	Config* config = new Config;
-	if (!load_config(*config))
+	if (!config->load())
 		return 0;
 
 	User* user = new User;

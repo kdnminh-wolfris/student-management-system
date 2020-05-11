@@ -151,17 +151,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="administration.cpp" />
+    <ClCompile Include="admin.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="menu.cpp" />
-    <ClCompile Include="profile.cpp" />
-    <ClCompile Include="staff-class.cpp" />
+    <ClCompile Include="datatype.cpp" />
+    <ClCompile Include="staff_class.cpp" />
     <ClCompile Include="tools.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="admin.h" />
     <ClInclude Include="datatype.h" />
-    <ClInclude Include="function.h" />
-    <ClInclude Include="profile.h" />
+    <ClInclude Include="staff_class.h" />
+    <ClInclude Include="menu.h" />
+    <ClInclude Include="tools.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

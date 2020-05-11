@@ -1,4 +1,4 @@
-#include "function.h"
+#include "menu.h"
 
 void menu(User& user, Config& config) {
 	/*
@@ -18,7 +18,7 @@ void menu(User& user, Config& config) {
 
 	int option = int_option(numberFunction + 4);
 
-	if (option == 0) view_profile(user);
+	if (option == 0) user.view_profile();
 	else if (option == numberFunction + 1) {
 
 
@@ -31,9 +31,9 @@ void menu(User& user, Config& config) {
 	else if (option == numberFunction + 3) {
 		if (bool_option("logout")) {
 			Config config;
-			load_config(config);
+			config.load();
 			config.login_status = 0;
-			update_config(config);
+			config.update();
 
 			cout << "Logged out.\n" << endl;
 			return;
@@ -83,12 +83,13 @@ void optionFunction(int option, int user_position) {
 				numtag(4); cout << "Change a student from class A to class B\n";
 				numtag(5); cout << "View list of classes\n";
 				numtag(6); cout << "View list of students in a class\n";
+				numtag(7); cout << "Exit\n";
 
-				option = int_option(7);
+				option = int_option(8);
 
 				switch (option) {
 					case 0: {
-						//import_student_from_csv();
+						import_from_csv();
 						break;
 					}
 					case 1: {
@@ -96,11 +97,11 @@ void optionFunction(int option, int user_position) {
 						break;
 					}
 					case 2: {
-						//edit_a_student();
+
 						break;
 					}
 					case 3: {
-						//remove_a_student();
+
 						break;
 					}
 					case 4: {
@@ -108,12 +109,15 @@ void optionFunction(int option, int user_position) {
 						break;
 					}
 					case 5: {
-						view_class_list();
+
 						break;
 					}
 					case 6: {
 						
 						break;
+					}
+					case 7: {
+						return;
 					}
 				}
 			}
