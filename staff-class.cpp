@@ -9,7 +9,8 @@ void import_student_from_csv()
 	ofstream outacc;//out as output for student list, outacc as output for creating student account
 	string choice;
 	cout << "Please type in the name of the class you wish to import:" << endl;
-	getline(cin, choice);
+	cin.ignore();
+    getline(cin, choice);
 	string classname;
 	classname = choice;
 	nodeStudent* pHead = nullptr;
