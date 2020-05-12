@@ -98,6 +98,16 @@ void AccountList::_delete() {
 	tail = nullptr;
 }
 
+void AccountList::_delete(nodeAccount* p) {
+	if (head == p) head = head->next;
+	if (tail == p) tail = tail->prev;
+	if (p->next != nullptr)
+		p->next->prev = p->prev;
+	if (p->prev != nullptr)
+		p->prev->next = p->next;
+	delete p;
+}
+
 bool Date::input() {
 	cout << "YYYY: ";
 	cin >> year;
@@ -413,6 +423,13 @@ int StudentList::size() {
 	return ret;
 }
 
+int StudentList::count() {
+	int ret = 0;
+	for (nodeStudent* iter = head; iter != nullptr; iter = iter->next)
+		ret += iter->student.status == 1;
+	return ret;
+}
+
 void StudentList::append(Student student) {
 	if (head == nullptr)
 		head = tail = new nodeStudent,
@@ -522,6 +539,16 @@ void StudentList::_delete() {
 	tail = nullptr;
 }
 
+void StudentList::_delete(nodeStudent* p) {
+	if (head == p) head = head->next;
+	if (tail == p) tail = tail->prev;
+	if (p->next != nullptr)
+		p->next->prev = p->prev;
+	if (p->prev != nullptr)
+		p->prev->next = p->next;
+	delete p;
+}
+
 bool Lecturer::load() {
 	ifstream fi;
 	fi.open("data/lecturer.gulu");
@@ -616,4 +643,14 @@ void ClassList::_delete() {
 		delete tmp;
 	}
 	tail = nullptr;
+}
+
+void ClassList::_delete(nodeClass* p) {
+	if (head == p) head = head->next;
+	if (tail == p) tail = tail->prev;
+	if (p->next != nullptr)
+		p->next->prev = p->prev;
+	if (p->prev != nullptr)
+		p->prev->next = p->next;
+	delete p;
 }

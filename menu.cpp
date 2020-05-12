@@ -80,7 +80,7 @@ void optionFunction(int option, int user_position) {
 				numtag(1); cout << "Add a new student to a class\n";
 				numtag(2); cout << "Edit student infomation\n";
 				numtag(3); cout << "Remove a student\n";
-				numtag(4); cout << "Change a student from class A to class B\n";
+				numtag(4); cout << "Move a student to another class\n";
 				numtag(5); cout << "View list of classes\n";
 				numtag(6); cout << "View list of students in a class\n";
 				numtag(7); cout << "Exit\n";
@@ -97,23 +97,23 @@ void optionFunction(int option, int user_position) {
 						break;
 					}
 					case 2: {
-
+						edit_student();
 						break;
 					}
 					case 3: {
-
+						remove_student();
 						break;
 					}
 					case 4: {
-
+						move_student();
 						break;
 					}
 					case 5: {
-
+						view_class_list();
 						break;
 					}
 					case 6: {
-						
+						view_list_of_student_in_class();
 						break;
 					}
 					case 7: {

@@ -3,8 +3,6 @@
 
 #include "tools.h"
 
-using namespace std;
-
 struct Config {
 	int login_status = 0;
 	string curID;
@@ -32,6 +30,7 @@ struct AccountList {
 	bool load();
 	void update();
 	void _delete();
+	void _delete(nodeAccount* p);
 };
 
 struct Date {
@@ -70,12 +69,14 @@ struct StudentList {
 	} * head = nullptr, * tail = nullptr;
 
 	int size();
+	int count();
 	void append(Student student);
 	bool load(string classID);
 	void update(string classID);
 	bool loadAll();
 	void updateAll();
 	void _delete();
+	void _delete(nodeStudent* p);
 };
 
 struct Lecturer {
@@ -101,6 +102,7 @@ struct ClassList {
 	bool load();
 	void update();
 	void _delete();
+	void _delete(nodeClass* p);
 };
 
 #endif
