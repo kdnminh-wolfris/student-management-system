@@ -2,7 +2,6 @@
 #define DATATYPE
 
 #include "tools.h"
-#include <string>
 
 using namespace std;
 
@@ -39,6 +38,7 @@ struct Date {
 	int year = -1, month = -1, day = -1;
 
 	bool input();
+	string password();
 };
 
 struct User {
@@ -71,7 +71,10 @@ struct StudentList {
 
 	int size();
 	void append(Student student);
+	bool load(string classID);
 	void update(string classID);
+	bool loadAll();
+	void updateAll();
 	void _delete();
 };
 

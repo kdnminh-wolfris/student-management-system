@@ -93,7 +93,7 @@ void optionFunction(int option, int user_position) {
 						break;
 					}
 					case 1: {
-
+						add_new_student();
 						break;
 					}
 					case 2: {

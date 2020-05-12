@@ -59,6 +59,7 @@ bool AccountList::load() {
 
 	int nAccount; fi >> nAccount;
 	fi.ignore(100, '\n');
+
 	head = tail = nullptr;
 	while (nAccount--) {
 		fi.ignore(100, '\n');
@@ -73,6 +74,7 @@ bool AccountList::load() {
 	}
 
 	fi.close();
+	return true;
 }
 
 void AccountList::update() {
@@ -82,7 +84,7 @@ void AccountList::update() {
 	for (nodeAccount* iter = head; iter != nullptr; iter = iter->next) {
 		fo << '\n' << iter->account.userID << '\n';
 		fo << iter->account.password << '\n';
-		fo << iter->account.password << '\n';
+		fo << iter->account.position << '\n';
 	}
 	fo.close();
 }
@@ -107,6 +109,24 @@ bool Date::input() {
 	cin >> day;
 	if (day > 31 || day < 1) return false;
 	return true;
+}
+
+string Date::password() {
+	string ret;
+	int x = day;
+	for (int i = 0; i < 2; ++i)
+		ret = char(x % 10 + 48) + ret,
+		x /= 10;
+	x = month;
+	for (int i = 0; i < 2; ++i)
+		ret = char(x % 10 + 48) + ret,
+		x /= 10;
+	x = year;
+	for (int i = 0; i < 4; ++i)
+		ret = char(x % 10 + 48) + ret,
+		x /= 10;
+	
+	return ret;
 }
 
 bool User::get_info() {
@@ -405,6 +425,40 @@ void StudentList::append(Student student) {
 	tail->next = nullptr;
 }
 
+bool StudentList::load(string classID) {
+	ifstream fi;
+	fi.open("data/class/" + classID + "-student.gulu");
+	if (!fi.is_open()) {
+		cout << "Error: Missing " << classID << "-student.gulu file\n" << endl;
+		return false;
+	}
+
+	int nStudent; fi >> nStudent;
+	fi.ignore(100, '\n');
+
+	head = tail = nullptr;
+	while (nStudent--) {
+		fi.ignore(100, '\n');
+
+		Student tmp;
+
+		getline(fi, tmp.general.ID);
+		getline(fi, tmp.general.fullname);
+		fi >> tmp.general.DoB.year >> tmp.general.DoB.month >> tmp.general.DoB.day;
+		fi >> tmp.general.sex;
+		fi >> tmp.status;
+		fi.ignore();
+
+		tmp.class_ = classID;
+		tmp.general.position = 2;
+
+		append(tmp);
+	}
+
+	fi.close();
+	return true;
+}
+
 void StudentList::update(string classID) {
 	ofstream fo;
 	fo.open("data/class/" + classID + "-student.gulu");
@@ -417,6 +471,44 @@ void StudentList::update(string classID) {
 		fo << iter->student.general.DoB.day << '\n';
 		fo << iter->student.general.sex << '\n';
 		fo << iter->student.status << '\n';
+	}
+	fo.close();
+}
+
+bool StudentList::loadAll() {
+	ifstream fi;
+	fi.open("data/student.gulu");
+	if (!fi.is_open()) {
+		cout << "Error: Missing student.gulu file\n" << endl;
+		return false;
+	}
+
+	int nStudent; fi >> nStudent;
+	fi.ignore(100, '\n');
+
+	head = tail = nullptr;
+	while (nStudent--) {
+		fi.ignore(100, '\n');
+
+		Student tmp;
+
+		getline(fi, tmp.general.ID);
+		getline(fi, tmp.class_);
+
+		append(tmp);
+	}
+
+	fi.close();
+	return true;
+}
+
+void StudentList::updateAll() {
+	ofstream fo;
+	fo.open("data/student.gulu");
+	fo << size() << '\n';
+	for (nodeStudent* iter = head; iter != nullptr; iter = iter->next) {
+		fo << '\n' << iter->student.general.ID << '\n';
+		fo << iter->student.class_ << '\n';
 	}
 	fo.close();
 }
@@ -496,6 +588,8 @@ bool ClassList::load() {
 	}
 
 	int nClass; fi >> nClass;
+	fi.ignore(100, '\n');
+
 	head = tail = nullptr;
 	while (nClass--) {
 		string tmp;  getline(fi, tmp);
@@ -503,6 +597,7 @@ bool ClassList::load() {
 	}
 
 	fi.close();
+	return true;
 }
 
 void ClassList::update() {

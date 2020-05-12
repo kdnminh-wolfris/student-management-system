@@ -15,7 +15,7 @@ int int_option(int numberChoice) {
 		cout << "\nChoose an option to continue...: ";
 		cout.flush();
 
-		cin >> tmp;
+		getline(cin, tmp);
 
 		ret = 0;
 
@@ -49,7 +49,7 @@ bool bool_option(string operation) {
 		cout << "Enter Y/N to continue... ";
 		cout.flush();
 
-		cin >> tmp;
+		getline(cin, tmp);
 
 		if (tmp == "Y" || tmp == "y" || tmp == "N" || tmp == "n")
 			break;
