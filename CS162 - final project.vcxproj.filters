@@ -33,6 +33,9 @@
     <ClCompile Include="staff_class.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="staff-course.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="admin.h">
@@ -48,6 +51,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="staff_class.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="staff-course.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

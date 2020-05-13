@@ -151,3 +151,16 @@ bool valid_date(int year, int month, int day) {
 		}
 	}
 }
+
+string AcademicYearCode(int academic_year) {
+	string ayearCode = "";
+	ayearCode += char(academic_year / 10 % 10 + 48) + char(academic_year % 10 + 48);
+	++academic_year;
+	ayearCode += char(academic_year / 10 % 10 + 48) + char(academic_year % 10 + 48);
+	--academic_year;
+	return ayearCode;
+}
+
+string SemesterCode(int semester) {
+	return semester == 1 ? "HK1" : semester == 2 ? "HK2" : "HK3";
+}

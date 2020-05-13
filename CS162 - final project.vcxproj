@@ -155,12 +155,14 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="datatype.cpp" />
+    <ClCompile Include="staff-course.cpp" />
     <ClCompile Include="staff_class.cpp" />
     <ClCompile Include="tools.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="admin.h" />
     <ClInclude Include="datatype.h" />
+    <ClInclude Include="staff-course.h" />
     <ClInclude Include="staff_class.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="tools.h" />

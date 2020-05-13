@@ -91,7 +91,7 @@ void AccountList::update() {
 
 void AccountList::_delete() {
 	while (head != nullptr) {
-		auto tmp = head;
+		nodeAccount* tmp = head;
 		head = head->next;
 		delete tmp;
 	}
@@ -348,9 +348,9 @@ void User::profileStudent() {
 	}
 	cout << ")\n";
 
-	cout << "Class: " << student.class_ << '\n';
+	cout << "Class: " << student.classID << '\n';
 
-	int graduation_year = (student.class_[0] - 48) * 10 + (student.class_[1] - 48) + 4;
+	int graduation_year = (student.classID[0] - 48) * 10 + (student.classID[1] - 48) + 4;
 	cout << "Graduation year: " << graduation_year << "\n";
 }
 
@@ -373,7 +373,7 @@ bool Student::load() {
 
 		string tmpID;
 		getline(fi, tmpID);
-		getline(fi, class_);
+		getline(fi, classID);
 
 		if (tmpID == general.ID) {
 			found = true; break;
@@ -386,9 +386,9 @@ bool Student::load() {
 		return false;
 	}
 
-	fi.open("data/class/" + class_ + "-student.gulu");
+	fi.open("data/class/" + classID + "-student.gulu");
 	if (!fi.is_open()) {
-		cout << "Error: Missing " << class_ << "-student.gulu file\n" << endl;
+		cout << "Error: Missing " << classID << "-student.gulu file\n" << endl;
 		return false;
 	}
 
@@ -413,7 +413,7 @@ bool Student::load() {
 		}
 	}
 
-	cout << "Error: Missing " << general.ID << " in " << class_ << "/student.gulu\n" << endl;
+	cout << "Error: Missing " << general.ID << " in " << classID << "/student.gulu\n" << endl;
 	return false;
 }
 
@@ -466,7 +466,7 @@ bool StudentList::load(string classID) {
 		fi >> tmp.status;
 		fi.ignore();
 
-		tmp.class_ = classID;
+		tmp.classID = classID;
 		tmp.general.position = 2;
 
 		append(tmp);
@@ -510,7 +510,7 @@ bool StudentList::loadAll() {
 		Student tmp;
 
 		getline(fi, tmp.general.ID);
-		getline(fi, tmp.class_);
+		getline(fi, tmp.classID);
 
 		append(tmp);
 	}
@@ -525,14 +525,14 @@ void StudentList::updateAll() {
 	fo << size() << '\n';
 	for (nodeStudent* iter = head; iter != nullptr; iter = iter->next) {
 		fo << '\n' << iter->student.general.ID << '\n';
-		fo << iter->student.class_ << '\n';
+		fo << iter->student.classID << '\n';
 	}
 	fo.close();
 }
 
 void StudentList::_delete() {
 	while (head != nullptr) {
-		auto tmp = head;
+		nodeStudent* tmp = head;
 		head = head->next;
 		delete tmp;
 	}
@@ -547,6 +547,63 @@ void StudentList::_delete(nodeStudent* p) {
 	if (p->prev != nullptr)
 		p->prev->next = p->next;
 	delete p;
+}
+
+bool StudentList::loadCourse(int academic_year, int semester, string classID, string courseID) {
+	string ayearCode = AcademicYearCode(academic_year);
+	string sCode = SemesterCode(semester);
+
+	ifstream fi;
+	fi.open("data/course/" + ayearCode + "-" + sCode + "-" + classID + "-" + courseID + "-enrolled.gulu");
+	if (!fi.is_open()) {
+		cout << "Error: Missing" << ayearCode << "-" << sCode << "-" << classID << "-" << courseID << "-enrolled.gulu file\n" << endl;
+		return false;
+	}
+
+	head = tail = nullptr;
+	while (!fi.eof()) {
+		Student tmp;
+		getline(fi, tmp.general.ID);
+		getline(fi, tmp.classID);
+		fi >> tmp.midtermGrade >> tmp.finalGrade >> tmp.bonusGrade >> tmp.totalGrade;
+
+		tmp.attended = new int[10];
+		for (int i = 0; i < 10; ++i)
+			fi >> tmp.attended[i];
+
+		fi.ignore(100, '\n');
+		fi.ignore(100, '\n');
+
+		append(tmp);
+	}
+
+	fi.close();
+	return true;
+}
+
+void StudentList::updateCourse(int academic_year, int semester, string classID, string courseID) {
+	string ayearCode = AcademicYearCode(academic_year);
+	string sCode = SemesterCode(semester);
+
+	ofstream fo;
+	fo.open("data/course/" + ayearCode + "-" + sCode + "-" + classID + "-" + courseID + "-enrolled.gulu");
+
+	for (nodeStudent* iter = head; iter != nullptr; iter = iter->next) {
+		fo << iter->student.general.ID << '\n';
+		fo << iter->student.classID << '\n';
+
+		fo << iter->student.midtermGrade << ' ';
+		fo << iter->student.finalGrade << ' ';
+		fo << iter->student.bonusGrade << ' ';
+		fo << iter->student.totalGrade << '\n';
+
+		for (int i = 0; i < 10; ++i)
+			fo << iter->student.attended[i] << ' ';
+
+		fo << "\n\n";
+	}
+
+	fo.close();
 }
 
 bool Lecturer::load() {
@@ -586,6 +643,93 @@ bool Lecturer::load() {
 	}
 
 	return true;
+}
+
+int LecturerList::size() {
+	int ret = 0;
+	for (nodeLecturer* iter = head; iter != nullptr; iter = iter->next, ++ret);
+	return ret;
+}
+
+void LecturerList::append(Lecturer lecturer) {
+	if (head == nullptr)
+		head = tail = new nodeLecturer,
+		head->prev = nullptr;
+	else
+		tail->next = new nodeLecturer,
+		tail->next->prev = tail,
+		tail = tail->next;
+	tail->lecturer = lecturer;
+	tail->next = nullptr;
+}
+
+bool LecturerList::load() {
+	ifstream fi;
+	fi.open("data/lecturer.gulu");
+	if (!fi.is_open()) {
+		cout << "Error: Missing lecturer.gulu file\n" << endl;
+		return false;
+	}
+
+	int nLecturer; fi >> nLecturer;
+	fi.ignore(100, '\n');
+
+	head = tail = nullptr;
+	while (nLecturer--) {
+		Lecturer tmp;
+		getline(fi, tmp.general.ID);
+		getline(fi, tmp.general.fullname);
+		
+		fi >> tmp.general.DoB.year >> tmp.general.DoB.month >> tmp.general.DoB.day;
+		fi >> tmp.general.sex;
+		fi.ignore(100, '\n');
+
+		getline(fi, tmp.degree);
+
+		append(tmp);
+	}
+
+	fi.close();
+	return true;
+}
+
+void LecturerList::update() {
+	ofstream fo;
+	fo.open("data/lecturer.gulu");
+	fo << size() << '\n';
+	for (nodeLecturer* iter = head; iter != nullptr; iter = iter->next) {
+		fo << '\n';
+
+		fo << iter->lecturer.general.ID << '\n';
+		fo << iter->lecturer.general.fullname << '\n';
+
+		fo << iter->lecturer.general.DoB.year << ' ';
+		fo << iter->lecturer.general.DoB.month << ' ';
+		fo << iter->lecturer.general.DoB.day << '\n';
+
+		fo << iter->lecturer.general.sex << '\n';
+		fo << iter->lecturer.degree << '\n';
+	}
+	fo.close();
+}
+
+void LecturerList::_delete() {
+	while (head != nullptr) {
+		nodeLecturer* tmp = head;
+		head = head->next;
+		delete tmp;
+	}
+	tail = nullptr;
+}
+
+void LecturerList::_delete(nodeLecturer* p) {
+	if (head == p) head = head->next;
+	if (tail == p) tail = tail->prev;
+	if (p->next != nullptr)
+		p->next->prev = p->prev;
+	if (p->prev != nullptr)
+		p->prev->next = p->next;
+	delete p;
 }
 
 int ClassList::size() {
@@ -638,7 +782,7 @@ void ClassList::update() {
 
 void ClassList::_delete() {
 	while (head != nullptr) {
-		auto tmp = head;
+		nodeClass* tmp = head;
 		head = head->next;
 		delete tmp;
 	}
@@ -646,6 +790,127 @@ void ClassList::_delete() {
 }
 
 void ClassList::_delete(nodeClass* p) {
+	if (head == p) head = head->next;
+	if (tail == p) tail = tail->prev;
+	if (p->next != nullptr)
+		p->next->prev = p->prev;
+	if (p->prev != nullptr)
+		p->prev->next = p->next;
+	delete p;
+}
+
+int CourseList::size() {
+	int ret = 0;
+	for (nodeCourse* iter = head; iter != nullptr; iter = iter->next, ++ret);
+	return ret;
+}
+
+void CourseList::append(Course course) {
+	if (head == nullptr)
+		head = tail = new nodeCourse,
+		head->prev = nullptr;
+	else
+		tail->next = new nodeCourse,
+		tail->next->prev = tail,
+		tail = tail->next;
+	tail->course = course;
+	tail->next = nullptr;
+}
+
+bool CourseList::load(int academic_year, int semester, string classID) {
+	string ayearCode = AcademicYearCode(academic_year);
+	string sCode = SemesterCode(semester);
+
+	ifstream fi;
+	fi.open("data/course/" + ayearCode + "-" + sCode + "-" + classID + "-schedule.gulu");
+	if (!fi.is_open()) {
+		cout << "Error: Missing " << ayearCode << "-" << sCode << "-" << classID << "-schedule.gulu file\n" << endl;
+		return false;
+	}
+
+	head = tail = nullptr;
+	while (!fi.eof()) {
+		Course tmp;
+		getline(fi, tmp.ID);
+		getline(fi, tmp.name);
+		getline(fi, tmp.lectureID);
+
+		fi >> tmp.startDate.year >> tmp.startDate.month >> tmp.startDate.day;
+		fi >> tmp.endDate.year >> tmp.endDate.month >> tmp.endDate.day;
+
+		fi >> tmp.sessionDay;
+		fi >> tmp.startTime.hour >> tmp.startTime.minute;
+		fi >> tmp.endTime.hour >> tmp.endTime.minute;
+		
+		fi.ignore(100, '\n');
+
+		getline(fi, tmp.room);
+
+		fi.ignore(100, '\n');
+
+		tmp.academic_year = academic_year;
+		tmp.semester = semester;
+		tmp.classID = classID;
+
+		if (!tmp.studentList.loadCourse(academic_year, semester, classID, tmp.ID)) {
+			fi.close(); return false;
+		}
+
+		append(tmp);
+	}
+
+	fi.close();
+	return true;
+}
+
+void CourseList::update(int academic_year, int semester, string classID) {
+	string ayearCode = AcademicYearCode(academic_year);
+	string sCode = SemesterCode(semester);
+
+	ofstream fo;
+	fo.open("data/course/" + ayearCode + "-" + sCode + "-" + classID + "-schedule.gulu");
+
+	for (nodeCourse* iter = head; iter != nullptr; iter = iter->next) {
+		fo << iter->course.ID << '\n';
+		fo << iter->course.name << '\n';
+		fo << iter->course.lectureID << '\n';
+
+		fo << iter->course.startDate.year << ' ';
+		fo << iter->course.startDate.month << ' ';
+		fo << iter->course.startDate.day << '\n';
+
+		fo << iter->course.endDate.year << ' ';
+		fo << iter->course.endDate.month << ' ';
+		fo << iter->course.endDate.day << '\n';
+
+		fo << iter->course.sessionDay << '\n';
+		
+		fo << iter->course.startTime.hour << ' ';
+		fo << iter->course.startTime.minute << '\n';
+		
+		fo << iter->course.endTime.hour << ' ';
+		fo << iter->course.endTime.minute << '\n';
+
+		fo << iter->course.room << '\n';
+
+		fo << '\n';
+
+		iter->course.studentList.updateCourse(academic_year, semester, classID, iter->course.ID);
+	}
+
+	fo.close();
+}
+
+void CourseList::_delete() {
+	while (head != nullptr) {
+		nodeCourse* tmp = head;
+		head = head->next;
+		delete tmp;
+	}
+	tail = nullptr;
+}
+
+void CourseList::_delete(nodeCourse* p) {
 	if (head == p) head = head->next;
 	if (tail == p) tail = tail->prev;
 	if (p->next != nullptr)

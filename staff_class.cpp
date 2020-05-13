@@ -1,6 +1,6 @@
 #include "staff_class.h"
 
-void import_from_csv() {
+void import_student() {
 	cout << "Import students of a class\n" << endl;
 
 	ifstream fi;
@@ -63,13 +63,21 @@ void import_from_csv() {
 			else break;
 		} while (true);
 
+		tmp.general.fullname += ' ';
+
+		do {
+			char ch; fi.get(ch);
+			if (ch != ',') tmp.general.fullname += ch;
+			else break;
+		} while (true);
+
 		fi >> tmp.general.sex;
 		fi.ignore();
 
 		fi >> tmp.general.DoB.year >> tmp.general.DoB.month >> tmp.general.DoB.day;
 
 		tmp.general.position = 2;
-		tmp.class_ = classID;
+		tmp.classID = classID;
 		tmp.status = 1;
 
 		studentList.append(tmp);
@@ -128,11 +136,11 @@ void add_new_student() {
 	int turn = 0;
 	do {
 		cout << "Enter new student's class: ";
-		getline(cin, student.class_);
+		getline(cin, student.classID);
 
-		fi.open("data/class/" + student.class_ + "-student.gulu");
+		fi.open("data/class/" + student.classID + "-student.gulu");
 		if (!fi.is_open()) {
-			cout << student.class_ << " not found\n" << endl;
+			cout << student.classID << " not found\n" << endl;
 			if (++turn == max_turn) break;
 		}
 	} while (!fi.is_open());
@@ -159,12 +167,12 @@ void add_new_student() {
 	student.status = 1;
 
 	StudentList studentList;
-	if (!studentList.load(student.class_)) {
+	if (!studentList.load(student.classID)) {
 		system("pause");
 		return;
 	}
 	studentList.append(student);
-	studentList.update(student.class_);
+	studentList.update(student.classID);
 	studentList._delete();
 
 	if (!studentList.loadAll()) {
@@ -189,7 +197,7 @@ void add_new_student() {
 	accountList.update();
 	accountList._delete();
 
-	cout << '\n' << student.general.fullname << " has been added into " << student.class_ << " successfully!\n" << endl;
+	cout << '\n' << student.general.fullname << " has been added into " << student.classID << " successfully!\n" << endl;
 	system("pause");
 }
 
@@ -227,7 +235,7 @@ void edit_student() {
 
 	studentList._delete();
 
-	if (!studentList.load(student.class_)) {
+	if (!studentList.load(student.classID)) {
 		system("pause");
 		return;
 	}
@@ -264,7 +272,7 @@ void edit_student() {
 			break;
 		}
 
-	studentList.update(student.class_);
+	studentList.update(student.classID);
 	studentList._delete();
 
 	AccountList accountList;
@@ -323,7 +331,7 @@ void remove_student() {
 
 	studentList._delete();
 
-	if (!studentList.load(student.class_)) {
+	if (!studentList.load(student.classID)) {
 		system("pause");
 		return;
 	}
@@ -351,7 +359,7 @@ void remove_student() {
 			break;
 		}
 
-	studentList.update(student.class_);
+	studentList.update(student.classID);
 	studentList._delete();
 
 	studentList.loadAll();
@@ -423,7 +431,7 @@ void move_student() {
 	studentList.updateAll();
 	studentList._delete();
 
-	if (!studentList.load(student.class_)) {
+	if (!studentList.load(student.classID)) {
 		system("pause");
 		return;
 	}
@@ -433,10 +441,10 @@ void move_student() {
 			studentList._delete(iter);
 			break;
 		}
-	studentList.update(student.class_);
+	studentList.update(student.classID);
 	studentList._delete();
 
-	string prev_class = student.class_;
+	string prev_class = student.classID;
 
 	ifstream fi;
 	turn = 0;
@@ -449,18 +457,18 @@ void move_student() {
 			cout << tmp << " not found\n" << endl;
 			if (++turn == max_turn) break;
 		}
-		else student.class_ = tmp;
+		else student.classID = tmp;
 	} while (!fi.is_open());
 	bool class_not_found = false;
 	if (fi.is_open()) fi.close();
 	else class_not_found = true;
 
-	if (!studentList.load(student.class_)) {
+	if (!studentList.load(student.classID)) {
 		system("pause");
 		return;
 	}
 	studentList.append(student);
-	studentList.update(student.class_);
+	studentList.update(student.classID);
 	studentList._delete();
 
 	if (!studentList.loadAll()) {
@@ -487,7 +495,7 @@ void move_student() {
 
 	if (!class_not_found)
 		cout << "Move " << student.general.fullname << " from " << prev_class,
-		cout << " to " << student.class_ << " successfully!\n" << endl;
+		cout << " to " << student.classID << " successfully!\n" << endl;
 	system("pause");
 }
 
@@ -518,7 +526,7 @@ void view_class_list() {
 	system("pause");
 }
 
-void view_list_of_student_in_class() {
+void view_student_list_of_class() {
 	cout << "View list of students in a class\n" << endl;
 
 	string class_code;
