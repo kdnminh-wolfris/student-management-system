@@ -1,9 +1,4 @@
-﻿  admin.cpp
-  main.cpp
-  menu.cpp
-  datatype.cpp
-  staff-course.cpp
-  staff_class.cpp
+﻿  staff-course.cpp
   tools.cpp
   Generating Code...
   CS162 - final project.vcxproj -> D:\GitHub\CS162-19APCS2-gulugulu\Debug\CS162 - final project.exe

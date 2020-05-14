@@ -55,13 +55,13 @@ void import_student() {
 			char ch; fi.get(ch);
 			if (ch != ',') tmp.general.ID += ch;
 			else break;
-		} while (true);
+		} while (true); // ID
 
 		do {
 			char ch; fi.get(ch);
 			if (ch != ',') tmp.general.fullname += ch;
 			else break;
-		} while (true);
+		} while (true); // Last name
 
 		tmp.general.fullname += ' ';
 
@@ -69,12 +69,35 @@ void import_student() {
 			char ch; fi.get(ch);
 			if (ch != ',') tmp.general.fullname += ch;
 			else break;
-		} while (true);
+		} while (true); // First name
 
-		fi >> tmp.general.sex;
-		fi.ignore();
+		do {
+			char ch; fi.get(ch);
+			if (ch == 'M') tmp.general.sex = 1;
+			else if (ch == 'F') tmp.general.sex = 0;
+			if (ch == ',') break;
+		} while (true); // Sex
 
-		fi >> tmp.general.DoB.year >> tmp.general.DoB.month >> tmp.general.DoB.day;
+		do {
+			char ch; fi.get(ch);
+			if (ch != '/')
+				tmp.general.DoB.day = tmp.general.DoB.day * 10 + (ch - 48);
+			else break;
+		} while (true); // DoB day
+
+		do {
+			char ch; fi.get(ch);
+			if (ch != '/')
+				tmp.general.DoB.month = tmp.general.DoB.month * 10 + (ch - 48);
+			else break;
+		} while (true); // DoB month
+
+		do {
+			char ch; fi.get(ch);
+			if (ch != '\n')
+				tmp.general.DoB.year = tmp.general.DoB.year * 10 + (ch - 48);
+			else break;
+		} while (true); // DoB year
 
 		tmp.general.position = 2;
 		tmp.classID = classID;
@@ -85,10 +108,7 @@ void import_student() {
 
 	fi.close();
 
-	studentList.tail = studentList.tail->prev;
-	delete studentList.tail->next;
-	studentList.tail->next = nullptr;
-
+	studentList._delete(studentList.tail);
 	studentList.update(classID);
 
 	StudentList studentAllList;

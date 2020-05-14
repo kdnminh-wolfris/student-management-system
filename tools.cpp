@@ -154,10 +154,11 @@ bool valid_date(int year, int month, int day) {
 
 string AcademicYearCode(int academic_year) {
 	string ayearCode = "";
-	ayearCode += char(academic_year / 10 % 10 + 48) + char(academic_year % 10 + 48);
+	ayearCode += char(academic_year / 10 % 10 + 48);
+	ayearCode += char(academic_year % 10 + 48);
 	++academic_year;
-	ayearCode += char(academic_year / 10 % 10 + 48) + char(academic_year % 10 + 48);
-	--academic_year;
+	ayearCode += char(academic_year / 10 % 10 + 48);
+	ayearCode += char(academic_year % 10 + 48);
 	return ayearCode;
 }
 

@@ -34,7 +34,7 @@ struct AccountList {
 };
 
 struct Date {
-	int year = -1, month = -1, day = -1;
+	int year = 0, month = 0, day = 0;
 
 	bool input();
 	string password();
@@ -59,8 +59,8 @@ struct Student {
 	string classID;
 	int status; // 0: graduted; 1: studying; 2: reserved
 
-	int midtermGrade, finalGrade, bonusGrade, totalGrade;
-	int* attended;
+	int midtermGrade = 0, finalGrade = 0, bonusGrade = 0, totalGrade = 0;
+	int* attended = nullptr;
 
 	bool load();
 };
@@ -120,7 +120,7 @@ struct ClassList {
 };
 
 struct Time {
-	int hour, minute;
+	int hour = 0, minute = 0;
 };
 
 struct Course {

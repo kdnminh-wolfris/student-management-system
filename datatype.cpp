@@ -57,21 +57,19 @@ bool AccountList::load() {
 		return false;
 	}
 
-	int nAccount; fi >> nAccount;
-	fi.ignore(100, '\n');
-
 	head = tail = nullptr;
-	while (nAccount--) {
-		fi.ignore(100, '\n');
-
+	while (!fi.eof()) {
 		Account tmp;
 		getline(fi, tmp.userID);
 		getline(fi, tmp.password);
 		fi >> tmp.position;
 		fi.ignore(100, '\n');
 
+		fi.ignore(100, '\n');
+
 		append(tmp);
 	}
+	_delete(tail);
 
 	fi.close();
 	return true;
@@ -598,7 +596,8 @@ void StudentList::updateCourse(int academic_year, int semester, string classID, 
 		fo << iter->student.totalGrade << '\n';
 
 		for (int i = 0; i < 10; ++i)
-			fo << iter->student.attended[i] << ' ';
+			if (iter->student.attended == nullptr) fo << "0 ";
+			else fo << iter->student.attended[i] << ' ';
 
 		fo << "\n\n";
 	}
@@ -671,11 +670,10 @@ bool LecturerList::load() {
 		return false;
 	}
 
-	int nLecturer; fi >> nLecturer;
-	fi.ignore(100, '\n');
+	// Error reading
 
 	head = tail = nullptr;
-	while (nLecturer--) {
+	while (!fi.eof()) {
 		Lecturer tmp;
 		getline(fi, tmp.general.ID);
 		getline(fi, tmp.general.fullname);
@@ -686,8 +684,11 @@ bool LecturerList::load() {
 
 		getline(fi, tmp.degree);
 
+		fi.ignore(100, '\n');
+
 		append(tmp);
 	}
+	_delete(tail);
 
 	fi.close();
 	return true;
@@ -870,6 +871,12 @@ void CourseList::update(int academic_year, int semester, string classID) {
 	ofstream fo;
 	fo.open("data/course/" + ayearCode + "-" + sCode + "-" + classID + "-schedule.gulu");
 
+	LecturerList lecturerList;
+	lecturerList.load();
+
+	AccountList accountList;
+	accountList.load();
+
 	for (nodeCourse* iter = head; iter != nullptr; iter = iter->next) {
 		fo << iter->course.ID << '\n';
 		fo << iter->course.name << '\n';
@@ -896,7 +903,52 @@ void CourseList::update(int academic_year, int semester, string classID) {
 		fo << '\n';
 
 		iter->course.studentList.updateCourse(academic_year, semester, classID, iter->course.ID);
+
+		bool found = false;
+		for (auto p = lecturerList.head; p != nullptr; p = p->next)
+			if (p->lecturer.general.ID == iter->course.lectureID) { found = true; break; }
+		if (!found) {
+			cout << "We found that " << iter->course.lectureID << " hasn't been added to the system, please help us fulfill the information\n" << endl;
+
+			Lecturer newLecturer;
+
+			cout << "Lecturer ID: " << iter->course.lectureID << '\n';
+			newLecturer.general.ID = iter->course.lectureID;
+
+			cout << "Lecturer's full name: ";
+			getline(cin, newLecturer.general.fullname);
+
+			cout << "Lecturer's degree: ";
+			getline(cin, newLecturer.degree);
+
+			cout << "Date of Birth:\n";
+			newLecturer.general.DoB.input();
+
+			cout << "Sex (0 Female / 1 Male): ";
+			cin >> newLecturer.general.sex;
+			cin.ignore();
+
+			newLecturer.general.position = 1;
+
+			lecturerList.append(newLecturer);
+
+			Account newAccount;
+
+			newAccount.userID = newLecturer.general.ID;
+			newAccount.password = newLecturer.general.ID;
+			newAccount.position = 1;
+
+			accountList.append(newAccount);
+
+			cout << '\n';
+		}
 	}
+
+	//lecturerList.update();
+	lecturerList._delete();
+
+	//accountList.update();
+	accountList._delete();
 
 	fo.close();
 }
