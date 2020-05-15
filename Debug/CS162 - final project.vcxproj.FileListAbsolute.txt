@@ -1,0 +1,4 @@
+D:\.vs\source\repos\CS162 - final project\Debug\CS162 - final project.exe
+D:\.vs\source\repos\CS162 - final project\Debug\CS162 - final project.pdb
+D:\GitHub\CS162-19APCS2-gulugulu\Debug\CS162 - final project.exe
+D:\GitHub\CS162-19APCS2-gulugulu\Debug\CS162 - final project.pdb

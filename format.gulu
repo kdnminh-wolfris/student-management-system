@@ -1,31 +1,27 @@
 >>> data/class/class.gulu
 
-- First line is the number of classes.
-
-- Each line is a class code.
+- Each lines is a class code.
 
 >>> data/class/<class_code>-student.gulu
 
-- First line is the number of student's information blocks.
+- Each student's information blocks will be like this:
 
-- Each block will be like this:
 Student ID
 Fullname
 DoB // yyyy mm dd
 Sex // 0: Female; 1: Male
 Status // 0: gratuated; 1: studying; 2: reserved
 
-- The first line and each blocks will be seperated by a single line.
+- Each blocks will be seperated by a single line.
 
 >>> data/student.gulu
 
-- First line is the number of information blocks.
+- Each blocks will be like this:
 
-- Each block will be like this:
 Student ID
 Class code
 
-- The first line and each blocks will be seperated by a single line.
+- Each blocks will be seperated by a single line.
 
 >>> data/config.gulu
 
@@ -37,36 +33,60 @@ Max password entering turn
 
 >>> data/account.gulu
 
-- First line is the number of information blocks.
+- Each blocks will be like this:
 
-- Each block will be like this:
 UserID
 Password
 Position // 0: Staff; 1: Lecturer; 2: Student
 
-- The first line and each blocks will be seperated by a single line.
+- Each blocks will be seperated by a single line.
 
 >>> data/academic_staff.gulu
 
-- First line is the number of information blocks.
-
 - Each block will be like this:
+
 UserID
 Fullname
 DoB // yyyy mm dd
 Sex // 0: Female; 1: Male
 
-- The first line and each blocks will be seperated by a single line.
+- Each blocks will be seperated by a single line.
 
 >>> data/lecturer.gulu
 
-- First line is the number of information blocks.
+- Each blocks will be like this:
 
-- Each block will be like this:
 UserID
 Fullname
 DoB // yyyy mm dd
 Sex // 0: Female; 1: Male
 Degree // text
 
-- The first line and each blocks will be seperated by a single line.
+- Each blocks will be seperated by a single line.
+
+>>> data/course/<academic_year>-<semester>-<class code>-schedule.gulu
+
+- Each blocks will be like this:
+
+Course ID
+Course name
+Lecturer name
+Start Date // yyyy mm dd
+End Date // yyyy mm dd
+Session day // day of week
+Start time // hh mm
+End time // hh mm
+Room
+
+- Each blocks will be seperated by a single line.
+
+>>> data/course/<academic_year>-<semester>-<class code>-schedule.gulu
+
+- Each blocks will be like this:
+
+Student ID
+Class ID
+Midterm Final Bonus Total // each of 4 grades seperated by a whitespace
+Attendance list // 10 numbers 0s or 1s for attendance of each sessions
+
+- Each blocks will be seperated by a single line.

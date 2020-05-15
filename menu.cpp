@@ -1,4 +1,4 @@
-#include "function.h"
+#include "menu.h"
 
 void menu(User& user, Config& config) {
 	/*
@@ -18,7 +18,7 @@ void menu(User& user, Config& config) {
 
 	int option = int_option(numberFunction + 4);
 
-	if (option == 0) view_profile(user);
+	if (option == 0) user.view_profile();
 	else if (option == numberFunction + 1) {
 
 
@@ -31,9 +31,9 @@ void menu(User& user, Config& config) {
 	else if (option == numberFunction + 3) {
 		if (bool_option("logout")) {
 			Config config;
-			load_config(config);
+			config.load();
 			config.login_status = 0;
-			update_config(config);
+			config.update();
 
 			cout << "Logged out.\n" << endl;
 			return;
@@ -80,31 +80,32 @@ void optionFunction(int option, int user_position) {
 				numtag(1); cout << "Add a new student to a class\n";
 				numtag(2); cout << "Edit student infomation\n";
 				numtag(3); cout << "Remove a student\n";
-				numtag(4); cout << "Change a student from class A to class B\n";
+				numtag(4); cout << "Move a student to another class\n";
 				numtag(5); cout << "View list of classes\n";
-				numtag(6); cout << "View list of students in a class\n";
+				numtag(6); cout << "View list of students of a class\n";
+				numtag(7); cout << "Back to main menu\n";
 
-				option = int_option(7);
+				option = int_option(8);
 
 				switch (option) {
 					case 0: {
-						import_student_from_csv();
+						import_student();
 						break;
 					}
 					case 1: {
-
+						add_new_student();
 						break;
 					}
 					case 2: {
-						edit_a_student();
+						edit_student();
 						break;
 					}
 					case 3: {
-						remove_a_student();
+						remove_student();
 						break;
 					}
 					case 4: {
-
+						move_student();
 						break;
 					}
 					case 5: {
@@ -112,10 +113,74 @@ void optionFunction(int option, int user_position) {
 						break;
 					}
 					case 6: {
-						
+						view_student_list_of_class();
 						break;
 					}
 				}
+
+				break;
+			}
+			case 1: {
+				cout << "Course Management\n" << endl;
+
+				numtag(0); cout << "Import a course\n";
+				numtag(1); cout << "Add a new course\n";
+				numtag(2); cout << "Edit course information\n";
+				numtag(3); cout << "Remove a course\n";
+				numtag(4); cout << "Remove a student from a course\n";
+				numtag(5); cout << "Add a student to a course\n";
+				numtag(6); cout << "View list of courses\n";
+				numtag(7); cout << "View list of students of a course\n";
+				numtag(8); cout << "View attendance list of a course\n";
+				numtag(9); cout << "View list of lecturers\n";
+				numtag(10); cout << "Back to main menu\n";
+
+				int option = int_option(11);
+
+				switch (option) {
+					case 0: {
+						import_course();
+						break;
+					}
+					case 1: {
+						add_new_course();
+						break;
+					}
+					case 2: {
+						edit_course();
+						break;
+					}
+					case 3: {
+						remove_course();
+						break;
+					}
+					case 4: {
+						remove_student_from_course();
+						break;
+					}
+					case 5: {
+						add_student_to_course();
+						break;
+					}
+					case 6: {
+						view_course_list();
+						break;
+					}
+					case 7: {
+						view_student_list_of_course();
+						break;
+					}
+					case 8: {
+						view_attendance_list_of_course();
+						break;
+					}
+					case 9: {
+						view_lecturer_list();
+						break;
+					}
+				}
+
+				break;
 			}
 		}
 	}
