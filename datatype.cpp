@@ -78,11 +78,12 @@ bool AccountList::load() {
 void AccountList::update() {
 	ofstream fo;
 	fo.open("data/account.gulu");
-	fo << size() << '\n';
 	for (nodeAccount* iter = head; iter != nullptr; iter = iter->next) {
-		fo << '\n' << iter->account.userID << '\n';
+		fo << iter->account.userID << '\n';
 		fo << iter->account.password << '\n';
 		fo << iter->account.position << '\n';
+
+		fo << '\n';
 	}
 	fo.close();
 }
@@ -147,14 +148,9 @@ bool User::get_info() {
 			return false;
 		}
 
-		int numberStaff;
-		fi >> numberStaff;
-		fi.ignore(100, '\n');
-
 		string tmpID = ID;
 
-		while (numberStaff--) {
-			fi.ignore(100, '\n');
+		while (!fi.eof()) {
 			getline(fi, ID);
 			getline(fi, fullname);
 
@@ -163,6 +159,8 @@ bool User::get_info() {
 			fi >> DoB.day;
 
 			fi >> sex;
+			fi.ignore(100, '\n');
+
 			fi.ignore(100, '\n');
 
 			if (tmpID == ID) {
@@ -182,18 +180,13 @@ bool User::get_info() {
 			return false;
 		}
 
-		int numberLecturer;
-		fi >> numberLecturer;
-		fi.ignore(100, '\n');
-
-		while (numberLecturer--) {
-			fi.ignore(100, '\n');
-
+		while (!fi.eof()) {
 			string tmpID;
 			getline(fi, tmpID);
 			getline(fi, fullname);
 			fi >> DoB.year >> DoB.month >> DoB.day;
 			fi >> sex;
+			fi.ignore(100, '\n');
 			fi.ignore(100, '\n');
 			fi.ignore(100, '\n');
 
@@ -214,17 +207,13 @@ bool User::get_info() {
 			return false;
 		}
 
-		int numberStudent;
-		fi >> numberStudent;
-		fi.ignore(100, '\n');
-
 		string tmpID, tmpClassCode;
 		bool found = false;
 
-		while (numberStudent--) {
-			fi.ignore(100, '\n');
+		while (!fi.eof()) {
 			getline(fi, tmpID);
 			getline(fi, tmpClassCode);
+			fi.ignore(100, '\n');
 			if (tmpID == ID) {
 				found = true;
 			}
@@ -242,13 +231,9 @@ bool User::get_info() {
 			return false;
 		}
 
-		fi >> numberStudent;
-		fi.ignore(100, '\n');
-
 		tmpID = ID;
 
-		while (numberStudent--) {
-			fi.ignore(100, '\n');
+		while (!fi.eof()) {
 			getline(fi, ID);
 			getline(fi, fullname);
 
@@ -258,6 +243,8 @@ bool User::get_info() {
 
 			fi >> sex;
 			fi.ignore(100, '\n');
+			fi.ignore(100, '\n');
+		
 			fi.ignore(100, '\n');
 
 			if (tmpID == ID) {
@@ -360,15 +347,9 @@ bool Student::load() {
 		return false;
 	}
 
-	int numberStudent;
-	fi >> numberStudent;
-	fi.ignore(100, '\n');
-
 	bool found = false;
 
-	while (numberStudent--) {
-		fi.ignore(100, '\n');
-
+	while (!fi.eof()) {
 		string tmpID;
 		getline(fi, tmpID);
 		getline(fi, classID);
@@ -376,6 +357,8 @@ bool Student::load() {
 		if (tmpID == general.ID) {
 			found = true; break;
 		}
+
+		fi.ignore(100, '\n');
 	}
 
 	fi.close();
@@ -390,12 +373,7 @@ bool Student::load() {
 		return false;
 	}
 
-	fi >> numberStudent;
-	fi.ignore(100, '\n');
-
-	while (numberStudent--) {
-		fi.ignore(100, '\n');
-
+	while (!fi.eof()) {
 		string tmpID;
 		getline(fi, tmpID);
 
@@ -409,6 +387,8 @@ bool Student::load() {
 		if (tmpID == general.ID) {
 			fi.close(); return true;
 		}
+
+		fi.ignore(100, '\n');
 	}
 
 	cout << "Error: Missing " << general.ID << " in " << classID << "/student.gulu\n" << endl;
@@ -448,13 +428,8 @@ bool StudentList::load(string classID) {
 		return false;
 	}
 
-	int nStudent; fi >> nStudent;
-	fi.ignore(100, '\n');
-
 	head = tail = nullptr;
-	while (nStudent--) {
-		fi.ignore(100, '\n');
-
+	while (!fi.eof()) {
 		Student tmp;
 
 		getline(fi, tmp.general.ID);
@@ -467,8 +442,11 @@ bool StudentList::load(string classID) {
 		tmp.classID = classID;
 		tmp.general.position = 2;
 
+		fi.ignore(100, '\n');
+
 		append(tmp);
 	}
+	_delete(tail);
 
 	fi.close();
 	return true;
@@ -477,15 +455,16 @@ bool StudentList::load(string classID) {
 void StudentList::update(string classID) {
 	ofstream fo;
 	fo.open("data/class/" + classID + "-student.gulu");
-	fo << size() << '\n';
 	for (nodeStudent* iter = head; iter != nullptr; iter = iter->next) {
-		fo << '\n' << iter->student.general.ID << '\n';
+		fo << iter->student.general.ID << '\n';
 		fo << iter->student.general.fullname << '\n';
 		fo << iter->student.general.DoB.year << ' ';
 		fo << iter->student.general.DoB.month << ' ';
 		fo << iter->student.general.DoB.day << '\n';
 		fo << iter->student.general.sex << '\n';
 		fo << iter->student.status << '\n';
+
+		fo << '\n';
 	}
 	fo.close();
 }
@@ -498,20 +477,18 @@ bool StudentList::loadAll() {
 		return false;
 	}
 
-	int nStudent; fi >> nStudent;
-	fi.ignore(100, '\n');
-
 	head = tail = nullptr;
-	while (nStudent--) {
-		fi.ignore(100, '\n');
-
+	while (!fi.eof()) {
 		Student tmp;
 
 		getline(fi, tmp.general.ID);
 		getline(fi, tmp.classID);
 
+		fi.ignore(100, '\n');
+
 		append(tmp);
 	}
+	_delete(tail);
 
 	fi.close();
 	return true;
@@ -520,10 +497,11 @@ bool StudentList::loadAll() {
 void StudentList::updateAll() {
 	ofstream fo;
 	fo.open("data/student.gulu");
-	fo << size() << '\n';
 	for (nodeStudent* iter = head; iter != nullptr; iter = iter->next) {
-		fo << '\n' << iter->student.general.ID << '\n';
+		fo << iter->student.general.ID << '\n';
 		fo << iter->student.classID << '\n';
+
+		fo << '\n';
 	}
 	fo.close();
 }
@@ -613,15 +591,9 @@ bool Lecturer::load() {
 		return false;
 	}
 
-	int numberLecturer;
-	fi >> numberLecturer;
-	fi.ignore(100, '\n');
-
 	bool found = false;
 
-	while (numberLecturer--) {
-		fi.ignore(100, '\n');
-
+	while (!fi.eof()) {
 		string tmpID;
 		getline(fi, tmpID);
 		getline(fi, general.fullname);
@@ -629,6 +601,8 @@ bool Lecturer::load() {
 		fi >> general.sex;
 		fi.ignore(100, '\n');
 		getline(fi, degree);
+
+		fi.ignore(100, '\n');
 
 		if (tmpID == general.ID) {
 			found = true; break;
@@ -670,8 +644,6 @@ bool LecturerList::load() {
 		return false;
 	}
 
-	// Error reading
-
 	head = tail = nullptr;
 	while (!fi.eof()) {
 		Lecturer tmp;
@@ -697,10 +669,7 @@ bool LecturerList::load() {
 void LecturerList::update() {
 	ofstream fo;
 	fo.open("data/lecturer.gulu");
-	fo << size() << '\n';
 	for (nodeLecturer* iter = head; iter != nullptr; iter = iter->next) {
-		fo << '\n';
-
 		fo << iter->lecturer.general.ID << '\n';
 		fo << iter->lecturer.general.fullname << '\n';
 
@@ -710,6 +679,8 @@ void LecturerList::update() {
 
 		fo << iter->lecturer.general.sex << '\n';
 		fo << iter->lecturer.degree << '\n';
+
+		fo << '\n';
 	}
 	fo.close();
 }
@@ -759,14 +730,12 @@ bool ClassList::load() {
 		return false;
 	}
 
-	int nClass; fi >> nClass;
-	fi.ignore(100, '\n');
-
 	head = tail = nullptr;
-	while (nClass--) {
+	while (!fi.eof()) {
 		string tmp;  getline(fi, tmp);
 		append(tmp);
 	}
+	_delete(tail);
 
 	fi.close();
 	return true;
@@ -775,7 +744,6 @@ bool ClassList::load() {
 void ClassList::update() {
 	ofstream fo;
 	fo.open("data/class/class.gulu");
-	fo << size() << '\n';
 	for (nodeClass* iter = head; iter != nullptr; iter = iter->next)
 		fo << iter->ID << '\n';
 	fo.close();
@@ -944,10 +912,10 @@ void CourseList::update(int academic_year, int semester, string classID) {
 		}
 	}
 
-	//lecturerList.update();
+	lecturerList.update();
 	lecturerList._delete();
 
-	//accountList.update();
+	accountList.update();
 	accountList._delete();
 
 	fo.close();

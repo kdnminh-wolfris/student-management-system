@@ -83,7 +83,7 @@ void optionFunction(int option, int user_position) {
 				numtag(4); cout << "Move a student to another class\n";
 				numtag(5); cout << "View list of classes\n";
 				numtag(6); cout << "View list of students of a class\n";
-				numtag(7); cout << "Exit\n";
+				numtag(7); cout << "Back to main menu\n";
 
 				option = int_option(8);
 
@@ -116,9 +116,6 @@ void optionFunction(int option, int user_position) {
 						view_student_list_of_class();
 						break;
 					}
-					case 7: {
-						return;
-					}
 				}
 
 				break;
@@ -136,8 +133,9 @@ void optionFunction(int option, int user_position) {
 				numtag(7); cout << "View list of students of a course\n";
 				numtag(8); cout << "View attendance list of a course\n";
 				numtag(9); cout << "View list of lecturers\n";
+				numtag(10); cout << "Back to main menu\n";
 
-				int option = int_option(10);
+				int option = int_option(11);
 
 				switch (option) {
 					case 0: {

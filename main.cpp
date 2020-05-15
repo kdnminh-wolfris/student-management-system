@@ -2,6 +2,7 @@
 
 int main() {
 	system("cls"); // Clear screen
+	cin.clear();
 
 	cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||||\n";
 	cout << "|||                                                   |||\n";

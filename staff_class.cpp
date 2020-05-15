@@ -529,18 +529,23 @@ void view_class_list() {
 		cout << "Error: Missing class.gulu file\n";
 		return;
 	}
-	int x; in >> x;
+
+	ClassList classList;
+	if (!classList.load()) {
+		system("pause");
+		return;
+	}
+
+	int x = classList.size();
+
 	cout << "There ";
 	if (x == 1) cout << "is"; else cout << "are";
 	cout << " " << x << " class";
 	if (x != 1) cout << "es";
 	cout << ":\n\n";
-	string class_code;
-	for (int i = 0; i < x; i++)
-	{
-		in >> class_code;
-		numtag(i + 1); cout << class_code << '\n';
-	}
+	int i = 0;
+	for (auto iter = classList.head; iter != nullptr; iter = iter->next)
+		numtag(++i), cout << iter->ID << '\n';
 	in.close();
 	cout << endl;
 	system("pause");
@@ -585,9 +590,10 @@ void view_student_list_of_class() {
 	if (nStudent != 1) cout << "s";
 	cout << " in " << class_code << "\n";
 
+	int i = 0;
 	for (auto iter = studentList.head; iter != nullptr; iter = iter->next)
 		if (iter->student.status == 1) {
-			cout << "\n";
+			cout << "\n"; numtag(++i); cout << "\n";
 			cout << iter->student.general.fullname << " (ID: " << iter->student.general.ID << ")\n";
 
 			cout << "D.o.B: ";

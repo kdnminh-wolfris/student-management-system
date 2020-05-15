@@ -183,9 +183,7 @@ void import_course() {
 	courseList.update(academic_year, semester, classID);
 	courseList._delete();
 
-	cout << AcademicYearCode(academic_year) << '\n';
-
-	cout << "Import " << termCode << "-" << classID + "schedule successfully!\n" << endl;
+	cout << "\nImport " << termCode << "-" << classID + "schedule successfully!\n" << endl;
 	system("pause");
 }
 

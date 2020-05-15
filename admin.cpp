@@ -44,13 +44,8 @@ int verified(User& user, string& pw) {
 		return 2;
 	}
 
-	int numberAccount;
-	fi >> numberAccount;
-	fi.ignore(100, '\n');
-
-	while (numberAccount--) {
+	while (!fi.eof()) {
 		string tmp_ID, tmp_pw;
-		fi.ignore(100, '\n');
 		getline(fi, tmp_ID);
 		getline(fi, tmp_pw);
 
@@ -61,6 +56,7 @@ int verified(User& user, string& pw) {
 			return 0;
 		}
 
+		fi.ignore(100, '\n');
 		fi.ignore(100, '\n');
 	}
 
