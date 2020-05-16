@@ -199,6 +199,13 @@ void remove_course() {
 }
 
 void remove_student_from_course() {
+cin.ignore();
+string studentID;
+string courseID;
+cout<<"Please type in the course code of the student to be removed:"<<endl;
+getline(cin,courseID);
+cout<<"Please type in the ID of the student to be removed:"<<endl;
+getline(cin,studentID);
 
 }
 
