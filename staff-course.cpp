@@ -202,11 +202,45 @@ void remove_student_from_course() {
 cin.ignore();
 string studentID;
 string courseID;
+int semester;
+int acayear;
+cout<<"Please type in the academic year, ex:1920 for 2019-2020:"<<endl;
+cin>>acayear;
+cout<<"Please type in the semester of either 1 ,2 or 3:"<<endl;
+cin>>semester;
+cin.ignore();
 cout<<"Please type in the course code of the student to be removed:"<<endl;
 getline(cin,courseID);
 cout<<"Please type in the ID of the student to be removed:"<<endl;
 getline(cin,studentID);
+CourseList listcourse;
+bool check=listcourse.load(acayear,semester,courseID);
+if (!check) return;
+else 
+	{
+		 CourseList::nodeCourse *cur=listcourse.head;
+		 while (cur!=nullptr)
+		 {
+			 if (cur->course.ID==courseID)
+			{
+				StudentList::nodeStudent *temp=cur->course.studentList.head;
+				while (temp!=nullptr)
+				{
+					if (temp->next!=nullptr&&temp->next->student.general.ID==studentID)
+					{
+					StudentList::nodeStudent *todel=temp->next;
+					temp->next=todel->next;
+					delete todel;
+					cout<<"Student removed successfully from course"<<endl;
+					break;
+					}
+				}
+				break;
+			}
+			else cur=cur->next;
+		 }
 
+	}
 }
 
 void add_student_to_course() {
