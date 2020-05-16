@@ -258,6 +258,17 @@ void view_attendance_list_of_course() {
 
 }
 
-void view_lecturer_list() {
 
+void view_lecturer_list() {
+    LecturerList lecturer_list;
+    if(!lecturer_list.load()) return;
+
+    LecturerList::nodeLecturer *nl = lecturer_list.head;
+    while(nl!=nullptr)
+    {
+        Lecturer cur = nl->lecturer;
+        cur.general.view_profile();
+        nl = nl->next;
+    }
+    lecturer_list._delete();
 }
