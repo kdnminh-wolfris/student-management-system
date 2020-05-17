@@ -227,7 +227,7 @@ while (cur!=nullptr)
 }
 studentlist._delete(cur);//trying to delete all the student list that was previously loaded into function
 studentlist.loadCourse(acayear,semester,classname,courseID);
-StudentList::nodeStudent *cur=studentlist.head;//set pointer cur to the head of student list in course
+cur=studentlist.head;//set pointer cur to the head of student list in course
 while (cur!=nullptr)
 {
 	if (cur->student.general.ID==studentID)
@@ -237,56 +237,59 @@ while (cur!=nullptr)
 		break;
 	}
 }
-//delete all of the list of student previously loaded into function here
-}
-
-void add_student_to_course() {
-string studentID;
-string courseID;
-int semester;
-int acayear;
-cout<<"Please type in the academic year, ex:1920 for 2019-2020:"<<endl;
-cin>>acayear;
-cout<<"Please type in the semester of either 1 ,2 or 3:"<<endl;
-cin>>semester;
-cin.ignore();
-cout<<"Please type in the course code of the student to be removed:"<<endl;
-getline(cin,courseID);
-cout<<"Please type in the ID of the student to be removed:"<<endl;
-getline(cin,studentID);
-StudentList studentlist;
-studentlist.loadAll();
-string classname;
-StudentList::nodeStudent *cur=studentlist.head;
-while (cur!=nullptr)
-{
-	if (cur->student.general.ID==studentID)
-	{
-		classname=cur->student.classID;//get the class of the student to be deleted to load the correct course
-		break;
-	}
-	else cur=cur->next;
-}
-studentlist._delete(cur);//trying to delete all the student list that was previously loaded into function
-studentlist.loadCourse(acayear,semester,classname,courseID);
-StudentList::nodeStudent *cur=studentlist.tail;//set pointer cur to the last of student list in course
-cur->next= new StudentList::nodeStudent;
-StudentList::nodeStudent *temp=cur;
-cur=cur->next;
-cur->next=nullptr;
-cur->prev=temp;
-cur->student.classID=classname;
-cur->student.general.ID=studentID;
-//input score for the student, 0 is default
-cur->student.bonusGrade=0;
-cur->student.finalGrade=0;
-cur->student.midtermGrade=0;
-cur->student.totalGrade=0;
-//update the list of student in course
 studentlist.updateCourse(acayear,semester,classname,courseID);
-
 //delete all of the list of student previously loaded into function here
+//studentlist._delete(cur);
+}
 
+void add_student_to_course() {//WARNING: UNEXPECTED ERROR WHEN ADDING STUDENT: CREATE ANOTHER EMPTY STUDENT FIRST
+	string studentID;
+	string courseID;
+	int semester;
+	int acayear;
+	cout << "Please type in the academic year, ex:1920 for 2019-2020:" << endl;
+	cin >> acayear;
+	cout << "Please type in the semester of either 1 ,2 or 3:" << endl;
+	cin >> semester;
+	cin.ignore();
+	cout << "Please type in the course code of the student to be added:" << endl;
+	getline(cin, courseID);
+	cout << "Please type in the ID of the student to be added:" << endl;
+	getline(cin, studentID);
+	StudentList studentlist;
+	studentlist.loadAll();
+	string classname;
+	StudentList::nodeStudent* cur = studentlist.head;
+	while (cur != nullptr)
+	{
+		if (cur->student.general.ID == studentID)
+		{
+			classname = cur->student.classID;//get the class of the student to be deleted to load the correct course
+			break;
+		}
+		else cur = cur->next;
+	}
+	studentlist._delete(cur);//trying to delete all the student list that was previously loaded into function
+	studentlist.loadCourse(acayear, semester, classname, courseID);
+	cur = studentlist.tail;//set pointer cur to the last of student list in course
+	cur->next = new StudentList::nodeStudent;
+	StudentList::nodeStudent* temp = cur;
+	cur = cur->next;
+	cur->next = nullptr;
+	cur->prev = temp;
+	cur->student.classID = classname;
+	cur->student.general.ID = studentID;
+	//input score for the student, 0 is default
+	cur->student.bonusGrade = 0;
+	cur->student.finalGrade = 0;
+	cur->student.midtermGrade = 0;
+	cur->student.totalGrade = 0;
+	//update the list of student in course
+	studentlist.updateCourse(acayear, semester, classname, courseID);
+	cout << "Student " << studentID << " was added successfully into course " << courseID << endl;
+	//delete all of the list of student previously loaded into function here
+	//studentlist._delete(cur);
+	system("pause");
 }
 
 void view_course_list() {
