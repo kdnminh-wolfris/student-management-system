@@ -9,8 +9,8 @@ void add_new_course(); // manually
 void edit_course();
 void remove_course();
 
-void remove_student_from_course();
-void add_student_to_course();
+void remove_student_from_course();//to-do
+void add_student_to_course();//to-do
 
 void view_course_list();
 void view_student_list_of_course();

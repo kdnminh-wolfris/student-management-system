@@ -199,7 +199,6 @@ void remove_course() {
 }
 
 void remove_student_from_course() {
-cin.ignore();
 string studentID;
 string courseID;
 int semester;
@@ -213,34 +212,32 @@ cout<<"Please type in the course code of the student to be removed:"<<endl;
 getline(cin,courseID);
 cout<<"Please type in the ID of the student to be removed:"<<endl;
 getline(cin,studentID);
-CourseList listcourse;
-bool check=listcourse.load(acayear,semester,courseID);
-if (!check) return;
-else 
+StudentList studentlist;
+studentlist.loadAll();
+string classname;
+StudentList::nodeStudent *cur=studentlist.head;
+while (cur!=nullptr)
+{
+	if (cur->student.general.ID==studentID)
 	{
-		 CourseList::nodeCourse *cur=listcourse.head;
-		 while (cur!=nullptr)
-		 {
-			 if (cur->course.ID==courseID)
-			{
-				StudentList::nodeStudent *temp=cur->course.studentList.head;
-				while (temp!=nullptr)
-				{
-					if (temp->next!=nullptr&&temp->next->student.general.ID==studentID)
-					{
-					StudentList::nodeStudent *todel=temp->next;
-					temp->next=todel->next;
-					delete todel;
-					cout<<"Student removed successfully from course"<<endl;
-					break;
-					}
-				}
-				break;
-			}
-			else cur=cur->next;
-		 }
-
+		classname=cur->student.classID;//get the class of the student to be deleted to load the correct course
+		break;
 	}
+	else cur=cur->next;
+}
+studentlist._delete(cur);//trying to delete all the student list that was previously loaded into function
+studentlist.loadCourse(acayear,semester,classname,courseID);
+StudentList::nodeStudent *cur=studentlist.head;//set pointer cur to the head of student list in course
+while (cur!=nullptr)
+{
+	if (cur->student.general.ID==studentID)
+	{
+		studentlist._delete(cur);//trying to delete the current student from the list
+		cout<<"The student " << studentID<< " was successfully removed from course "<<courseID<<endl;
+		break;
+	}
+}
+//delete all of the list of student previously loaded into function here
 }
 
 void add_student_to_course() {
