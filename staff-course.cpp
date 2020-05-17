@@ -203,7 +203,7 @@ string studentID;
 string courseID;
 int semester;
 int acayear;
-cout<<"Please type in the academic year, ex:1920 for 2019-2020:"<<endl;
+cout<<"Please type in the academic year, ex:2019 for 2019-2020:"<<endl;
 cin>>acayear;
 cout<<"Please type in the semester of either 1 ,2 or 3:"<<endl;
 cin>>semester;
@@ -240,6 +240,7 @@ while (cur!=nullptr)
 studentlist.updateCourse(acayear,semester,classname,courseID);
 //delete all of the list of student previously loaded into function here
 //studentlist._delete(cur);
+system("pause");
 }
 
 void add_student_to_course() {//WARNING: UNEXPECTED ERROR WHEN ADDING STUDENT: CREATE ANOTHER EMPTY STUDENT FIRST
@@ -247,7 +248,7 @@ void add_student_to_course() {//WARNING: UNEXPECTED ERROR WHEN ADDING STUDENT: C
 	string courseID;
 	int semester;
 	int acayear;
-	cout << "Please type in the academic year, ex:1920 for 2019-2020:" << endl;
+	cout << "Please type in the academic year, ex:2019 for 2019-2020:" << endl;
 	cin >> acayear;
 	cout << "Please type in the semester of either 1 ,2 or 3:" << endl;
 	cin >> semester;
