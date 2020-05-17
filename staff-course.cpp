@@ -213,7 +213,7 @@ getline(cin,courseID);
 cout<<"Please type in the ID of the student to be removed:"<<endl;
 getline(cin,studentID);
 StudentList studentlist;
-studentlist.loadAll();
+bool check=studentlist.loadAll();
 string classname;
 StudentList::nodeStudent *cur=studentlist.head;
 while (cur!=nullptr)
@@ -225,21 +225,40 @@ while (cur!=nullptr)
 	}
 	else cur=cur->next;
 }
-studentlist._delete(cur);//trying to delete all the student list that was previously loaded into function
-studentlist.loadCourse(acayear,semester,classname,courseID);
-cur=studentlist.head;//set pointer cur to the head of student list in course
-while (cur!=nullptr)
+if (cur==nullptr) 
 {
-	if (cur->student.general.ID==studentID)
-	{
-		studentlist._delete(cur);//trying to delete the current student from the list
-		cout<<"The student " << studentID<< " was successfully removed from course "<<courseID<<endl;
-		break;
-	}
+	cout <<"The student ID you entered is incorrect. Please try again"<<endl;
+	return;
 }
-studentlist.updateCourse(acayear,semester,classname,courseID);
-//delete all of the list of student previously loaded into function here
-//studentlist._delete(cur);
+studentlist._delete();//trying to delete all the student list that was previously loaded into function
+bool checklist=studentlist.loadCourse(acayear,semester,classname,courseID);
+if (checklist){
+	cur=studentlist.head;//set pointer cur to the head of student list in course
+	while (cur!=nullptr)
+	{
+		if (cur->student.general.ID == studentID)
+		{
+			studentlist._delete(cur);//trying to delete the current student from the list
+			cout << "The student " << studentID << " was successfully removed from course " << courseID << endl;
+			break;
+		}
+		else cur = cur->next;
+	}
+	if (cur == nullptr)
+	{
+		cout << "The student with ID " << studentID << " was not found in the course " << courseID << endl;
+		studentlist._delete();
+		return;
+	}
+	studentlist.updateCourse(acayear,semester,classname,courseID);
+	//delete all of the list of student previously loaded into function here
+	studentlist._delete();
+}
+else 
+{
+	cout<<"The course you entered was incorrect. Please try again.";
+	return;
+}
 system("pause");
 }
 
@@ -266,12 +285,20 @@ void add_student_to_course() {//WARNING: UNEXPECTED ERROR WHEN ADDING STUDENT: C
 		if (cur->student.general.ID == studentID)
 		{
 			classname = cur->student.classID;//get the class of the student to be deleted to load the correct course
+			cout << "Student " << studentID << " was found in class "<<classname<<endl;
 			break;
 		}
 		else cur = cur->next;
 	}
-	studentlist._delete(cur);//trying to delete all the student list that was previously loaded into function
-	studentlist.loadCourse(acayear, semester, classname, courseID);
+	if (cur==nullptr) 
+	{
+		cout<<"Cannot find the specified student in database "<<courseID<<endl;
+		studentlist._delete();
+		return;
+	}
+	studentlist._delete();//trying to delete all the student list that was previously loaded into function
+	bool checklist=studentlist.loadCourse(acayear, semester, classname, courseID);
+	if (checklist){
 	cur = studentlist.tail;//set pointer cur to the last of student list in course
 	cur->next = new StudentList::nodeStudent;
 	StudentList::nodeStudent* temp = cur;
@@ -287,9 +314,15 @@ void add_student_to_course() {//WARNING: UNEXPECTED ERROR WHEN ADDING STUDENT: C
 	cur->student.totalGrade = 0;
 	//update the list of student in course
 	studentlist.updateCourse(acayear, semester, classname, courseID);
-	cout << "Student " << studentID << " was added successfully into course " << courseID << endl;
+	
 	//delete all of the list of student previously loaded into function here
-	//studentlist._delete(cur);
+	studentlist._delete();
+	}
+	else {
+		cout<<"Cannot find the specified course. Please try again"<<endl;
+		studentlist._delete();
+		return;
+	}
 	system("pause");
 }
 
