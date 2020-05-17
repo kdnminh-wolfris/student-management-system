@@ -194,7 +194,6 @@ void add_new_course() {
 void edit_course() {
     int  acedemic_year, semester;
     string classID, courseID;
-    cin.get();
     cout <<"Edit course information\n "<<endl;
     CourseList courseList;
     const int max_turn=3;
@@ -298,7 +297,44 @@ void edit_course() {
     
 }
 void remove_course() {
-
+    cout<<"Remove a course\n"<<endl;
+    
+    int  acedemic_year, semester;
+    string classID, courseID;
+    CourseList courseList;
+    const int max_turn=3;
+    int turn=0;
+    while (turn<max_turn){
+        cout<<"PLease input "<<endl
+        <<"Course ID : ";
+        getline(cin,courseID,'\n');
+        cout <<"Class : ";
+        getline(cin,classID,'\n');
+        cout <<"Acedemic year : ";
+        cin>>acedemic_year;
+        cout <<"Semester : ";
+        cin>>semester;
+        bool found=false;
+        courseList.load(acedemic_year,semester,classID);
+        for (auto iter=courseList.head;iter!=nullptr;iter=iter->next){
+            if (iter->course.ID==courseID) {
+                found= true;
+                courseList._delete(iter);
+                break;
+            }
+        }
+        if (!found) cout <<courseID<<" not exist\n"<<endl;
+        else {
+            courseList.update(acedemic_year,semester,classID);
+            cout <<"Remove "<<courseID<<" successfully"<<endl;
+            break;
+        }
+        ++turn;
+    }
+    if (turn==max_turn){
+        return;
+    }
+    courseList._delete();
 }
 
 void remove_student_from_course() {
