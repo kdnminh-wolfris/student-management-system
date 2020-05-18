@@ -232,8 +232,9 @@ if (checklist){
 	}
 	if (cur == nullptr)
 	{
-		cout << "The student with ID " << studentID << " was not found in the course " << courseID << endl;
+		cout << "The student with ID " << studentID << " was not found in the course " << courseID <<"of class"<<classname<< endl;
 		studentlist._delete();
+		system("pause");
 		return;
 	}
 	studentlist.updateCourse(acayear,semester,classname,courseID);
