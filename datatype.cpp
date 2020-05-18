@@ -552,6 +552,7 @@ bool StudentList::loadCourse(int academic_year, int semester, string classID, st
 
 		append(tmp);
 	}
+	_delete(tail);
 
 	fi.close();
 	return true;
@@ -827,6 +828,7 @@ bool CourseList::load(int academic_year, int semester, string classID) {
 
 		append(tmp);
 	}
+	_delete(tail);
 
 	fi.close();
 	return true;
