@@ -243,6 +243,7 @@ if (checklist){
 else 
 {
 	cout<<"The course you entered was incorrect. Please try again.";
+	system("pause");
 	return;
 }
 system("pause");
@@ -290,6 +291,7 @@ void add_student_to_course() {//WARNING: UNEXPECTED ERROR WHEN ADDING STUDENT: C
 	}
 	else {
 		cout<<"Cannot find the specified course. Please try again"<<endl;
+		system("pause");
 		return;
 	}
 	system("pause");
