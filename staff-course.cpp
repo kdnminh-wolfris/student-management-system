@@ -255,6 +255,7 @@ void view_student_list_of_course() {
 }
 
 
+
 void view_attendance_list_of_course() {
     cout << "Please enter the academic year.\n";
     int academic_year; cin>>academic_year;
@@ -278,8 +279,8 @@ void view_attendance_list_of_course() {
     while(ns!=nullptr)
     {
     	Student sd = ns->student;
-    	cout << sd.general.ID << " ";
-    	for(int i=0; i<10; i++) cout << sd.attended[0] << "  ";
+    	cout << "   "<<sd.general.ID << " ";
+    	for(int i=0; i<10; i++) cout <<"   "<< sd.attended[0];
     	cout << "\n\n";
         ns = ns->next;
     }
