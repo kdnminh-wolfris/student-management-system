@@ -280,7 +280,7 @@ void view_attendance_list_of_course() {
     	Student sd = ns->student;
     	cout << sd.general.ID << " ";
     	for(int i=0; i<10; i++) cout << sd.attended[0] << "  ";
-    	cout << '\n\n';
+    	cout << "\n\n";
         ns = ns->next;
     }
 
