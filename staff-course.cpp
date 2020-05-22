@@ -300,7 +300,6 @@ void view_student_list_of_course() {
 }
 
 
-
 void view_attendance_list_of_course() {
     cout << "Please enter the academic year.\n";
     int academic_year; cin>>academic_year;
@@ -314,23 +313,27 @@ void view_attendance_list_of_course() {
     if(!sl.loadCourse(academic_year, semester, classID, courseID)) return;
     StudentList::nodeStudent *ns = sl.head;
     cout << "          This is the attendance list of the course " << courseID << '\n';
-    cout << "(Note that 1 means that student attends that class while 0 otherwise)"<<'\n';
+    cout << "(Note that * means that student attends that class while - otherwise)"<<'\n';
     cout << "              There are 10 weeks in this course" << '\n';
     cout << "Student's ID  ";
-    for(int i=1; i<=10; i++) 
-    	if(i<10) cout << "W0" << i << " ";
-    	else cout << "W" << 10 << '\n';
+    for(int i=1; i<=10; i++)
+        if(i<10) cout << "W0" << i << " ";
+        else cout << "W" << 10 << '\n';
 
     while(ns!=nullptr)
     {
-    	Student sd = ns->student;
-    	cout << "   "<<sd.general.ID << " ";
-    	for(int i=0; i<10; i++) cout <<"   "<< sd.attended[0];
-    	cout << "\n\n";
+        Student sd = ns->student;
+        cout << "   "<<sd.general.ID << " ";
+        for(int i=0; i<10; i++)
+        {
+            if(sd.attended[i]) cout <<"   "<< "*";
+            else cout <<"   "<< "-";
+        }
+        cout << "\n\n";
         ns = ns->next;
     }
 
-    sl._delete();    
+    sl._delete();
 }
 
 
