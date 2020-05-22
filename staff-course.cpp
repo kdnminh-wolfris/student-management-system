@@ -187,47 +187,53 @@ void import_course() {
 	system("pause");
 }
 
+
 void add_new_course() {
-    Course new_course;
-    cout << "Please enter the academic year in which is course will be taught?\n";
-    cin>>new_course.academic_year;
-    cout << "Please enter the semester in which this course will be taught?\n";
-    cin>>new_course.semester;
-    cout << "Please enter the ID of the class which will enroll in this course?\n";
-    cin>>new_course.classID;
-    cout << "Please enter the ID of this new course?\n";
-    cin>>new_course.ID;
-    cout << "Please enter the full name of this course?\n";
-    cin.ignore();
-    getline(cin, new_course.name, '\n');
-    cout << "Please enter the ID of the lecturer of this course?\n";
-    cin>>new_course.lectureID;
-    cout << "Please enter the starting date of this course?\n";
-    new_course.startDate.input();
-    cout << "Please enter the finishing date of this course?\n";
-    new_course.endDate.input();
-    cout << "Please enter the session day in the week?\n";
-    cin>>new_course.sessionDay;
-    cout << "Please enter the starting time of this course (9 30 means 9h30)?\n";
-    cin>>new_course.startTime.hour>>new_course.startTime.minute;
-    cout << "Please enter the finishing time of this course (11 30 means 11h30)?\n";
-    cin>>new_course.endTime.hour>>new_course.endTime.minute;
-    cout << "Please enter the name of the room where the lectures are held?\n";
-    cin>>new_course.room;
-    string path_enrolled = "data/course/" + AcademicYearCode(new_course.academic_year)+"-"+SemesterCode(new_course.semester)+"-"+new_course.classID+"-"+new_course.ID+"-enrolled.gulu";
-    ofstream out_enrolled;
-    out_enrolled.open(path_enrolled.c_str());
-    //There is still some low-level problems
-    if(!out_enrolled.is_open())
+	Course new_course;
+	cout << "Please enter the academic year in which is course will be taught?\n";
+	cin>>new_course.academic_year;
+	cout << "Please enter the semester in which this course will be taught?\n";
+	cin>>new_course.semester;
+	cout << "Please enter the ID of the class which will enroll in this course?\n";
+	cin>>new_course.classID;
+	cout << "Please enter the ID of this new course?\n";
+	cin>>new_course.ID;
+	cout << "Please enter the full name of this course?\n";
+	cin.ignore();
+	getline(cin, new_course.name, '\n');
+	cout << "Please enter the ID of the lecturer of this course?\n";
+	cin>>new_course.lectureID;
+	cout << "Please enter the starting date of this course?\n";
+	new_course.startDate.input();
+	cout << "Please enter the finishing date of this course?\n";
+	new_course.endDate.input();
+	cout << "Please enter the session day in the week?\n";
+	cin>>new_course.sessionDay;
+	cout << "Please enter the starting time of this course (9 30 means 9h30)?\n";
+	cin>>new_course.startTime.hour>>new_course.startTime.minute;
+	cout << "Please enter the finishing time of this course (11 30 means 11h30)?\n";
+	cin>>new_course.endTime.hour>>new_course.endTime.minute;
+	cout << "Please enter the name of the room where the lectures are held?\n";
+	cin>>new_course.room;
+	string path_enrolled = "data/course/" + AcademicYearCode(new_course.academic_year)+"-"+SemesterCode(new_course.semester)+"-"+new_course.classID+"-"+new_course.ID+"-enrolled.gulu";
+	ofstream out_enrolled;
+	out_enrolled.open(path_enrolled.c_str());
+	if(!out_enrolled.is_open())
+	{
+		cout << "Cannot create file enrolled.gulu\n";
+		return;
+	}
+	CourseList cl; cl.load(new_course.academic_year, new_course.semester, new_course.classID);
+    if(!new_course.studentList.load(new_course.classID))
     {
-        cout << "Cannot create file enrolled.gulu\n";
+        cl._delete();
+        out_enrolled.close();
         return;
     }
-    CourseList cl; cl.load(new_course.academic_year, new_course.semester, new_course.classID);
-    cl.append(new_course);
-    cl.update(new_course.academic_year, new_course.semester, new_course.classID);
-    cl._delete();
-    out_enrolled.close();
+	cl.append(new_course);
+	cl.update(new_course.academic_year, new_course.semester, new_course.classID);
+	cl._delete();
+	out_enrolled.close();
 }
 
 void edit_course() {
