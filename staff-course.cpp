@@ -244,11 +244,103 @@ void remove_course() {
 }
 
 void remove_student_from_course() {
-
+string studentID;
+string courseID;
+string classname;
+int semester;
+int acayear;
+cout<<"Please type in the academic year, ex:2019 for 2019-2020:"<<endl;
+cin>>acayear;
+cout<<"Please type in the semester of either 1 ,2 or 3:"<<endl;
+cin>>semester;
+cin.ignore();
+cout<<"Please type in the course code of the student to be removed:"<<endl;
+getline(cin,courseID);
+cout<<"Please type in the class of the course in which the student is to be removed:"<<endl;
+getline(cin,classname);
+cout<<"Please type in the ID of the student to be removed:"<<endl;
+getline(cin,studentID);
+StudentList studentlist;
+StudentList::nodeStudent *cur;
+bool checklist=studentlist.loadCourse(acayear,semester,classname,courseID);
+if (checklist){
+	cur=studentlist.head;//set pointer cur to the head of student list in course
+	while (cur!=nullptr)
+	{
+		if (cur->student.general.ID == studentID)
+		{
+			studentlist._delete(cur);//trying to delete the current student from the list
+			cout << "The student " << studentID << " was successfully removed from course " << courseID << endl;
+			break;
+		}
+		else cur = cur->next;
+	}
+	if (cur == nullptr)
+	{
+		cout << "The student with ID " << studentID << " was not found in the course " << courseID <<"of class"<<classname<< endl;
+		studentlist._delete();
+		system("pause");
+		return;
+	}
+	studentlist.updateCourse(acayear,semester,classname,courseID);
+	//delete all of the list of student previously loaded into function here
+	studentlist._delete();
+}
+else 
+{
+	cout<<"The course you entered was incorrect. Please try again.";
+	system("pause");
+	return;
+}
+system("pause");
 }
 
-void add_student_to_course() {
-
+void add_student_to_course() {//WARNING: UNEXPECTED ERROR WHEN ADDING STUDENT: CREATE ANOTHER EMPTY STUDENT FIRST
+	string studentID;
+	string courseID;
+	string classname;
+	int semester;
+	int acayear;
+	cout << "Please type in the academic year, ex:2019 for 2019-2020:" << endl;
+	cin >> acayear;
+	cout << "Please type in the semester of either 1 ,2 or 3:" << endl;
+	cin >> semester;
+	cin.ignore();
+	cout << "Please type in the course code of the student to be added:" << endl;
+	getline(cin, courseID);
+	cout<<"Please type in the class of the course in which the student is to be added:"<<endl;
+	getline(cin,classname);
+	cout << "Please type in the ID of the student to be added:" << endl;
+	getline(cin, studentID);
+	StudentList studentlist;
+	StudentList::nodeStudent* cur;
+	bool checklist=studentlist.loadCourse(acayear, semester, classname, courseID);
+	if (checklist){
+	cur = studentlist.tail;//set pointer cur to the last of student list in course
+	cur->next = new StudentList::nodeStudent;
+	StudentList::nodeStudent* temp = cur;
+	cur = cur->next;
+	cur->next = nullptr;
+	cur->prev = temp;
+	cur->student.classID = classname;
+	cur->student.general.ID = studentID;
+	//input score for the student, 0 is default
+	cur->student.bonusGrade = 0;
+	cur->student.finalGrade = 0;
+	cur->student.midtermGrade = 0;
+	cur->student.totalGrade = 0;
+	//update the list of student in course
+	studentlist.updateCourse(acayear, semester, classname, courseID);
+	
+	//delete all of the list of student previously loaded into function here
+	studentlist._delete();
+	}
+	else {
+		cout<<"Cannot find the specified course. Please try again"<<endl;
+		system("pause");
+		return;
+	}
+	system("pause");
 }
 
 
