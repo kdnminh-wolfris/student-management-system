@@ -237,10 +237,149 @@ void add_new_course() {
 }
 
 void edit_course() {
-
+    int  acedemic_year, semester;
+    string classID, courseID;
+    cout <<"Edit course information\n "<<endl;
+    CourseList courseList;
+    const int max_turn=3;
+    int turn=0;
+    Course course;
+    while (turn<max_turn){
+        cout<<"PLease input "<<endl
+        <<"Course ID : ";
+        getline(cin,courseID,'\n');
+        cout <<"Class : ";
+        getline(cin,classID,'\n');
+        cout <<"Acedemic year : ";
+        cin>>acedemic_year;
+        cout <<"Semester : ";
+        cin>>semester;
+        bool found=false;
+        courseList.load(acedemic_year,semester,classID);
+            for (auto iter=courseList.head;iter!=nullptr;iter=iter->next){
+                if (iter->course.ID==courseID) {
+                    found= true;
+                    course=iter->course;
+                    break;
+                }
+            }
+        if (!found) cout <<courseID<<" not exist\n"<<endl;
+        else break;
+        ++turn;
+    }
+    if (turn==max_turn){
+        return;
+    }
+    
+    cin.get();
+    string tmp;
+    cout <<"Course ID (enter a blank to maintain the current)\n";
+    cout <<course.ID<<" -> ";
+    getline(cin,tmp,'\n');
+    if (tmp!="") course.ID=tmp;
+    
+    cout <<"Course name(enter a blank to maintain the current)\n";
+    cout <<course.name<<" -> ";
+    getline(cin,tmp,'\n');
+    if (tmp!="") course.name=tmp;
+    
+    cout <<"Lecturer ID (enter a blank to maintain the current)\n";
+    cout <<course.lectureID<<" -> ";
+    getline(cin,tmp,'\n');
+    if (tmp!="") course.lectureID=tmp;
+    
+    cout <<"Class ID (enter a blank to maintain the current)\n";
+    cout <<course.classID<<" -> ";
+    getline(cin,tmp,'\n');
+    if (tmp!="") course.classID=tmp;
+    
+    cout <<"Start date : \n";
+    cout <<course.startDate.year<<"/"<<course.startDate.month<<"/"<<course.startDate.day<<" -> ";
+    course.startDate.input();
+    
+    cout <<"End date : \n";
+    cout <<course.endDate.year<<"/"<<course.endDate.month<<"/"<<course.endDate.day<<" -> ";
+    course.endDate.input();
+    
+    int temp;
+    cout <<"Acedemic year : \n";
+    cout <<course.academic_year<<" -> ";
+    cin>>temp;
+    if (temp!=0) course.academic_year=temp;
+    
+    cout <<"Semester : \n";
+    cout <<course.semester<<" -> ";
+    cin>>temp;
+    if (temp>0 && temp <4) course.semester=temp;
+    
+    cout <<"Session day (day of the week) : \n";
+    cout <<course.sessionDay<<" -> ";
+    cin>>temp;
+    if (temp>1 && temp <8) course.sessionDay=temp;
+    
+    cout <<"Start time : \n";
+    cout <<course.startTime.hour<<" : "<<course.startTime.minute<<" -> ";
+    cin>>course.startTime.hour>>course.startTime.minute;
+    
+    cout <<"End time : \n";
+    cout <<course.endTime.hour<<" : "<<course.endTime.minute<<" -> ";
+    cin>>course.endTime.hour>>course.endTime.minute;
+    
+    cin.get();
+    cout <<"Room (enter a blank to maintain the current)\n";
+    cout <<course.room<<" -> ";
+    getline(cin,tmp,'\n');
+    if (tmp!="") course.room=tmp;
+    
+    for (auto iter=courseList.head;iter!=nullptr;iter=iter->next)
+    if (iter->course.ID==courseID) {
+        iter->course=course;
+        break;
+    }
+    courseList.update(course.academic_year,course.semester,course.classID);
+    cout << "Edit " << course.ID << "'s information successfully!\n" << endl;
+    courseList._delete();
+    
 }
 void remove_course() {
-
+    cout<<"Remove a course\n"<<endl;
+    
+    int  acedemic_year, semester;
+    string classID, courseID;
+    CourseList courseList;
+    const int max_turn=3;
+    int turn=0;
+    while (turn<max_turn){
+        cout<<"PLease input "<<endl
+        <<"Course ID : ";
+        getline(cin,courseID,'\n');
+        cout <<"Class : ";
+        getline(cin,classID,'\n');
+        cout <<"Acedemic year : ";
+        cin>>acedemic_year;
+        cout <<"Semester : ";
+        cin>>semester;
+        bool found=false;
+        courseList.load(acedemic_year,semester,classID);
+        for (auto iter=courseList.head;iter!=nullptr;iter=iter->next){
+            if (iter->course.ID==courseID) {
+                found= true;
+                courseList._delete(iter);
+                break;
+            }
+        }
+        if (!found) cout <<courseID<<" not exist\n"<<endl;
+        else {
+            courseList.update(acedemic_year,semester,classID);
+            cout <<"Remove "<<courseID<<" successfully"<<endl;
+            break;
+        }
+        ++turn;
+    }
+    if (turn==max_turn){
+        return;
+    }
+    courseList._delete();
 }
 
 void remove_student_from_course() {
@@ -427,7 +566,6 @@ void view_attendance_list_of_course() {
 
     sl._delete();
 }
-
 
 void view_lecturer_list() {
     LecturerList lecturer_list;
