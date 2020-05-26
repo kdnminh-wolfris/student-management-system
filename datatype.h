@@ -63,6 +63,11 @@ struct Student {
 	int* attended = nullptr;
 
 	bool load();
+
+	void check_in();
+	void view_check_in();
+	void view_schedule();
+	void view_course_score();
 };
 
 struct StudentList {
@@ -89,6 +94,14 @@ struct Lecturer {
 	string degree;
 
 	bool load();
+
+	void view_course_list();
+	void view_student_list();
+	void view_attendance_list();
+	void edit_attendance();
+	void import_scoreboard();
+	void edit_student_grade();
+	void view_scoreboard();
 };
 
 struct LecturerList {

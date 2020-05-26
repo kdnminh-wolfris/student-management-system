@@ -43,15 +43,15 @@ void menu(User& user, Config& config) {
 	else optionFunction(option - 1, user.position);
 }
 
-int menuFunction(int start, int user_position) {
-	if (user_position == 0) {
+int menuFunction(int start, User& user) {
+	if (user.position == 0) {
 		numtag(start + 0); cout << "Class\n";
 		numtag(start + 1); cout << "Course\n";
 		numtag(start + 2); cout << "Scoreboard\n";
 		numtag(start + 3); cout << "Attendance list\n";
 		return 4;
 	}
-	else if (user_position == 1) {
+	else if (user.position == 1) {
 		numtag(start + 0); cout << "View course list\n";
 		numtag(start + 1); cout << "View course's student list\n";
 		numtag(start + 2); cout << "View course's attendance list\n";
@@ -70,8 +70,8 @@ int menuFunction(int start, int user_position) {
 	}
 }
 
-void optionFunction(int option, int user_position) {
-	if (user_position == 0) {
+void optionFunction(int option, User& user) {
+	if (user.position == 0) {
 		switch (option) {
 			case 0: {
 				cout << "Class Manangement\n" << endl;
@@ -184,10 +184,10 @@ void optionFunction(int option, int user_position) {
 			}
 		}
 	}
-	else if (user_position == 1) {
+	else if (user.position == 1) {
 
 	}
-	else if (user_position == 2) {
+	else if (user.position == 2) {
 
 	}
 }

@@ -187,7 +187,6 @@ void import_course() {
 	system("pause");
 }
 
-
 void add_new_course() {
 	Course new_course;
 	cout << "Please enter the academic year in which is course will be taught?\n";
@@ -221,6 +220,7 @@ void add_new_course() {
 	if(!out_enrolled.is_open())
 	{
 		cout << "Cannot create file enrolled.gulu\n";
+		system("pause");
 		return;
 	}
 	CourseList cl; cl.load(new_course.academic_year, new_course.semester, new_course.classID);
@@ -228,12 +228,14 @@ void add_new_course() {
     {
         cl._delete();
         out_enrolled.close();
+		system("pause");
         return;
     }
 	cl.append(new_course);
 	cl.update(new_course.academic_year, new_course.semester, new_course.classID);
 	cl._delete();
 	out_enrolled.close();
+	system("pause");
 }
 
 void edit_course() {
