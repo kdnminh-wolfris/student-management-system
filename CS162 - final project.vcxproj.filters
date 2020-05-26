@@ -30,10 +30,10 @@
     <ClCompile Include="datatype.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="staff_class.cpp">
+    <ClCompile Include="staff-course.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="staff-course.cpp">
+    <ClCompile Include="staff-class.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -50,10 +50,16 @@
     <ClInclude Include="menu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="staff_class.h">
+    <ClInclude Include="staff-course.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="staff-course.h">
+    <ClInclude Include="staff-scoreboard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="staff-class.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="staff-attendancelist.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
