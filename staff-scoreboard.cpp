@@ -52,8 +52,18 @@ cout<<"Please type in the class ID of course"<<endl;
 getline(cin,classname);
 string academic=AcademicYearCode(acayear);
 string semestercode=SemesterCode(semester);
-string path="csv files/"+academic+"-"+semestercode+"-"+classname+"-"+courseID+"-Scoreboard.gulu";
+string path="csv files/"+academic+"-"+semestercode+"-"+classname+"-"+courseID+"-Scoreboard.csv";
 StudentList studentlist;
 studentlist.loadCourse(acayear,semester,classname,courseID);
 StudentList::nodeStudent *cur=studentlist.head;
+output.open(path);
+if (!output.is_open())
+{
+    cout<<"Cannot open file to export"<<endl;
+}
+else
+{
+    studentlist.loadCourse(acayear,semester,classname,courseID);
+}
+
 }
