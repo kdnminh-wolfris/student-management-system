@@ -54,16 +54,31 @@ string academic=AcademicYearCode(acayear);
 string semestercode=SemesterCode(semester);
 string path="csv files/"+academic+"-"+semestercode+"-"+classname+"-"+courseID+"-Scoreboard.csv";
 StudentList studentlist;
-studentlist.loadCourse(acayear,semester,classname,courseID);
-StudentList::nodeStudent *cur=studentlist.head;
-output.open(path);
-if (!output.is_open())
+bool check=studentlist.loadCourse(acayear,semester,classname,courseID);
+if (check)
 {
-    cout<<"Cannot open file to export"<<endl;
+    StudentList::nodeStudent *cur=studentlist.head;
+    output.open(path);
+    if (!output.is_open())
+    {
+        cout<<"Cannot open file to export"<<endl;
+        return;
+    }
+    else
+    {
+        //output<< output the title if necessary
+        output<<"ID,Midterm,Final,Bonus,Total"<<endl;
+        while (cur!=nullptr)
+        {
+            output<<cur->student.general.ID<<",";
+            output<<cur->student.midtermGrade<<",";
+            output<<cur->student.finalGrade<<",";
+            output<<cur->student.bonusGrade<<",";
+            output<<cur->student.totalGrade<<","<<endl;
+            cur=cur->next;
+        }
+        studentlist._delete();
+    }
 }
-else
-{
-    studentlist.loadCourse(acayear,semester,classname,courseID);
-}
-
+else cout<<"Cannot load the specified course with the information you entered."<<endl;
 }
