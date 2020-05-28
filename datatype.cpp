@@ -619,6 +619,89 @@ bool Lecturer::load() {
 	return true;
 }
 
+void Lecturer::view_course_list() {
+	//There are still some problems here, when calling cl.load() 
+	//it prints out missing erolled.gulu
+	//it should have looked for the file schedule.gulu instead
+	cout << "Please enter the academic year.\n";
+	int academic_year; cin>>academic_year;
+	cout <<"Please enter the semester (1,2 or 3)?\n";
+	int semester; cin>>semester;
+	cout <<"Please enter the code of the class?\n";
+	string classID; cin>>classID;
+
+	CourseList cl;
+	if(!cl.load(academic_year, semester, classID)) return;
+
+	CourseList::nodeCourse *nc = cl.head;
+	cout << "There are " << cl.size() << " courses in this list:\n";
+	while(nc!=nullptr)
+	{
+		cout << nc->course.ID << " - " << nc->course.name << '\n';
+		nc = nc->next;
+	}
+	cl._delete();
+}
+
+void Lecturer::view_student_list() {
+    cout << "Please enter the academic year.\n";
+    int academic_year; cin>>academic_year;
+    cout <<"Please enter the semester (1,2 or 3)?\n";
+    int semester; cin>>semester;
+    cout <<"Please enter the code of the class?\n";
+    string classID; cin>>classID;
+    cout << "Please enter the code of the course?\n";
+    string courseID; cin>>courseID;
+    StudentList sl;
+    if(!sl.loadCourse(academic_year, semester, classID, courseID)) return;
+
+    StudentList::nodeStudent *ns = sl.head;
+    cout << "There are " << sl.size() << " students in this course:\n";
+    while(ns!=nullptr)
+    {
+        User cur_student = ns->student.general;
+        cur_student.view_profile();
+        ns = ns->next;
+    }
+    sl._delete();
+}
+
+void Lecturer::view_attendance_list() {
+    cout << "Please enter the academic year.\n";
+    int academic_year; cin>>academic_year;
+    cout <<"Please enter the semester (1,2 or 3)?\n";
+    int semester; cin>>semester;
+    cout <<"Please enter the code of the class?\n";
+    string classID; cin>>classID;
+    cout << "Please enter the code of the course?\n";
+    string courseID; cin>>courseID;
+    StudentList sl;
+    if(!sl.loadCourse(academic_year, semester, classID, courseID)) return;
+    StudentList::nodeStudent *ns = sl.head;
+    cout << "          This is the attendance list of the course " << courseID << '\n';
+    cout << "(Note that * means that student attends that class while - otherwise)"<<'\n';
+    cout << "              There are 10 weeks in this course" << '\n';
+    cout << "Student's ID  ";
+    for(int i=1; i<=10; i++)
+        if(i<10) cout << "W0" << i << " ";
+        else cout << "W" << 10 << '\n';
+
+    while(ns!=nullptr)
+    {
+        Student sd = ns->student;
+        cout << "   "<<sd.general.ID << " ";
+        for(int i=0; i<10; i++)
+        {
+            if(sd.attended[i]) cout <<"   "<< "*";
+            else cout <<"   "<< "-";
+        }
+        cout << "\n\n";
+        ns = ns->next;
+    }
+
+    sl._delete();
+}
+
 int LecturerList::size() {
 	int ret = 0;
 	for (nodeLecturer* iter = head; iter != nullptr; iter = iter->next, ++ret);
