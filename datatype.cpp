@@ -820,6 +820,52 @@ void Lecturer::view_scoreboard() {
     sl._delete();
 }
 
+void Lecturer::import_scoreboard() {
+    cout << "Please enter the academic year.\n";
+    int academic_year; cin>>academic_year;
+    cout <<"Please enter the semester (1,2 or 3)?\n";
+    int semester; cin>>semester;
+    cout <<"Please enter the code of the class?\n";
+    string classID; cin>>classID;
+    cout << "Please enter the code of the course?\n";
+    string courseID; cin>>courseID;
+    StudentList sl;
+    if(!sl.loadCourse(academic_year, semester, classID, courseID)) return;
+    cout << "Please enter the name of the file (including its extension .csv).\n";
+    string filename;
+    cin.ignore();
+    getline(cin, filename, '\n');
+    //Assuming that we already have the name of the file
+    ifstream myfile("csv files/"+filename);
+    if(!myfile.is_open()) {
+        cout << "Your path name is wrong!\n";
+        sl._delete();
+        return;
+    }
+    //skip the first line
+    StudentList::nodeStudent *cur = sl.head;
+    string dummy;
+    getline(myfile, dummy, '\n');
+
+    string sid, score;
+    int midterm, final, bonus, total;
+    while(!myfile.eof() and cur!=nullptr) {
+        getline(myfile, sid, ',');
+        getline(myfile, score, ',');
+        cur->student.midtermGrade = stoi(score);
+        getline(myfile, score, ',');
+        cur->student.finalGrade = stoi(score);
+        getline(myfile, score, ',');
+        cur->student.bonusGrade = stoi(score);
+        getline(myfile, score, '\n');
+        cur->student.totalGrade = stoi(score);
+        cur = cur->next;
+    }
+    sl.updateCourse(academic_year, semester, classID, courseID);
+    sl._delete();
+    cout << "Update successfully.\n";
+}
+
 int LecturerList::size() {
 	int ret = 0;
 	for (nodeLecturer* iter = head; iter != nullptr; iter = iter->next, ++ret);
