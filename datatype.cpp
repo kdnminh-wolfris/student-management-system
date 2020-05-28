@@ -749,6 +749,48 @@ void Lecturer::edit_attendance() {
     return;
 }
 
+void Lecturer::edit_student_grade() {
+    cout << "Please enter the academic year.\n";
+    int academic_year; cin>>academic_year;
+    cout <<"Please enter the semester (1,2 or 3)?\n";
+    int semester; cin>>semester;
+    cout <<"Please enter the code of the class?\n";
+    string classID; cin>>classID;
+    cout << "Please enter the code of the course?\n";
+    string courseID; cin>>courseID;
+    StudentList sl;
+    if(!sl.loadCourse(academic_year, semester, classID, courseID)) return;
+    cout << "Please enter the student ID of the student whose grades you want to edit?\n";
+    string SID; cin>>SID;
+    StudentList::nodeStudent* cur = sl.head;
+    bool found = false;
+    while(cur!=nullptr) {
+        if(cur->student.general.ID==SID) {
+            found = true; break;
+        }
+        cur = cur->next;
+    }
+    if(!found) {
+        sl._delete();
+        cout << SID << " not found.\n";
+        return;
+    }
+    //now cur points to that student
+    cout << "The current grades of that student:\n";
+    cout << "Midterm: " << cur->student.midtermGrade << '\n';
+    cout << "Final: " << cur->student.finalGrade << '\n';
+    cout << "Bonus: " << cur->student.bonusGrade << '\n';
+    cout << "Total: " << cur->student.totalGrade << '\n';
+
+    cout << "Now enter the new grades of that student following the above order, sepearted by a space.\n";
+    cin>>cur->student.midtermGrade>>cur->student.finalGrade>>cur->student.bonusGrade>>cur->student.totalGrade;
+
+    sl.updateCourse(academic_year, semester, classID, courseID);
+    cout << "Change made sucessfully.\n";
+    sl._delete();
+    return;
+}
+
 int LecturerList::size() {
 	int ret = 0;
 	for (nodeLecturer* iter = head; iter != nullptr; iter = iter->next, ++ret);
