@@ -10,7 +10,7 @@ void menu(User& user, Config& config) {
 
 	cout << "[ 0 ] Profile\n";
 
-	int numberFunction = menuFunction(1, user.position);
+	int numberFunction = menuFunction(1, user);
 
 	numtag(numberFunction + 1); cout << "Settings\n";
 	numtag(numberFunction + 2); cout << "Change password\n";
@@ -40,7 +40,7 @@ void menu(User& user, Config& config) {
 		}
 		else return menu(user, config);
 	}
-	else optionFunction(option - 1, user.position);
+	else optionFunction(option - 1, user);
 }
 
 int menuFunction(int start, User& user) {
