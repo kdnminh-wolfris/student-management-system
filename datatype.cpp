@@ -702,6 +702,53 @@ void Lecturer::view_attendance_list() {
     sl._delete();
 }
 
+void Lecturer::edit_attendance() {
+    cout << "Please enter the academic year.\n";
+    int academic_year; cin>>academic_year;
+    cout <<"Please enter the semester (1,2 or 3)?\n";
+    int semester; cin>>semester;
+    cout <<"Please enter the code of the class?\n";
+    string classID; cin>>classID;
+    cout << "Please enter the code of the course?\n";
+    string courseID; cin>>courseID;
+    StudentList sl;
+    if(!sl.loadCourse(academic_year, semester, classID, courseID)) return;
+    cout << "Please enter the student ID of the student you want to edit?\n";
+    string SID; cin>>SID;
+    StudentList::nodeStudent* cur = sl.head;
+    bool found = false;
+    while(cur!=nullptr) {
+        if(cur->student.general.ID==SID) {
+            found = true; break;
+        }
+        cur = cur->next;
+    }
+    if(!found) {
+        sl._delete();
+        cout << SID << " not found.\n";
+        return;
+    }
+    //now cur points to that student
+    cout << "This is the attended list of this student for ten weeks\n";
+    cout << "* means attended while - means otherwise.\n";
+    for(int i=0; i<10; i++)
+        if(cur->student.attended[i]) cout <<"   "<< "*";
+        else cout <<"   "<< "-";
+
+    cout << "\nWhich week to you want to change? (Enter a number from 1 to 10)?\n";
+    int change; cin>>change; change--;
+    if(change<0 or change>9){
+        cout << "You entered the wrong number\n";
+        sl._delete();
+        return;
+    }
+    cur->student.attended[change] = 1-cur->student.attended[change];
+    sl.updateCourse(academic_year, semester, classID, courseID);
+    cout << "Change made sucessfully.\n";
+    sl._delete();
+    return;
+}
+
 int LecturerList::size() {
 	int ret = 0;
 	for (nodeLecturer* iter = head; iter != nullptr; iter = iter->next, ++ret);
