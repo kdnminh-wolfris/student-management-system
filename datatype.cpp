@@ -791,6 +791,35 @@ void Lecturer::edit_student_grade() {
     return;
 }
 
+void Lecturer::view_scoreboard() {
+    cout << "Please enter the academic year.\n";
+    int academic_year; cin>>academic_year;
+    cout <<"Please enter the semester (1,2 or 3)?\n";
+    int semester; cin>>semester;
+    cout <<"Please enter the code of the class?\n";
+    string classID; cin>>classID;
+    cout << "Please enter the code of the course?\n";
+    string courseID; cin>>courseID;
+    StudentList sl;
+    if(!sl.loadCourse(academic_year, semester, classID, courseID)) return;
+
+    StudentList::nodeStudent *ns = sl.head;
+    cout << "          This is the scoreboard of the course " << courseID << "\n\n";
+
+    cout << "Student's ID     Midterm      Final      Bonus       Total\n";
+
+    while(ns!=nullptr)
+    {
+        Student sd = ns->student;
+        cout << "   "<<sd.general.ID << " ";
+        cout << "        "<<sd.midtermGrade << "           " << sd.finalGrade << "           " << sd.bonusGrade << "           " << sd.totalGrade;
+        cout << "\n\n";
+        ns = ns->next;
+    }
+
+    sl._delete();
+}
+
 int LecturerList::size() {
 	int ret = 0;
 	for (nodeLecturer* iter = head; iter != nullptr; iter = iter->next, ++ret);
