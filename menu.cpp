@@ -182,6 +182,28 @@ void optionFunction(int option, User& user) {
 
 				break;
 			}
+			case 2: {
+				cout << "Scoreboard Management\n" << endl;
+
+				numtag(0); cout << "View scoreboard of a course\n";
+				numtag(1); cout << "Export scoreboard of a course to csv file\n";
+				numtag(2); cout << "Back to main menu\n";
+
+				int option = int_option(3);
+
+				switch (option) {
+					case 0: {
+						view_scoreboard_course();
+						break;
+					}
+					case 1: {
+						export_scoreboard();
+						break;
+					}
+				}
+				
+				break;
+			}
 		}
 	}
 	else if (user.position == 1) {
