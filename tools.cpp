@@ -19,7 +19,7 @@ int int_option(int numberChoice) {
 
 		ret = 0;
 
-		for (int i = int(tmp.length()) - 1; i >= 0; --i)
+		for (int i = 0; i < tmp.length(); ++i)
 			if ('0' <= tmp[i] && tmp[i] <= '9') {
 				ret = ret * 10 + (tmp[i] - 48);
 			}
