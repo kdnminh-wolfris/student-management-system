@@ -31,8 +31,14 @@ while (cur!=nullptr)
         cur=cur->next;
     }
 studentlist._delete();
+cur = nullptr;
+system("pause");
 }
-else cout<<"Cannot load the specified course with the data you entered."<<endl;
+else
+{
+    cout << "Cannot load the specified course with the data you entered." << endl;
+    system("pause");
+}
 }
 void export_scoreboard() // to csv
 {
@@ -62,6 +68,7 @@ if (check)
     if (!output.is_open())
     {
         cout<<"Cannot open file to export"<<endl;
+        system("pause");
         return;
     }
     else
@@ -78,7 +85,14 @@ if (check)
             cur=cur->next;
         }
         studentlist._delete();
+        system("pause");
+        cur = nullptr;
     }
 }
-else cout<<"Cannot load the specified course with the information you entered."<<endl;
+else
+{
+    cout << "Cannot load the specified course with the information you entered." << endl;
+    system("pause");
+    return;
+}
 }
