@@ -5,7 +5,7 @@ string courseID;
 string classname;
 int semester;
 int acayear;
-cout<<"Please type in the academic year:"<<endl;
+cout<<"Please type in the starting academic year:"<<endl;
 cin>>acayear;
 cout<<"Please type in the semester:"<<endl;
 cin>>semester;
@@ -25,8 +25,8 @@ while (cur!=nullptr)
     {
         cout<<cur->student.general.ID<<"    ";
         cout<<cur->student.midtermGrade<<"          ";
-        cout<<cur->student.finalGrade<<"        ";
-        cout<<cur->student.bonusGrade<<"       ";
+        cout<<cur->student.finalGrade<<"          ";
+        cout<<cur->student.bonusGrade<<"        ";
         cout<<cur->student.totalGrade<<endl;
         cur=cur->next;
     }
@@ -47,7 +47,7 @@ string courseID;
 string classname;
 int semester;
 int acayear;
-cout<<"Please type in the academic year:"<<endl;
+cout<<"Please type in the starting academic year:"<<endl;
 cin>>acayear;
 cout<<"Please type in the semester:"<<endl;
 cin>>semester;
