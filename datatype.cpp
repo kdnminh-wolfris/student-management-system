@@ -470,26 +470,50 @@ void Student::check_in(){
     cout<<"Please enter the semester : ";
     cin>>semester;
     Course course;
-    course.studentList.loadCourse(academic_year,semester,class_ID,course_ID);
-    int day;
-    cout<<"Please enter the day you want to check-in (from 1 to 10) : ";
-    cin>>day;
-    for(auto iter=course.studentList.head;iter!=nullptr;iter=iter->next)
-        if(iter->student.general.ID==general.ID){
-            if (iter->student.attended[day-1]==1){
-                cout<<"Already checked-in this day !\n";
-                return;
-            }
-            iter->student.attended[day-1]=1;
-            attended=iter->student.attended;
-            course.studentList.updateCourse(academic_year,semester, class_ID, course_ID);
+    CourseList courseList;
+    Student student;
+    courseList.load(academic_year,semester,class_ID);
+    for (auto iter=courseList.head;iter!=nullptr;iter=iter->next){
+        if (iter->course.ID==course_ID) {
+            course = iter->course;
             break;
         }
-    if(attended==nullptr) {
-        cout <<"Cannot find this student in this course ! ";
+    }
+    if (course.ID != course_ID){
+        cout <<"This not does not exist ! "<<endl;
         return;
     }
-    cout<<"Check-in successfully !\n";
+    course.studentList.loadCourse(academic_year,semester,class_ID,course_ID);
+    time_t now =time(0);
+    tm *current= localtime(&now);
+    Date cur;
+    cur.day=current->tm_mday;
+    cur.month=current->tm_mon+1;
+    cur.year=current->tm_year+1900;
+    int differ= differ_day(course.startDate, cur);
+    if (differ%7 != 0 || differ%7>10){
+        cout <<"Cannot check-in !! "<<endl;
+        return;
+    }
+    else {
+        if (((current->tm_hour>course.startTime.hour && current->tm_hour<course.endTime.hour) || (current->tm_hour==course.startTime.hour && current->tm_min>course.startTime.minute) || (current->tm_hour==course.endTime.hour && current->tm_min<course.endTime.minute)))
+        {
+            int day=differ/7;
+            for (auto iter=course.studentList.head; iter!=nullptr;iter=iter->next){
+                if (iter->student.general.ID==general.ID){
+                    iter->student.attended[day]=1;
+                    attended=iter->student.attended;
+                    break;
+                }
+            }
+            course.studentList.updateCourse(academic_year,semester,class_ID, course_ID);
+            if (attended[day-1]==0){
+                cout <<"This student does not exist in this course ! "<<endl;
+                return ;
+            }
+            else cout <<"Check-in successfully ! "<<endl;
+        }
+    }
 }
 
 void Student::view_schedule(){
