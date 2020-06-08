@@ -36,6 +36,9 @@
     <ClCompile Include="staff-class.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="staff-scoreboard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="admin.h">

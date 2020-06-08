@@ -532,7 +532,7 @@ bool StudentList::loadCourse(int academic_year, int semester, string classID, st
 	ifstream fi;
 	fi.open("data/course/" + ayearCode + "-" + sCode + "-" + classID + "-" + courseID + "-enrolled.gulu");
 	if (!fi.is_open()) {
-		cout << "Error: Missing" << ayearCode << "-" << sCode << "-" << classID << "-" << courseID << "-enrolled.gulu file\n" << endl;
+		cout << "Error: Missing " << ayearCode << "-" << sCode << "-" << classID << "-" << courseID << "-enrolled.gulu file\n" << endl;
 		return false;
 	}
 
@@ -805,6 +805,8 @@ bool CourseList::load(int academic_year, int semester, string classID) {
 		getline(fi, tmp.name);
 		getline(fi, tmp.lectureID);
 
+		if (tmp.ID == "") break;
+
 		fi >> tmp.startDate.year >> tmp.startDate.month >> tmp.startDate.day;
 		fi >> tmp.endDate.year >> tmp.endDate.month >> tmp.endDate.day;
 
@@ -828,7 +830,6 @@ bool CourseList::load(int academic_year, int semester, string classID) {
 
 		append(tmp);
 	}
-	_delete(tail);
 
 	fi.close();
 	return true;

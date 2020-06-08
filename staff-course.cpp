@@ -183,25 +183,65 @@ void import_course() {
 	courseList.update(academic_year, semester, classID);
 	courseList._delete();
 
-	cout << "\nImport " << termCode << "-" << classID + "schedule successfully!\n" << endl;
+	cout << "\nImport " << termCode << "-" << classID + " schedule successfully!\n" << endl;
 	system("pause");
 }
 
 void add_new_course() {
+	cout << "Add a new course\n" << endl;
+
+	ifstream fi;
+
+	string classID;
+	string termCode;
+
+	const int max_turn = 3;
+	int turn = 0;
+	do {
+		int tturn = 0;
+		do {
+			cout << "Enter the academic year - the semester (ex. 1920-HK1): ";
+			getline(cin, termCode);
+
+			if (termCode.size() == 8 && termCode[4] == '-' && termCode[5] == 'H' && termCode[6] == 'K')
+				if ('1' <= termCode[7] && termCode[7] <= '3')
+					if (((termCode[0] - 48) * 10 + (termCode[1] - 48) + 1) % 100 == (termCode[2] - 48) * 10 + (termCode[3] - 48))
+						break;
+
+			cout << "Invalid code!\n" << endl;
+			++tturn;
+		} while (tturn < max_turn);
+		if (tturn == max_turn) {
+			system("pause");
+			return;
+		}
+
+		cout << "Enter the imported class: ";
+		getline(cin, classID);
+
+		fi.open("data/course/" + termCode + "-" + classID + "-schedule.gulu");
+		if (!fi.is_open()) {
+			cout << termCode << "-" << classID + "-schedule.gulu not found\n" << endl;
+			if (++turn == max_turn) break;
+		}
+	} while (!fi.is_open());
+	if (!fi.is_open()) {
+		system("pause");
+		return;
+	}
+
 	Course new_course;
-	cout << "Please enter the academic year in which is course will be taught?\n";
-	cin>>new_course.academic_year;
-	cout << "Please enter the semester in which this course will be taught?\n";
-	cin>>new_course.semester;
-	cout << "Please enter the ID of the class which will enroll in this course?\n";
-	cin>>new_course.classID;
+
+	new_course.academic_year = 2000 + (termCode[0] - 48) * 10 + (termCode[1] - 48);
+	new_course.semester = termCode[7] - 48;
+	new_course.classID = classID;
+
 	cout << "Please enter the ID of this new course?\n";
-	cin>>new_course.ID;
+	getline(cin, new_course.ID);
 	cout << "Please enter the full name of this course?\n";
-	cin.ignore();
-	getline(cin, new_course.name, '\n');
+	getline(cin, new_course.name);
 	cout << "Please enter the ID of the lecturer of this course?\n";
-	cin>>new_course.lectureID;
+	getline(cin, new_course.lectureID);
 	cout << "Please enter the starting date of this course?\n";
 	new_course.startDate.input();
 	cout << "Please enter the finishing date of this course?\n";
@@ -213,13 +253,13 @@ void add_new_course() {
 	cout << "Please enter the finishing time of this course (11 30 means 11h30)?\n";
 	cin>>new_course.endTime.hour>>new_course.endTime.minute;
 	cout << "Please enter the name of the room where the lectures are held?\n";
-	cin>>new_course.room;
+	cin.ignore(); getline(cin, new_course.room);
 	string path_enrolled = "data/course/" + AcademicYearCode(new_course.academic_year)+"-"+SemesterCode(new_course.semester)+"-"+new_course.classID+"-"+new_course.ID+"-enrolled.gulu";
 	ofstream out_enrolled;
 	out_enrolled.open(path_enrolled.c_str());
 	if(!out_enrolled.is_open())
 	{
-		cout << "Cannot create file enrolled.gulu\n";
+		cout << "Error: Cannot create file enrolled.gulu\n";
 		system("pause");
 		return;
 	}
@@ -235,45 +275,72 @@ void add_new_course() {
 	cl.update(new_course.academic_year, new_course.semester, new_course.classID);
 	cl._delete();
 	out_enrolled.close();
+
+	cout << "Add " << new_course.ID << " successfully!\n" << endl;
+
 	system("pause");
 }
 
 void edit_course() {
-    int  acedemic_year, semester;
-    string classID, courseID;
     cout <<"Edit course information\n "<<endl;
-    CourseList courseList;
-    const int max_turn=3;
-    int turn=0;
-    Course course;
-    while (turn<max_turn){
-        cout<<"PLease input "<<endl
-        <<"Course ID : ";
-        getline(cin,courseID,'\n');
-        cout <<"Class : ";
-        getline(cin,classID,'\n');
-        cout <<"Acedemic year : ";
-        cin>>acedemic_year;
-        cout <<"Semester : ";
-        cin>>semester;
-        bool found=false;
-        courseList.load(acedemic_year,semester,classID);
-            for (auto iter=courseList.head;iter!=nullptr;iter=iter->next){
-                if (iter->course.ID==courseID) {
-                    found= true;
-                    course=iter->course;
-                    break;
-                }
-            }
-        if (!found) cout <<courseID<<" not exist\n"<<endl;
-        else break;
-        ++turn;
-    }
-    if (turn==max_turn){
-        return;
-    }
+
+	ifstream fi;
+
+	string classID;
+	string termCode;
+
+	const int max_turn = 3;
+	int turn = 0;
+	do {
+		int tturn = 0;
+		do {
+			cout << "Enter the academic year - the semester (ex. 1920-HK1): ";
+			getline(cin, termCode);
+
+			if (termCode.size() == 8 && termCode[4] == '-' && termCode[5] == 'H' && termCode[6] == 'K')
+				if ('1' <= termCode[7] && termCode[7] <= '3')
+					if (((termCode[0] - 48) * 10 + (termCode[1] - 48) + 1) % 100 == (termCode[2] - 48) * 10 + (termCode[3] - 48))
+						break;
+
+			cout << "Invalid code!\n" << endl;
+			++tturn;
+		} while (tturn < max_turn);
+		if (tturn == max_turn) {
+			system("pause");
+			return;
+		}
+
+		cout << "Enter the imported class: ";
+		getline(cin, classID);
+
+		fi.open("data/course/" + termCode + "-" + classID + "-schedule.gulu");
+		if (!fi.is_open()) {
+			cout << termCode << "-" << classID + "-schedule.gulu not found\n" << endl;
+			if (++turn == max_turn) break;
+		}
+	} while (!fi.is_open());
+	if (!fi.is_open()) {
+		system("pause");
+		return;
+	}
+
+	Course course;
+
+	course.academic_year = 2000 + (termCode[0] - 48) * 10 + (termCode[1] - 48);
+	course.semester = termCode[7] - 48;
+	course.classID = classID;
+
+	CourseList courseList;
+	courseList.load(course.academic_year, course.semester, course.classID);
+
+	cout << "Course ID : ";
+	getline(cin, course.ID);
+
+	for (auto iter = courseList.head; iter != nullptr; iter = iter->next)
+		if (iter->course.ID == course.ID) {
+			course = iter->course; break;
+		}
     
-    cin.get();
     string tmp;
     cout <<"Course ID (enter a blank to maintain the current)\n";
     cout <<course.ID<<" -> ";
@@ -290,30 +357,15 @@ void edit_course() {
     getline(cin,tmp,'\n');
     if (tmp!="") course.lectureID=tmp;
     
-    cout <<"Class ID (enter a blank to maintain the current)\n";
-    cout <<course.classID<<" -> ";
-    getline(cin,tmp,'\n');
-    if (tmp!="") course.classID=tmp;
-    
     cout <<"Start date : \n";
-    cout <<course.startDate.year<<"/"<<course.startDate.month<<"/"<<course.startDate.day<<" -> ";
+    cout <<course.startDate.year<<"/"<<course.startDate.month<<"/"<<course.startDate.day<<" -> \n";
     course.startDate.input();
     
     cout <<"End date : \n";
-    cout <<course.endDate.year<<"/"<<course.endDate.month<<"/"<<course.endDate.day<<" -> ";
+    cout <<course.endDate.year<<"/"<<course.endDate.month<<"/"<<course.endDate.day<<" -> \n";
     course.endDate.input();
     
-    int temp;
-    cout <<"Acedemic year : \n";
-    cout <<course.academic_year<<" -> ";
-    cin>>temp;
-    if (temp!=0) course.academic_year=temp;
-    
-    cout <<"Semester : \n";
-    cout <<course.semester<<" -> ";
-    cin>>temp;
-    if (temp>0 && temp <4) course.semester=temp;
-    
+	int temp;
     cout <<"Session day (day of the week) : \n";
     cout <<course.sessionDay<<" -> ";
     cin>>temp;
@@ -327,22 +379,23 @@ void edit_course() {
     cout <<course.endTime.hour<<" : "<<course.endTime.minute<<" -> ";
     cin>>course.endTime.hour>>course.endTime.minute;
     
-    cin.get();
+    cin.ignore();
     cout <<"Room (enter a blank to maintain the current)\n";
     cout <<course.room<<" -> ";
     getline(cin,tmp,'\n');
     if (tmp!="") course.room=tmp;
     
     for (auto iter=courseList.head;iter!=nullptr;iter=iter->next)
-    if (iter->course.ID==courseID) {
+    if (iter->course.ID==course.ID) {
         iter->course=course;
         break;
     }
     courseList.update(course.academic_year,course.semester,course.classID);
     cout << "Edit " << course.ID << "'s information successfully!\n" << endl;
     courseList._delete();
-    
+	system("pause");
 }
+
 void remove_course() {
     cout<<"Remove a course\n"<<endl;
     
