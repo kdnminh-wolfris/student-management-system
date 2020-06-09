@@ -1,4 +1,5 @@
 #include "staff-scoreboard.h"
+
 void view_scoreboard_course()
 {
 string courseID;

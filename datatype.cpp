@@ -377,9 +377,9 @@ bool Student::load() {
 		string tmpID;
 		getline(fi, tmpID);
 
-		fi.ignore(100, '\n');
-		fi.ignore(100, '\n');
-		fi.ignore(100, '\n');
+		getline(fi, general.fullname);
+		fi >> general.DoB.year >> general.DoB.month >> general.DoB.day;
+		fi >> general.sex;
 
 		fi >> status;
 		fi.ignore(100, '\n');
@@ -393,6 +393,166 @@ bool Student::load() {
 
 	cout << "Error: Missing " << general.ID << " in " << classID << "/student.gulu\n" << endl;
 	return false;
+}
+
+void Student::view_course_score(){
+    string tmp_class, tmp_course;
+    cout <<"Please enter your course ID : ";
+    getline(cin,tmp_course,'\n');
+    cout<<"Please enter the class of the course : ";
+    getline(cin,tmp_class, '\n');
+    int semester,academic_year;
+    cout <<"Please enter the academic year : ";
+    cin>>academic_year;
+    cout<<"Please enter the semester : ";
+    cin>>semester;
+    Course course;
+    course.studentList.loadCourse(academic_year,semester,tmp_class,tmp_course);
+    Student student;
+    for(auto iter=course.studentList.head; iter!=nullptr;iter=iter->next)
+        if (iter->student.general.ID==general.ID) {
+            midtermGrade=iter->student.midtermGrade;
+            finalGrade=iter->student.finalGrade;
+            bonusGrade=iter->student.bonusGrade;
+            totalGrade=iter->student.totalGrade;
+            attended=iter->student.attended;
+            break;
+        }
+    if (attended==nullptr) {
+        cout <<"Cannot find this student in this course ! ";
+        return;
+    }
+    cout<<"\n---Your scores in "<<tmp_course<<"---\n\n";
+    cout <<"Midterm : "<<student.midtermGrade<<endl
+    <<"Final : "<<student.finalGrade<<endl
+    <<"Bonus : "<<student.bonusGrade<<endl
+    <<"Total : "<<student.totalGrade<<endl;
+}
+
+void Student :: view_check_in(){
+    string course_ID,class_ID;
+    cout <<"Please enter the course ID : ";
+    getline(cin,course_ID,'\n');
+    cout <<"Please enter the class of the course : ";
+    getline(cin,class_ID,'\n');
+    int semester,academic_year;
+    cout <<"Please enter the academic year : ";
+    cin>>academic_year;
+    cout<<"Please enter the semester : ";
+    cin>>semester;
+    Course course;
+    course.studentList.loadCourse(academic_year,semester,class_ID,course_ID);
+    for (auto iter=course.studentList.head;iter!=nullptr;iter=iter->next){
+        if (iter->student.general.ID==general.ID){
+            attended=iter->student.attended;
+            break;
+        }
+    }
+    if (attended==nullptr){
+        cout <<"Cannot find this student in this course ! ";
+        return;
+    }
+    cout <<"\n ---Check-in result--- \n\n";
+    cout <<"Day 1    2    3    4    5    6    7    8    9    10\n";
+    for(int i=0;i<10;i++) cout <<setw(5)<<attended[i];
+    cout <<endl;
+}
+
+void Student::check_in(){
+    string course_ID,class_ID;
+    cout <<"Please enter the course ID : ";
+    getline(cin,course_ID,'\n');
+    cout <<"Please enter the class of the course : ";
+    getline(cin,class_ID,'\n');
+    int semester,academic_year;
+    cout <<"Please enter the academic year : ";
+    cin>>academic_year;
+    cout<<"Please enter the semester : ";
+    cin>>semester;
+    Course course;
+    CourseList courseList;
+    Student student;
+    courseList.load(academic_year,semester,class_ID);
+    for (auto iter=courseList.head;iter!=nullptr;iter=iter->next){
+        if (iter->course.ID==course_ID) {
+            course = iter->course;
+            break;
+        }
+    }
+    if (course.ID != course_ID){
+        cout <<"This not does not exist ! "<<endl;
+        return;
+    }
+    course.studentList.loadCourse(academic_year,semester,class_ID,course_ID);
+    time_t now =time(0);
+    tm *current= localtime(&now);
+    Date cur;
+    cur.day=current->tm_mday;
+    cur.month=current->tm_mon+1;
+    cur.year=current->tm_year+1900;
+    int differ= differ_day(course.startDate, cur);
+    if (differ%7 != 0 || differ%7>10){
+        cout <<"Cannot check-in !! "<<endl;
+        return;
+    }
+    else {
+        if (((current->tm_hour>course.startTime.hour && current->tm_hour<course.endTime.hour) || (current->tm_hour==course.startTime.hour && current->tm_min>course.startTime.minute) || (current->tm_hour==course.endTime.hour && current->tm_min<course.endTime.minute)))
+        {
+            int day=differ/7;
+            for (auto iter=course.studentList.head; iter!=nullptr;iter=iter->next){
+                if (iter->student.general.ID==general.ID){
+                    iter->student.attended[day]=1;
+                    attended=iter->student.attended;
+                    break;
+                }
+            }
+            course.studentList.updateCourse(academic_year,semester,class_ID, course_ID);
+            if (attended[day-1]==0){
+                cout <<"This student does not exist in this course ! "<<endl;
+                return ;
+            }
+            else cout <<"Check-in successfully ! "<<endl;
+        }
+    }
+}
+
+void Student::view_schedule(){
+    ClassList classList;
+    classList.load();
+    int semester,academic_year;
+    cout <<"Please enter the academic year : ";
+    cin>>academic_year;
+    cout<<"Please enter the semester : ";
+    cin>>semester;
+    CourseList courseList;
+    bool enroled=false;
+    for(auto iter=classList.head;iter!=nullptr;iter=iter->next){
+        courseList.load(academic_year,semester,iter->ID);
+        
+        for (auto i=courseList.head;i!=nullptr;i=i->next){
+            i->course.studentList.loadCourse(academic_year,semester,iter->ID,i->course.ID);
+            for(auto j=i->course.studentList.head;j!=nullptr;j=j->next){
+                if (j->student.general.ID==general.ID){
+                    enroled=true;
+                    cout<<i->course.ID<<endl
+                    <<i->course.name<<endl
+                    <<i->course.lectureID<<endl
+                    <<i->course.startDate.year<<"/"
+                    <<i->course.startDate.month<<"/"
+                    <<i->course.startDate.day<<" - "
+                    <<i->course.endDate.year<<"/"
+                    <<i->course.endDate.month<<"/"
+                    <<i->course.endDate.day<<endl
+                    <<i->course.startTime.hour<<":"
+                    <<i->course.startTime.minute<<" - "
+                    <<i->course.endTime.hour<<":"
+                    <<i->course.endTime.minute<<endl
+                    <<i->course.room<<endl<<endl;
+                }
+            }
+        }
+    }
+    if (!enroled) cout <<"You are not in any course in this semester !\n\n";
 }
 
 int StudentList::size() {
@@ -532,7 +692,7 @@ bool StudentList::loadCourse(int academic_year, int semester, string classID, st
 	ifstream fi;
 	fi.open("data/course/" + ayearCode + "-" + sCode + "-" + classID + "-" + courseID + "-enrolled.gulu");
 	if (!fi.is_open()) {
-		cout << "Error: Missing" << ayearCode << "-" << sCode << "-" << classID << "-" << courseID << "-enrolled.gulu file\n" << endl;
+		cout << "Error: Missing " << ayearCode << "-" << sCode << "-" << classID << "-" << courseID << "-enrolled.gulu file\n" << endl;
 		return false;
 	}
 
@@ -617,6 +777,253 @@ bool Lecturer::load() {
 	}
 
 	return true;
+}
+
+void Lecturer::view_course_list() {
+	//There are still some problems here, when calling cl.load() 
+	//it prints out missing erolled.gulu
+	//it should have looked for the file schedule.gulu instead
+	cout << "Please enter the academic year.\n";
+	int academic_year; cin>>academic_year;
+	cout <<"Please enter the semester (1,2 or 3)?\n";
+	int semester; cin>>semester;
+	cout <<"Please enter the code of the class?\n";
+	string classID; cin>>classID;
+
+	CourseList cl;
+	if(!cl.load(academic_year, semester, classID)) return;
+
+	CourseList::nodeCourse *nc = cl.head;
+	cout << "There are " << cl.size() << " courses in this list:\n";
+	while(nc!=nullptr)
+	{
+		cout << nc->course.ID << " - " << nc->course.name << '\n';
+		nc = nc->next;
+	}
+	cl._delete();
+}
+
+void Lecturer::view_student_list() {
+    cout << "Please enter the academic year.\n";
+    int academic_year; cin>>academic_year;
+    cout <<"Please enter the semester (1,2 or 3)?\n";
+    int semester; cin>>semester;
+    cout <<"Please enter the code of the class?\n";
+    string classID; cin>>classID;
+    cout << "Please enter the code of the course?\n";
+    string courseID; cin>>courseID;
+    StudentList sl;
+    if(!sl.loadCourse(academic_year, semester, classID, courseID)) return;
+
+    StudentList::nodeStudent *ns = sl.head;
+    cout << "There are " << sl.size() << " students in this course:\n";
+    while(ns!=nullptr)
+    {
+        User cur_student = ns->student.general;
+        cur_student.view_profile();
+        ns = ns->next;
+    }
+    sl._delete();
+}
+
+void Lecturer::view_attendance_list() {
+    cout << "Please enter the academic year.\n";
+    int academic_year; cin>>academic_year;
+    cout <<"Please enter the semester (1,2 or 3)?\n";
+    int semester; cin>>semester;
+    cout <<"Please enter the code of the class?\n";
+    string classID; cin>>classID;
+    cout << "Please enter the code of the course?\n";
+    string courseID; cin>>courseID;
+    StudentList sl;
+    if(!sl.loadCourse(academic_year, semester, classID, courseID)) return;
+    StudentList::nodeStudent *ns = sl.head;
+    cout << "          This is the attendance list of the course " << courseID << '\n';
+    cout << "(Note that * means that student attends that class while - otherwise)"<<'\n';
+    cout << "              There are 10 weeks in this course" << '\n';
+    cout << "Student's ID  ";
+    for(int i=1; i<=10; i++)
+        if(i<10) cout << "W0" << i << " ";
+        else cout << "W" << 10 << '\n';
+
+    while(ns!=nullptr)
+    {
+        Student sd = ns->student;
+        cout << "   "<<sd.general.ID << " ";
+        for(int i=0; i<10; i++)
+        {
+            if(sd.attended[i]) cout <<"   "<< "*";
+            else cout <<"   "<< "-";
+        }
+        cout << "\n\n";
+        ns = ns->next;
+    }
+
+    sl._delete();
+}
+
+void Lecturer::edit_attendance() {
+    cout << "Please enter the academic year.\n";
+    int academic_year; cin>>academic_year;
+    cout <<"Please enter the semester (1,2 or 3)?\n";
+    int semester; cin>>semester;
+    cout <<"Please enter the code of the class?\n";
+    string classID; cin>>classID;
+    cout << "Please enter the code of the course?\n";
+    string courseID; cin>>courseID;
+    StudentList sl;
+    if(!sl.loadCourse(academic_year, semester, classID, courseID)) return;
+    cout << "Please enter the student ID of the student you want to edit?\n";
+    string SID; cin>>SID;
+    StudentList::nodeStudent* cur = sl.head;
+    bool found = false;
+    while(cur!=nullptr) {
+        if(cur->student.general.ID==SID) {
+            found = true; break;
+        }
+        cur = cur->next;
+    }
+    if(!found) {
+        sl._delete();
+        cout << SID << " not found.\n";
+        return;
+    }
+    //now cur points to that student
+    cout << "This is the attended list of this student for ten weeks\n";
+    cout << "* means attended while - means otherwise.\n";
+    for(int i=0; i<10; i++)
+        if(cur->student.attended[i]) cout <<"   "<< "*";
+        else cout <<"   "<< "-";
+
+    cout << "\nWhich week to you want to change? (Enter a number from 1 to 10)?\n";
+    int change; cin>>change; change--;
+    if(change<0 or change>9){
+        cout << "You entered the wrong number\n";
+        sl._delete();
+        return;
+    }
+    cur->student.attended[change] = 1-cur->student.attended[change];
+    sl.updateCourse(academic_year, semester, classID, courseID);
+    cout << "Change made sucessfully.\n";
+    sl._delete();
+    return;
+}
+
+void Lecturer::edit_student_grade() {
+    cout << "Please enter the academic year.\n";
+    int academic_year; cin>>academic_year;
+    cout <<"Please enter the semester (1,2 or 3)?\n";
+    int semester; cin>>semester;
+    cout <<"Please enter the code of the class?\n";
+    string classID; cin>>classID;
+    cout << "Please enter the code of the course?\n";
+    string courseID; cin>>courseID;
+    StudentList sl;
+    if(!sl.loadCourse(academic_year, semester, classID, courseID)) return;
+    cout << "Please enter the student ID of the student whose grades you want to edit?\n";
+    string SID; cin>>SID;
+    StudentList::nodeStudent* cur = sl.head;
+    bool found = false;
+    while(cur!=nullptr) {
+        if(cur->student.general.ID==SID) {
+            found = true; break;
+        }
+        cur = cur->next;
+    }
+    if(!found) {
+        sl._delete();
+        cout << SID << " not found.\n";
+        return;
+    }
+    //now cur points to that student
+    cout << "The current grades of that student:\n";
+    cout << "Midterm: " << cur->student.midtermGrade << '\n';
+    cout << "Final: " << cur->student.finalGrade << '\n';
+    cout << "Bonus: " << cur->student.bonusGrade << '\n';
+    cout << "Total: " << cur->student.totalGrade << '\n';
+
+    cout << "Now enter the new grades of that student following the above order, sepearted by a space.\n";
+    cin>>cur->student.midtermGrade>>cur->student.finalGrade>>cur->student.bonusGrade>>cur->student.totalGrade;
+
+    sl.updateCourse(academic_year, semester, classID, courseID);
+    cout << "Change made sucessfully.\n";
+    sl._delete();
+    return;
+}
+
+void Lecturer::view_scoreboard() {
+    cout << "Please enter the academic year.\n";
+    int academic_year; cin>>academic_year;
+    cout <<"Please enter the semester (1,2 or 3)?\n";
+    int semester; cin>>semester;
+    cout <<"Please enter the code of the class?\n";
+    string classID; cin>>classID;
+    cout << "Please enter the code of the course?\n";
+    string courseID; cin>>courseID;
+    StudentList sl;
+    if(!sl.loadCourse(academic_year, semester, classID, courseID)) return;
+
+    StudentList::nodeStudent *ns = sl.head;
+    cout << "          This is the scoreboard of the course " << courseID << "\n\n";
+
+    cout << "Student's ID     Midterm      Final      Bonus       Total\n";
+
+    while(ns!=nullptr)
+    {
+        Student sd = ns->student;
+        cout << "   "<<sd.general.ID << " ";
+        cout << "        "<<sd.midtermGrade << "           " << sd.finalGrade << "           " << sd.bonusGrade << "           " << sd.totalGrade;
+        cout << "\n\n";
+        ns = ns->next;
+    }
+
+    sl._delete();
+}
+
+void Lecturer::import_scoreboard() {
+    cout << "Please enter the academic year.\n";
+    int academic_year; cin>>academic_year;
+    cout <<"Please enter the semester (1,2 or 3)?\n";
+    int semester; cin>>semester;
+    cout <<"Please enter the code of the class?\n";
+    string classID; cin>>classID;
+    cout << "Please enter the code of the course?\n";
+    string courseID; cin>>courseID;
+    StudentList sl;
+    if(!sl.loadCourse(academic_year, semester, classID, courseID)) return;
+    cout << "Please enter the name of the file (including its extension .csv).\n";
+    string filename;
+    cin.ignore();
+    getline(cin, filename, '\n');
+    //Assuming that we already have the name of the file
+    ifstream myfile("csv files/"+filename);
+    if(!myfile.is_open()) {
+        cout << "Your path name is wrong!\n";
+        sl._delete();
+        return;
+    }
+    //skip the first line
+    StudentList::nodeStudent *cur = sl.head;
+    string dummy;
+    getline(myfile, dummy, '\n');
+
+    string sid, score;
+    int midterm, final, bonus, total;
+    while(!myfile.eof() and cur!=nullptr) {
+        getline(myfile, sid, ',');
+        getline(myfile, score, ',');
+        cur->student.midtermGrade = stoi(score);
+        getline(myfile, score, ',');
+        cur->student.finalGrade = stoi(score);
+        getline(myfile, score, ',');
+        cur->student.bonusGrade = stoi(score);
+        getline(myfile, score, '\n');
+        cur->student.totalGrade = stoi(score);
+        cur = cur->next;
+    }
+    sl.updateCourse(academic_year, semester, classID, courseID);
+    sl._delete();
+    cout << "Update successfully.\n";
 }
 
 int LecturerList::size() {
@@ -805,6 +1212,8 @@ bool CourseList::load(int academic_year, int semester, string classID) {
 		getline(fi, tmp.name);
 		getline(fi, tmp.lectureID);
 
+		if (tmp.ID == "") break;
+
 		fi >> tmp.startDate.year >> tmp.startDate.month >> tmp.startDate.day;
 		fi >> tmp.endDate.year >> tmp.endDate.month >> tmp.endDate.day;
 
@@ -828,7 +1237,6 @@ bool CourseList::load(int academic_year, int semester, string classID) {
 
 		append(tmp);
 	}
-	_delete(tail);
 
 	fi.close();
 	return true;

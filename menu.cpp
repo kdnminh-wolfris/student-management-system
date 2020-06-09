@@ -127,8 +127,8 @@ void optionFunction(int option, User& user) {
 				numtag(1); cout << "Add a new course\n";
 				numtag(2); cout << "Edit course information\n";
 				numtag(3); cout << "Remove a course\n";
-				numtag(4); cout << "Remove a student from a course\n";
-				numtag(5); cout << "Add a student to a course\n";
+				numtag(4); cout << "Add a student to a course\n";
+				numtag(5); cout << "Remove a student from a course\n";
 				numtag(6); cout << "View list of courses\n";
 				numtag(7); cout << "View list of students of a course\n";
 				numtag(8); cout << "View attendance list of a course\n";
@@ -155,11 +155,11 @@ void optionFunction(int option, User& user) {
 						break;
 					}
 					case 4: {
-						remove_student_from_course();
+						add_student_to_course();
 						break;
 					}
 					case 5: {
-						add_student_to_course();
+						remove_student_from_course();
 						break;
 					}
 					case 6: {
