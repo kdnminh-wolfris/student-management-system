@@ -469,6 +469,85 @@ void remove_course() {
 	system("pause");
 }
 
+void add_student_to_course() {
+	cout << "Add a student to a course\n" << endl;
+
+	ifstream fi;
+
+	string classID;
+	string termCode;
+
+	const int max_turn = 3;
+	int turn = 0;
+	do {
+		int tturn = 0;
+		do {
+			cout << "Enter the academic year - the semester (ex. 1920-HK1): ";
+			getline(cin, termCode);
+
+			if (termCode.size() == 8 && termCode[4] == '-' && termCode[5] == 'H' && termCode[6] == 'K')
+				if ('1' <= termCode[7] && termCode[7] <= '3')
+					if (((termCode[0] - 48) * 10 + (termCode[1] - 48) + 1) % 100 == (termCode[2] - 48) * 10 + (termCode[3] - 48))
+						break;
+
+			cout << "Invalid code!\n" << endl;
+			++tturn;
+		} while (tturn < max_turn);
+		if (tturn == max_turn) {
+			system("pause");
+			return;
+		}
+
+		cout << "Enter the imported class: ";
+		getline(cin, classID);
+
+		fi.open("data/course/" + termCode + "-" + classID + "-schedule.gulu");
+		if (!fi.is_open()) {
+			cout << termCode << "-" << classID + "-schedule.gulu not found\n" << endl;
+			if (++turn == max_turn) break;
+		}
+	} while (!fi.is_open());
+	if (!fi.is_open()) {
+		system("pause");
+		return;
+	}
+
+	int acayear = 2000 + (termCode[0] - 48) * 10 + (termCode[1] - 48);
+	int semester = termCode[7] - 48;
+
+	CourseList courseList;
+	courseList.load(acayear, semester, classID);
+
+	string courseID;
+	cout << "Please type in the ID of the course:" << endl;
+	getline(cin, courseID);
+
+	string studentID;
+	cout << "Please type in the ID of the student to be added:" << endl;
+	getline(cin, studentID);
+
+	StudentList studentlist;
+	bool checklist=studentlist.loadCourse(acayear, semester, classID, courseID);
+	if (checklist){
+		Student student;
+
+	student.general.ID = studentID;
+
+	student.load();
+		
+	studentlist.append(student);
+
+	studentlist.updateCourse(acayear, semester, classID, courseID);
+	
+	//delete all of the list of student previously loaded into function here
+
+	cout << "Add " << studentID << " to course " << courseID << " successfully\n" << endl;
+
+	studentlist._delete();
+	}
+	system("pause");
+}
+
 void remove_student_from_course() {
 	cout << "Remove a student from a course\n" << endl;
 
@@ -523,147 +602,217 @@ void remove_student_from_course() {
 	getline(cin, courseID);
 
 	string studentID;
-cout<<"Please type in the ID of the student to be removed:"<<endl;
-getline(cin,studentID);
-StudentList studentlist;
-StudentList::nodeStudent *cur;
-bool checklist=studentlist.loadCourse(acayear,semester,classID,courseID);
-if (checklist){
-	cur=studentlist.head;//set pointer cur to the head of student list in course
-	while (cur!=nullptr)
-	{
-		if (cur->student.general.ID == studentID)
-		{
-			studentlist._delete(cur);//trying to delete the current student from the list
-			cout << "Remove " << studentID << " successfully!\n" << endl;
-			break;
-		}
-		else cur = cur->next;
-	}
-	if (cur == nullptr)
-	{
-		cout << "The student with ID " << studentID << " was not found in the course " << courseID <<"of class"<<classID<< endl;
-		studentlist._delete();
-		system("pause");
-		return;
-	}
-	studentlist.updateCourse(acayear,semester,classID,courseID);
-	//delete all of the list of student previously loaded into function here
-	studentlist._delete();
-}
-system("pause");
-}
-
-void add_student_to_course() {//WARNING: UNEXPECTED ERROR WHEN ADDING STUDENT: CREATE ANOTHER EMPTY STUDENT FIRST
-	string studentID;
-	string courseID;
-	string classname;
-	int semester;
-	int acayear;
-	cout << "Please type in the academic year, ex:2019 for 2019-2020:" << endl;
-	cin >> acayear;
-	cout << "Please type in the semester of either 1 ,2 or 3:" << endl;
-	cin >> semester;
-	cin.ignore();
-	cout << "Please type in the course code of the student to be added:" << endl;
-	getline(cin, courseID);
-	cout<<"Please type in the class of the course in which the student is to be added:"<<endl;
-	getline(cin,classname);
-	cout << "Please type in the ID of the student to be added:" << endl;
+	cout << "Please type in the ID of the student to be removed:" << endl;
 	getline(cin, studentID);
 	StudentList studentlist;
 	StudentList::nodeStudent* cur;
-	bool checklist=studentlist.loadCourse(acayear, semester, classname, courseID);
-	if (checklist){
-	cur = studentlist.tail;//set pointer cur to the last of student list in course
-	cur->next = new StudentList::nodeStudent;
-	StudentList::nodeStudent* temp = cur;
-	cur = cur->next;
-	cur->next = nullptr;
-	cur->prev = temp;
-	cur->student.classID = classname;
-	cur->student.general.ID = studentID;
-	//input score for the student, 0 is default
-	cur->student.bonusGrade = 0;
-	cur->student.finalGrade = 0;
-	cur->student.midtermGrade = 0;
-	cur->student.totalGrade = 0;
-	//update the list of student in course
-	studentlist.updateCourse(acayear, semester, classname, courseID);
-	
-	//delete all of the list of student previously loaded into function here
-	studentlist._delete();
-	}
-	else {
-		cout<<"Cannot find the specified course. Please try again"<<endl;
-		system("pause");
-		return;
+	bool checklist = studentlist.loadCourse(acayear, semester, classID, courseID);
+	if (checklist) {
+		cur = studentlist.head;//set pointer cur to the head of student list in course
+		while (cur != nullptr)
+		{
+			if (cur->student.general.ID == studentID)
+			{
+				studentlist._delete(cur);//trying to delete the current student from the list
+				cout << "Remove " << studentID << " successfully!\n" << endl;
+				break;
+			}
+			else cur = cur->next;
+		}
+		if (cur == nullptr)
+		{
+			cout << "The student with ID " << studentID << " was not found in the course " << courseID << "of class" << classID << endl;
+			studentlist._delete();
+			system("pause");
+			return;
+		}
+		studentlist.updateCourse(acayear, semester, classID, courseID);
+		//delete all of the list of student previously loaded into function here
+		studentlist._delete();
 	}
 	system("pause");
 }
 
-
 void view_course_list() {
-	//There are still some problems here, when calling cl.load() 
-	//it prints out missing erolled.gulu
-	//it should have looked for the file schedule.gulu instead
-	cout << "Please enter the academic year.\n";
-	int academic_year; cin>>academic_year;
-	cout <<"Please enter the semester (1,2 or 3)?\n";
-	int semester; cin>>semester;
-	cout <<"Please enter the code of the class?\n";
-	string classID; cin>>classID;
+	cout << "View list of courses\n" << endl;
 
-	CourseList cl;
-	if(!cl.load(academic_year, semester, classID)) return;
+	ifstream fi;
+
+	string classID;
+	string termCode;
+
+	const int max_turn = 3;
+	int turn = 0;
+	do {
+		int tturn = 0;
+		do {
+			cout << "Enter the academic year - the semester (ex. 1920-HK1): ";
+			getline(cin, termCode);
+
+			if (termCode.size() == 8 && termCode[4] == '-' && termCode[5] == 'H' && termCode[6] == 'K')
+				if ('1' <= termCode[7] && termCode[7] <= '3')
+					if (((termCode[0] - 48) * 10 + (termCode[1] - 48) + 1) % 100 == (termCode[2] - 48) * 10 + (termCode[3] - 48))
+						break;
+
+			cout << "Invalid code!\n" << endl;
+			++tturn;
+		} while (tturn < max_turn);
+		if (tturn == max_turn) {
+			system("pause");
+			return;
+		}
+
+		cout << "Enter the imported class: ";
+		getline(cin, classID);
+
+		fi.open("data/course/" + termCode + "-" + classID + "-schedule.gulu");
+		if (!fi.is_open()) {
+			cout << termCode << "-" << classID + "-schedule.gulu not found\n" << endl;
+			if (++turn == max_turn) break;
+		}
+	} while (!fi.is_open());
+	if (!fi.is_open()) {
+		system("pause");
+		return;
+	}
+
+	int acayear = 2000 + (termCode[0] - 48) * 10 + (termCode[1] - 48);
+	int semester = termCode[7] - 48;
+
+	CourseList cl; cl.load(acayear, semester, classID);
 
 	CourseList::nodeCourse *nc = cl.head;
-	cout << "There are " << cl.size() << " courses in this list:\n";
+	cout << "\nThere are " << cl.size() << " courses in this list:\n";
 	while(nc!=nullptr)
 	{
 		cout << nc->course.ID << " - " << nc->course.name << '\n';
 		nc = nc->next;
 	}
+	cout << endl;
 	cl._delete();
+	system("pause");
 }
 
 void view_student_list_of_course() {
-    cout << "Please enter the academic year.\n";
-    int academic_year; cin>>academic_year;
-    cout <<"Please enter the semester (1,2 or 3)?\n";
-    int semester; cin>>semester;
-    cout <<"Please enter the code of the class?\n";
-    string classID; cin>>classID;
+	cout << "View list of courses\n" << endl;
+
+	ifstream fi;
+
+	string classID;
+	string termCode;
+
+	const int max_turn = 3;
+	int turn = 0;
+	do {
+		int tturn = 0;
+		do {
+			cout << "Enter the academic year - the semester (ex. 1920-HK1): ";
+			getline(cin, termCode);
+
+			if (termCode.size() == 8 && termCode[4] == '-' && termCode[5] == 'H' && termCode[6] == 'K')
+				if ('1' <= termCode[7] && termCode[7] <= '3')
+					if (((termCode[0] - 48) * 10 + (termCode[1] - 48) + 1) % 100 == (termCode[2] - 48) * 10 + (termCode[3] - 48))
+						break;
+
+			cout << "Invalid code!\n" << endl;
+			++tturn;
+		} while (tturn < max_turn);
+		if (tturn == max_turn) {
+			system("pause");
+			return;
+		}
+
+		cout << "Enter the imported class: ";
+		getline(cin, classID);
+
+		fi.open("data/course/" + termCode + "-" + classID + "-schedule.gulu");
+		if (!fi.is_open()) {
+			cout << termCode << "-" << classID + "-schedule.gulu not found\n" << endl;
+			if (++turn == max_turn) break;
+		}
+	} while (!fi.is_open());
+	if (!fi.is_open()) {
+		system("pause");
+		return;
+	}
+
+	int academic_year = 2000 + (termCode[0] - 48) * 10 + (termCode[1] - 48);
+	int semester = termCode[7] - 48;
+
     cout << "Please enter the code of the course?\n";
-    string courseID; cin>>courseID;
+	string courseID; getline(cin, courseID);
+
     StudentList sl;
     if(!sl.loadCourse(academic_year, semester, classID, courseID)) return;
 
     StudentList::nodeStudent *ns = sl.head;
-    cout << "There are " << sl.size() << " students in this course:\n";
+    cout << "\nThere are " << sl.size() << " students in this course:\n";
+	int i = 0;
     while(ns!=nullptr)
     {
-        User cur_student = ns->student.general;
-        cur_student.view_profile();
+		ns->student.load();
+		numtag(++i); cout << ns->student.general.fullname << " / " << ns->student.general.ID << " (" << ns->student.classID << ")\n";
         ns = ns->next;
     }
     sl._delete();
+
+	cout << endl;
+	system("pause");
 }
 
-
 void view_attendance_list_of_course() {
-    cout << "Please enter the academic year.\n";
-    int academic_year; cin>>academic_year;
-    cout <<"Please enter the semester (1,2 or 3)?\n";
-    int semester; cin>>semester;
-    cout <<"Please enter the code of the class?\n";
-    string classID; cin>>classID;
-    cout << "Please enter the code of the course?\n";
-    string courseID; cin>>courseID;
+	cout << "View attendance list of a course\n" << endl;
+
+	ifstream fi;
+
+	string classID;
+	string termCode;
+
+	const int max_turn = 3;
+	int turn = 0;
+	do {
+		int tturn = 0;
+		do {
+			cout << "Enter the academic year - the semester (ex. 1920-HK1): ";
+			getline(cin, termCode);
+
+			if (termCode.size() == 8 && termCode[4] == '-' && termCode[5] == 'H' && termCode[6] == 'K')
+				if ('1' <= termCode[7] && termCode[7] <= '3')
+					if (((termCode[0] - 48) * 10 + (termCode[1] - 48) + 1) % 100 == (termCode[2] - 48) * 10 + (termCode[3] - 48))
+						break;
+
+			cout << "Invalid code!\n" << endl;
+			++tturn;
+		} while (tturn < max_turn);
+		if (tturn == max_turn) {
+			system("pause");
+			return;
+		}
+
+		cout << "Enter the imported class: ";
+		getline(cin, classID);
+
+		fi.open("data/course/" + termCode + "-" + classID + "-schedule.gulu");
+		if (!fi.is_open()) {
+			cout << termCode << "-" << classID + "-schedule.gulu not found\n" << endl;
+			if (++turn == max_turn) break;
+		}
+	} while (!fi.is_open());
+	if (!fi.is_open()) {
+		system("pause");
+		return;
+	}
+
+	int academic_year = 2000 + (termCode[0] - 48) * 10 + (termCode[1] - 48);
+	int semester = termCode[7] - 48;
+
+	cout << "Please enter the code of the course?\n";
+	string courseID; getline(cin, courseID);
+
     StudentList sl;
     if(!sl.loadCourse(academic_year, semester, classID, courseID)) return;
     StudentList::nodeStudent *ns = sl.head;
-    cout << "          This is the attendance list of the course " << courseID << '\n';
+    cout << "\n          This is the attendance list of the course " << courseID << '\n';
     cout << "(Note that * means that student attends that class while - otherwise)"<<'\n';
     cout << "              There are 10 weeks in this course" << '\n';
     cout << "Student's ID  ";
@@ -685,18 +834,27 @@ void view_attendance_list_of_course() {
     }
 
     sl._delete();
+
+	cout << endl;
+	system("pause");
 }
 
 void view_lecturer_list() {
+	cout << "View list of lectures\n" << endl;
+
     LecturerList lecturer_list;
     if(!lecturer_list.load()) return;
 
     LecturerList::nodeLecturer *nl = lecturer_list.head;
+	cout << "There are " << lecturer_list.size() << " lectures:\n";
+	int i = 0;
     while(nl!=nullptr)
     {
-        Lecturer cur = nl->lecturer;
-        cur.general.view_profile();
+		numtag(++i); cout << nl->lecturer.general.fullname << " (" << nl->lecturer.degree << ")\n";
         nl = nl->next;
     }
     lecturer_list._delete();
+
+	cout << endl;
+	system("pause");
 }

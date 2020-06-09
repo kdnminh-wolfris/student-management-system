@@ -377,9 +377,9 @@ bool Student::load() {
 		string tmpID;
 		getline(fi, tmpID);
 
-		fi.ignore(100, '\n');
-		fi.ignore(100, '\n');
-		fi.ignore(100, '\n');
+		getline(fi, general.fullname);
+		fi >> general.DoB.year >> general.DoB.month >> general.DoB.day;
+		fi >> general.sex;
 
 		fi >> status;
 		fi.ignore(100, '\n');
