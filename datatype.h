@@ -1,7 +1,9 @@
 #ifndef DATATYPE
 #define DATATYPE
 
+#define _CRT_SECURE_NO_WARNINGS
 #include "tools.h"
+#include <time.h>
 
 struct Config {
 	int login_status = 0;
@@ -165,5 +167,7 @@ struct CourseList {
 	void _delete();
 	void _delete(nodeCourse* p);
 };
+
+int differ_day(Date begin, Date end);
 
 #endif

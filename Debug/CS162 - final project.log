@@ -1,2 +1,9 @@
-﻿  staff-course.cpp
+﻿  datatype.cpp
+D:\GitHub\CS162-19APCS2-gulugulu\datatype.cpp(1012,9): warning C4101: 'midterm': unreferenced local variable
+D:\GitHub\CS162-19APCS2-gulugulu\datatype.cpp(1012,32): warning C4101: 'total': unreferenced local variable
+D:\GitHub\CS162-19APCS2-gulugulu\datatype.cpp(1012,18): warning C4101: 'final': unreferenced local variable
+D:\GitHub\CS162-19APCS2-gulugulu\datatype.cpp(1012,25): warning C4101: 'bonus': unreferenced local variable
+  menu.cpp
+  staff-scoreboard.cpp
+  Generating Code...
   CS162 - final project.vcxproj -> D:\GitHub\CS162-19APCS2-gulugulu\Debug\CS162 - final project.exe

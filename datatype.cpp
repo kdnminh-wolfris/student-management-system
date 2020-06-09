@@ -484,7 +484,8 @@ void Student::check_in(){
         return;
     }
     course.studentList.loadCourse(academic_year,semester,class_ID,course_ID);
-    time_t now =time(0);
+	
+	time_t now =time(0);
     tm *current= localtime(&now);
     Date cur;
     cur.day=current->tm_mday;
@@ -1348,4 +1349,50 @@ void CourseList::_delete(nodeCourse* p) {
 	if (p->prev != nullptr)
 		p->prev->next = p->next;
 	delete p;
+}
+
+int differ_day(Date begin, Date end) {
+	int day = 0;
+	while (begin.year != end.year) {
+		if ((begin.year % 400 == 0) || ((begin.year % 4 == 0) && (begin.year % 100 != 0))) {
+			day = day + 366;
+		}
+		else day = day + 365;
+		++begin.year;
+	}
+	while (begin.month != end.month) {
+		if (begin.month > end.month) {
+			if (end.month == 2) {
+				if ((end.year % 400 == 0) || ((end.year % 4 == 0) && (end.year % 100 != 0))) day = day - 29;
+				else day = day - 28;
+				++end.month;
+			}
+			else if ((end.month == 4) || (end.month == 6) || (end.month == 9) || (end.month == 11)) {
+				day = day - 30;
+				++end.month;
+			}
+			else {
+				day = day - 31;
+				++end.month;
+			}
+		}
+		if (begin.month < end.month) {
+			if (begin.month == 2) {
+				if ((end.year % 400 == 0) || ((end.year % 4 == 0) && (end.year % 100 != 0))) day = day + 29;
+				else day = day + 28;
+				++begin.month;
+			}
+			else if ((begin.month == 4) || (begin.month == 6) || (begin.month == 9) || (begin.month == 11)) {
+				day = day + 30;
+				++begin.month;
+			}
+			else {
+				day = day + 31;
+				++begin.month;
+			}
+		}
+
+	}
+	day = day - begin.day + end.day;
+	return day;
 }
