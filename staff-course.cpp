@@ -276,7 +276,7 @@ void add_new_course() {
 	cl._delete();
 	out_enrolled.close();
 
-	cout << "Add " << new_course.ID << " successfully!\n" << endl;
+	cout << "\nAdd " << new_course.ID << " successfully!\n" << endl;
 
 	system("pause");
 }
@@ -398,65 +398,136 @@ void edit_course() {
 
 void remove_course() {
     cout<<"Remove a course\n"<<endl;
-    
-    int  acedemic_year, semester;
-    string classID, courseID;
-    CourseList courseList;
-    const int max_turn=3;
-    int turn=0;
-    while (turn<max_turn){
-        cout<<"PLease input "<<endl
-        <<"Course ID : ";
-        getline(cin,courseID,'\n');
-        cout <<"Class : ";
-        getline(cin,classID,'\n');
-        cout <<"Acedemic year : ";
-        cin>>acedemic_year;
-        cout <<"Semester : ";
-        cin>>semester;
-        bool found=false;
-        courseList.load(acedemic_year,semester,classID);
-        for (auto iter=courseList.head;iter!=nullptr;iter=iter->next){
-            if (iter->course.ID==courseID) {
-                found= true;
-                courseList._delete(iter);
-                break;
-            }
-        }
-        if (!found) cout <<courseID<<" not exist\n"<<endl;
-        else {
-            courseList.update(acedemic_year,semester,classID);
-            cout <<"Remove "<<courseID<<" successfully"<<endl;
-            break;
-        }
-        ++turn;
-    }
-    if (turn==max_turn){
-        return;
-    }
-    courseList._delete();
+
+	ifstream fi;
+
+	string classID;
+	string termCode;
+
+	const int max_turn = 3;
+	int turn = 0;
+	do {
+		int tturn = 0;
+		do {
+			cout << "Enter the academic year - the semester (ex. 1920-HK1): ";
+			getline(cin, termCode);
+
+			if (termCode.size() == 8 && termCode[4] == '-' && termCode[5] == 'H' && termCode[6] == 'K')
+				if ('1' <= termCode[7] && termCode[7] <= '3')
+					if (((termCode[0] - 48) * 10 + (termCode[1] - 48) + 1) % 100 == (termCode[2] - 48) * 10 + (termCode[3] - 48))
+						break;
+
+			cout << "Invalid code!\n" << endl;
+			++tturn;
+		} while (tturn < max_turn);
+		if (tturn == max_turn) {
+			system("pause");
+			return;
+		}
+
+		cout << "Enter the imported class: ";
+		getline(cin, classID);
+
+		fi.open("data/course/" + termCode + "-" + classID + "-schedule.gulu");
+		if (!fi.is_open()) {
+			cout << termCode << "-" << classID + "-schedule.gulu not found\n" << endl;
+			if (++turn == max_turn) break;
+		}
+	} while (!fi.is_open());
+	if (!fi.is_open()) {
+		system("pause");
+		return;
+	}
+
+	int ayear = 2000 + (termCode[0] - 48) * 10 + (termCode[1] - 48);
+	int semester = termCode[7] - 48;
+
+	CourseList courseList;
+	courseList.load(ayear, semester, classID);
+
+	string courseID;
+	cout << "Course ID : ";
+	getline(cin, courseID);
+
+	string path = "data/course/" + termCode + "-" + classID + "-" + courseID + "-enrolled.gulu";
+	if (remove(path.c_str())) {
+		cout << "Error: Cannot remove " << termCode << "-" << classID << "-" << courseID << "-enrolled.gulu\n" << endl;
+		system("pause");
+		courseList._delete();
+		return;
+	}
+
+	for (auto iter = courseList.head; iter != nullptr; iter = iter->next)
+		if (iter->course.ID == courseID) {
+			courseList._delete(iter); break;
+		}
+
+	courseList.update(ayear, semester, classID);
+	courseList._delete();
+
+	cout << "\nRemove " << courseID << " successfully!\n" << endl;
+	system("pause");
 }
 
 void remove_student_from_course() {
-string studentID;
-string courseID;
-string classname;
-int semester;
-int acayear;
-cout<<"Please type in the academic year, ex:2019 for 2019-2020:"<<endl;
-cin>>acayear;
-cout<<"Please type in the semester of either 1 ,2 or 3:"<<endl;
-cin>>semester;
-cin.ignore();
-cout<<"Please type in the course code of the student to be removed:"<<endl;
-getline(cin,courseID);
-cout<<"Please type in the class of the course in which the student is to be removed:"<<endl;
-getline(cin,classname);
+	cout << "Remove a student from a course\n" << endl;
+
+	ifstream fi;
+
+	string classID;
+	string termCode;
+
+	const int max_turn = 3;
+	int turn = 0;
+	do {
+		int tturn = 0;
+		do {
+			cout << "Enter the academic year - the semester (ex. 1920-HK1): ";
+			getline(cin, termCode);
+
+			if (termCode.size() == 8 && termCode[4] == '-' && termCode[5] == 'H' && termCode[6] == 'K')
+				if ('1' <= termCode[7] && termCode[7] <= '3')
+					if (((termCode[0] - 48) * 10 + (termCode[1] - 48) + 1) % 100 == (termCode[2] - 48) * 10 + (termCode[3] - 48))
+						break;
+
+			cout << "Invalid code!\n" << endl;
+			++tturn;
+		} while (tturn < max_turn);
+		if (tturn == max_turn) {
+			system("pause");
+			return;
+		}
+
+		cout << "Enter the imported class: ";
+		getline(cin, classID);
+
+		fi.open("data/course/" + termCode + "-" + classID + "-schedule.gulu");
+		if (!fi.is_open()) {
+			cout << termCode << "-" << classID + "-schedule.gulu not found\n" << endl;
+			if (++turn == max_turn) break;
+		}
+	} while (!fi.is_open());
+	if (!fi.is_open()) {
+		system("pause");
+		return;
+	}
+
+	int acayear = 2000 + (termCode[0] - 48) * 10 + (termCode[1] - 48);
+	int semester = termCode[7] - 48;
+
+	CourseList courseList;
+	courseList.load(acayear, semester, classID);
+
+	string courseID;
+	cout << "Please type in the ID of the course:" << endl;
+	getline(cin, courseID);
+
+	string studentID;
 cout<<"Please type in the ID of the student to be removed:"<<endl;
 getline(cin,studentID);
 StudentList studentlist;
 StudentList::nodeStudent *cur;
-bool checklist=studentlist.loadCourse(acayear,semester,classname,courseID);
+bool checklist=studentlist.loadCourse(acayear,semester,classID,courseID);
 if (checklist){
 	cur=studentlist.head;//set pointer cur to the head of student list in course
 	while (cur!=nullptr)
@@ -464,27 +535,21 @@ if (checklist){
 		if (cur->student.general.ID == studentID)
 		{
 			studentlist._delete(cur);//trying to delete the current student from the list
-			cout << "The student " << studentID << " was successfully removed from course " << courseID << endl;
+			cout << "Remove " << studentID << " successfully!\n" << endl;
 			break;
 		}
 		else cur = cur->next;
 	}
 	if (cur == nullptr)
 	{
-		cout << "The student with ID " << studentID << " was not found in the course " << courseID <<"of class"<<classname<< endl;
+		cout << "The student with ID " << studentID << " was not found in the course " << courseID <<"of class"<<classID<< endl;
 		studentlist._delete();
 		system("pause");
 		return;
 	}
-	studentlist.updateCourse(acayear,semester,classname,courseID);
+	studentlist.updateCourse(acayear,semester,classID,courseID);
 	//delete all of the list of student previously loaded into function here
 	studentlist._delete();
-}
-else 
-{
-	cout<<"The course you entered was incorrect. Please try again.";
-	system("pause");
-	return;
 }
 system("pause");
 }
