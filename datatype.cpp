@@ -781,15 +781,50 @@ bool Lecturer::load() {
 }
 
 void Lecturer::view_course_list() {
-	//There are still some problems here, when calling cl.load() 
-	//it prints out missing erolled.gulu
-	//it should have looked for the file schedule.gulu instead
-	cout << "Please enter the academic year.\n";
-	int academic_year; cin>>academic_year;
-	cout <<"Please enter the semester (1,2 or 3)?\n";
-	int semester; cin>>semester;
-	cout <<"Please enter the code of the class?\n";
-	string classID; cin>>classID;
+	cout << "View list of courses\n" << endl;
+
+	ifstream fi;
+
+	string classID;
+	string termCode;
+
+	const int max_turn = 3;
+	int turn = 0;
+	do {
+		int tturn = 0;
+		do {
+			cout << "Enter the academic year - the semester (ex. 1920-HK1): ";
+			getline(cin, termCode);
+
+			if (termCode.size() == 8 && termCode[4] == '-' && termCode[5] == 'H' && termCode[6] == 'K')
+				if ('1' <= termCode[7] && termCode[7] <= '3')
+					if (((termCode[0] - 48) * 10 + (termCode[1] - 48) + 1) % 100 == (termCode[2] - 48) * 10 + (termCode[3] - 48))
+						break;
+
+			cout << "Invalid code!\n" << endl;
+			++tturn;
+		} while (tturn < max_turn);
+		if (tturn == max_turn) {
+			system("pause");
+			return;
+		}
+
+		cout << "Enter the imported class: ";
+		getline(cin, classID);
+
+		fi.open("data/course/" + termCode + "-" + classID + "-schedule.gulu");
+		if (!fi.is_open()) {
+			cout << termCode << "-" << classID + "-schedule.gulu not found\n" << endl;
+			if (++turn == max_turn) break;
+		}
+	} while (!fi.is_open());
+	if (!fi.is_open()) {
+		system("pause");
+		return;
+	}
+
+	int academic_year = 2000 + (termCode[0] - 48) * 10 + (termCode[1] - 48);
+	int semester = termCode[7] - 48;
 
 	CourseList cl;
 	if(!cl.load(academic_year, semester, classID)) return;
@@ -802,76 +837,58 @@ void Lecturer::view_course_list() {
 		nc = nc->next;
 	}
 	cl._delete();
-}
-
-void Lecturer::view_student_list() {
-    cout << "Please enter the academic year.\n";
-    int academic_year; cin>>academic_year;
-    cout <<"Please enter the semester (1,2 or 3)?\n";
-    int semester; cin>>semester;
-    cout <<"Please enter the code of the class?\n";
-    string classID; cin>>classID;
-    cout << "Please enter the code of the course?\n";
-    string courseID; cin>>courseID;
-    StudentList sl;
-    if(!sl.loadCourse(academic_year, semester, classID, courseID)) return;
-
-    StudentList::nodeStudent *ns = sl.head;
-    cout << "There are " << sl.size() << " students in this course:\n";
-    while(ns!=nullptr)
-    {
-        User cur_student = ns->student.general;
-        cur_student.view_profile();
-        ns = ns->next;
-    }
-    sl._delete();
-}
-
-void Lecturer::view_attendance_list() {
-    cout << "Please enter the academic year.\n";
-    int academic_year; cin>>academic_year;
-    cout <<"Please enter the semester (1,2 or 3)?\n";
-    int semester; cin>>semester;
-    cout <<"Please enter the code of the class?\n";
-    string classID; cin>>classID;
-    cout << "Please enter the code of the course?\n";
-    string courseID; cin>>courseID;
-    StudentList sl;
-    if(!sl.loadCourse(academic_year, semester, classID, courseID)) return;
-    StudentList::nodeStudent *ns = sl.head;
-    cout << "          This is the attendance list of the course " << courseID << '\n';
-    cout << "(Note that * means that student attends that class while - otherwise)"<<'\n';
-    cout << "              There are 10 weeks in this course" << '\n';
-    cout << "Student's ID  ";
-    for(int i=1; i<=10; i++)
-        if(i<10) cout << "W0" << i << " ";
-        else cout << "W" << 10 << '\n';
-
-    while(ns!=nullptr)
-    {
-        Student sd = ns->student;
-        cout << "   "<<sd.general.ID << " ";
-        for(int i=0; i<10; i++)
-        {
-            if(sd.attended[i]) cout <<"   "<< "*";
-            else cout <<"   "<< "-";
-        }
-        cout << "\n\n";
-        ns = ns->next;
-    }
-
-    sl._delete();
+	system("pause");
 }
 
 void Lecturer::edit_attendance() {
-    cout << "Please enter the academic year.\n";
-    int academic_year; cin>>academic_year;
-    cout <<"Please enter the semester (1,2 or 3)?\n";
-    int semester; cin>>semester;
-    cout <<"Please enter the code of the class?\n";
-    string classID; cin>>classID;
+	cout << "Edit attendance list\n" << endl;
+
+	ifstream fi;
+
+	string classID;
+	string termCode;
+
+	const int max_turn = 3;
+	int turn = 0;
+	do {
+		int tturn = 0;
+		do {
+			cout << "Enter the academic year - the semester (ex. 1920-HK1): ";
+			getline(cin, termCode);
+
+			if (termCode.size() == 8 && termCode[4] == '-' && termCode[5] == 'H' && termCode[6] == 'K')
+				if ('1' <= termCode[7] && termCode[7] <= '3')
+					if (((termCode[0] - 48) * 10 + (termCode[1] - 48) + 1) % 100 == (termCode[2] - 48) * 10 + (termCode[3] - 48))
+						break;
+
+			cout << "Invalid code!\n" << endl;
+			++tturn;
+		} while (tturn < max_turn);
+		if (tturn == max_turn) {
+			system("pause");
+			return;
+		}
+
+		cout << "Enter the imported class: ";
+		getline(cin, classID);
+
+		fi.open("data/course/" + termCode + "-" + classID + "-schedule.gulu");
+		if (!fi.is_open()) {
+			cout << termCode << "-" << classID + "-schedule.gulu not found\n" << endl;
+			if (++turn == max_turn) break;
+		}
+	} while (!fi.is_open());
+	if (!fi.is_open()) {
+		system("pause");
+		return;
+	}
+
+	int academic_year = 2000 + (termCode[0] - 48) * 10 + (termCode[1] - 48);
+	int semester = termCode[7] - 48;
+
     cout << "Please enter the code of the course?\n";
-    string courseID; cin>>courseID;
+	string courseID; getline(cin, courseID);
+
     StudentList sl;
     if(!sl.loadCourse(academic_year, semester, classID, courseID)) return;
     cout << "Please enter the student ID of the student you want to edit?\n";
@@ -891,12 +908,12 @@ void Lecturer::edit_attendance() {
     }
     //now cur points to that student
     cout << "This is the attended list of this student for ten weeks\n";
-    cout << "* means attended while - means otherwise.\n";
+    cout << "\n* means attended while - means otherwise.\n";
     for(int i=0; i<10; i++)
         if(cur->student.attended[i]) cout <<"   "<< "*";
         else cout <<"   "<< "-";
 
-    cout << "\nWhich week to you want to change? (Enter a number from 1 to 10)?\n";
+    cout << "\n\nWhich week to you want to change? (Enter a number from 1 to 10)?\n";
     int change; cin>>change; change--;
     if(change<0 or change>9){
         cout << "You entered the wrong number\n";
@@ -905,9 +922,9 @@ void Lecturer::edit_attendance() {
     }
     cur->student.attended[change] = 1-cur->student.attended[change];
     sl.updateCourse(academic_year, semester, classID, courseID);
-    cout << "Change made sucessfully.\n";
+	cout << "\nChange made sucessfully.\n" << endl;
     sl._delete();
-    return;
+	system("pause");
 }
 
 void Lecturer::edit_student_grade() {
@@ -982,12 +999,51 @@ void Lecturer::view_scoreboard() {
 }
 
 void Lecturer::import_scoreboard() {
-    cout << "Please enter the academic year.\n";
-    int academic_year; cin>>academic_year;
-    cout <<"Please enter the semester (1,2 or 3)?\n";
-    int semester; cin>>semester;
-    cout <<"Please enter the code of the class?\n";
-    string classID; cin>>classID;
+	cout << "Import scoreboard from csv file\n" << endl;
+
+	ifstream fi;
+
+	string classID;
+	string termCode;
+
+	const int max_turn = 3;
+	int turn = 0;
+	do {
+		int tturn = 0;
+		do {
+			cout << "Enter the academic year - the semester (ex. 1920-HK1): ";
+			getline(cin, termCode);
+
+			if (termCode.size() == 8 && termCode[4] == '-' && termCode[5] == 'H' && termCode[6] == 'K')
+				if ('1' <= termCode[7] && termCode[7] <= '3')
+					if (((termCode[0] - 48) * 10 + (termCode[1] - 48) + 1) % 100 == (termCode[2] - 48) * 10 + (termCode[3] - 48))
+						break;
+
+			cout << "Invalid code!\n" << endl;
+			++tturn;
+		} while (tturn < max_turn);
+		if (tturn == max_turn) {
+			system("pause");
+			return;
+		}
+
+		cout << "Enter the imported class: ";
+		getline(cin, classID);
+
+		fi.open("data/course/" + termCode + "-" + classID + "-schedule.gulu");
+		if (!fi.is_open()) {
+			cout << termCode << "-" << classID + "-schedule.gulu not found\n" << endl;
+			if (++turn == max_turn) break;
+		}
+	} while (!fi.is_open());
+	if (!fi.is_open()) {
+		system("pause");
+		return;
+	}
+
+	int academic_year = 2000 + (termCode[0] - 48) * 10 + (termCode[1] - 48);
+	int semester = termCode[7] - 48;
+
     cout << "Please enter the code of the course?\n";
     string courseID; cin>>courseID;
     StudentList sl;

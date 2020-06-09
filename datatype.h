@@ -98,8 +98,6 @@ struct Lecturer {
 	bool load();
 
 	void view_course_list();
-	void view_student_list();
-	void view_attendance_list();
 	void edit_attendance();
 	void import_scoreboard();
 	void edit_student_grade();

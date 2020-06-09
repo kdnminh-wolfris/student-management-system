@@ -12,23 +12,17 @@ void menu(User& user, Config& config) {
 
 	int numberFunction = menuFunction(1, user);
 
-	numtag(numberFunction + 1); cout << "Settings\n";
-	numtag(numberFunction + 2); cout << "Change password\n";
-	numtag(numberFunction + 3); cout << "Logout\n";
+	numtag(numberFunction + 1); cout << "Change password\n";
+	numtag(numberFunction + 2); cout << "Logout\n";
 
 	int option = int_option(numberFunction + 4);
 
 	if (option == 0) user.view_profile();
 	else if (option == numberFunction + 1) {
-
-
-
-	}
-	else if (option == numberFunction + 2) {
 		if (changePassword(user, config))
 			cout << "Password changed sucessfully!\n" << endl;
 	}
-	else if (option == numberFunction + 3) {
+	else if (option == numberFunction + 2) {
 		if (bool_option("logout")) {
 			Config config;
 			config.load();
@@ -55,7 +49,7 @@ int menuFunction(int start, User& user) {
 		numtag(start + 0); cout << "View course list\n";
 		numtag(start + 1); cout << "View course's student list\n";
 		numtag(start + 2); cout << "View course's attendance list\n";
-		numtag(start + 3); cout << "Edit an attendance\n";
+		numtag(start + 3); cout << "Edit attendance list\n";
 		numtag(start + 4); cout << "Import scoreboard\n";
 		numtag(start + 5); cout << "Edit student grade\n";
 		numtag(start + 6); cout << "View scoreboard\n";
@@ -215,7 +209,7 @@ void optionFunction(int option, User& user) {
 
 				switch (option) {
 					case 0: {
-						view_attendance_list_course();
+						view_attendance_list_of_course();
 						break;
 					}
 					case 1: {
@@ -229,9 +223,62 @@ void optionFunction(int option, User& user) {
 		}
 	}
 	else if (user.position == 1) {
+		Lecturer lecturer;
+		lecturer.general = user;
+		lecturer.load();
 
+		switch (option) {
+			case 0: {
+				lecturer.view_course_list();
+				break;
+			}
+			case 1: {
+				view_student_list_of_course();
+				break;
+			}
+			case 2: {
+				view_attendance_list_of_course();
+				break;
+			}
+			case 3: {
+				lecturer.edit_attendance();
+				break;
+			}
+			case 4: {
+				lecturer.import_scoreboard();
+				break;
+			}
+			case 5: {
+				lecturer.edit_student_grade();
+				break;
+			}
+			case 6: {
+				lecturer.view_scoreboard();
+				break;
+			}
+		}
 	}
 	else if (user.position == 2) {
+		Student student;
+		student.general = user;
+		student.load();
 
+		switch (option) {
+			case 0: {
+				student.check_in();
+				break;
+			}
+			case 1: {
+				student.view_check_in();
+				break;
+			}
+			case 2: {
+				student.view_schedule();
+				break;
+			}
+			case 3: {
+				student.view_course_score();
+			}
+		}
 	}
 }
