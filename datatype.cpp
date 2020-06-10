@@ -830,10 +830,10 @@ void Lecturer::view_course_list() {
 	if(!cl.load(academic_year, semester, classID)) return;
 
 	CourseList::nodeCourse *nc = cl.head;
-	cout << "There are " << cl.size() << " courses in this list:\n";
+	cout << "There are the courses which you are teaching:\n";
 	while(nc!=nullptr)
 	{
-		cout << nc->course.ID << " - " << nc->course.name << '\n';
+		if(nc->course.lectureID==general.ID) cout << nc->course.ID << " - " << nc->course.name << '\n';
 		nc = nc->next;
 	}
 	cl._delete();
