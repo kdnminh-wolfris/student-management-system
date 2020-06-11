@@ -5,6 +5,8 @@
 #include "admin.h"
 #include "staff-class.h"
 #include "staff-course.h"
+#include "staff-scoreboard.h"
+#include "staff-attendancelist.h"
 
 void menu(User& user, Config& config);
 int menuFunction(int start, User& user);

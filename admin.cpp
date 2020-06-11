@@ -9,9 +9,9 @@ bool login(User& user, Config& config) {
 		string pw;
 		do {
 			cout << "User ID: ";
-			cin >> user.ID;
+			getline(cin, user.ID);
 			cout << "Password: ";
-			cin >> pw;
+			getline(cin, pw);
 			cout << endl;
 
 			int err = verified(user, pw);

@@ -19,7 +19,7 @@ int int_option(int numberChoice) {
 
 		ret = 0;
 
-		for (int i = int(tmp.length()) - 1; i >= 0; --i)
+		for (int i = 0; i < tmp.length(); ++i)
 			if ('0' <= tmp[i] && tmp[i] <= '9') {
 				ret = ret * 10 + (tmp[i] - 48);
 			}
@@ -166,48 +166,13 @@ string SemesterCode(int semester) {
 	return semester == 1 ? "HK1" : semester == 2 ? "HK2" : "HK3";
 }
 
-int differ_day(Date begin, Date end){
-    int day=0;
-    while (begin.year!=end.year){
-        if ((begin.year%400==0)||((begin.year%4==0)&&(begin.year%100!=0))){
-            day = day +366;
-        }
-        else day = day +365;
-    ++begin.year;
-    }
-    while (begin.month!=end.month){
-        if (begin.month>end.month){
-            if (end.month==2) {
-                if ((end.year%400==0)||((end.year%4==0)&&(end.year%100!=0))) day = day -29;
-                else day = day -28;
-                ++end.month;
-            }
-            else if ((end.month==4)||(end.month==6)||(end.month==9)||(end.month==11)){
-                day = day -30;
-                ++end.month;
-            }
-            else {
-                day =day -31;
-                ++end.month;
-            }
-        }
-        if (begin.month<end.month){
-            if (begin.month==2){
-                if ((end.year%400==0)||((end.year%4==0)&&(end.year%100!=0))) day = day +29;
-                else day = day +28;
-                ++begin.month;
-            }
-            else if  ((begin.month==4)||(begin.month==6)||(begin.month==9)||( begin.month==11)){
-                day = day +30;
-                ++begin.month;
-            }
-            else {
-                day =day +31;
-                ++begin.month;
-            }
-        }
-
-    }
-    day = day -begin.day+end.day;
-    return day;
+string weekdayCode(int day) {
+	switch (day) {
+		case 2: return "MON";
+		case 3: return "TUE";
+		case 4: return "WED";
+		case 5: return "THU";
+		case 6: return "FRI";
+		case 7: return "SAT";
+	}
 }

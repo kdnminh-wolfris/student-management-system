@@ -1,7 +1,9 @@
 #ifndef DATATYPE
 #define DATATYPE
 
+#define _CRT_SECURE_NO_WARNINGS
 #include "tools.h"
+#include <time.h>
 
 struct Config {
 	int login_status = 0;
@@ -59,7 +61,7 @@ struct Student {
 	string classID;
 	int status; // 0: graduted; 1: studying; 2: reserved
 
-	int midtermGrade = 0, finalGrade = 0, bonusGrade = 0, totalGrade = 0;
+	double midtermGrade = 0, finalGrade = 0, bonusGrade = 0, totalGrade = 0;
 	int* attended = nullptr;
 
 	bool load();
@@ -96,8 +98,6 @@ struct Lecturer {
 	bool load();
 
 	void view_course_list();
-	void view_student_list();
-	void view_attendance_list();
 	void edit_attendance();
 	void import_scoreboard();
 	void edit_student_grade();
@@ -165,5 +165,7 @@ struct CourseList {
 	void _delete();
 	void _delete(nodeCourse* p);
 };
+
+int differ_day(Date begin, Date end);
 
 #endif

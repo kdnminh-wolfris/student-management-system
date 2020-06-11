@@ -155,8 +155,10 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="datatype.cpp" />
+    <ClCompile Include="staff-attendancelist.cpp" />
     <ClCompile Include="staff-course.cpp" />
     <ClCompile Include="staff-class.cpp" />
+    <ClCompile Include="staff-scoreboard.cpp" />
     <ClCompile Include="tools.cpp" />
   </ItemGroup>
   <ItemGroup>
