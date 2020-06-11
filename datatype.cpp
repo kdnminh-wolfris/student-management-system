@@ -604,7 +604,7 @@ void Student::check_in(){
         }
     }
     if (course.ID != course_ID){
-        cout <<"This not does not exist ! "<<endl;
+        cout <<"This course does not exist ! "<<endl;
         return;
     }
     course.studentList.loadCourse(academic_year,semester,classID,course_ID);
@@ -616,20 +616,20 @@ void Student::check_in(){
     cur.month=current->tm_mon+1;
     cur.year=current->tm_year+1900;
     int differ= differ_day(course.startDate, cur);
-    if (differ%7 != 0 || differ%7>10){
+    if (current->tm_wday+1 != course.sessionDay || differ/7>10){
         cout <<"Cannot check-in !! "<<endl;
 		system("pause");
         return;
     }
     else {
-        if (((current->tm_hour>course.startTime.hour && current->tm_hour<course.endTime.hour) || (current->tm_hour==course.startTime.hour && current->tm_min>course.startTime.minute) || (current->tm_hour==course.endTime.hour && current->tm_min<course.endTime.minute)))
-        {
-            int day=differ/7;
-            for (auto iter=course.studentList.head; iter!=nullptr;iter=iter->next){
-                if (iter->student.general.ID==general.ID){
-                    iter->student.attended[day]=1;
-                    attended=iter->student.attended;
-                    break;
+        if (((current->tm_hour>course.startTime.hour &&current->tm_hour<course.endTime.hour) || (current->tm_hour==course.startTime.hour && current->tm_min>course.startTime.minute) || (current->tm_hour==course.endTime.hour && current->tm_min<course.endTime.minute)))
+            {
+                int day=differ/7;
+                for (auto iter=course.studentList.head; iter!=nullptr;iter=iter->next){
+                    if (iter->student.general.ID==general.ID){
+                        iter->student.attended[day]=1;
+                        attended=iter->student.attended;
+                        break;
                 }
             }
             course.studentList.updateCourse(academic_year,semester,classID, course_ID);
@@ -639,13 +639,16 @@ void Student::check_in(){
             }
             else cout <<"Check-in successfully ! "<<endl;
         }
+        else {
+            cout <<"Cannot check-in !! "<<endl;
+            return;
+        }
     }
 
 	course.studentList._delete();
 
 	system("pause");
 }
-
 void Student::view_schedule(){
 	cout << "View schedules\n" << endl;
 
