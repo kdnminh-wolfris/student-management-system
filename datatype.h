@@ -61,7 +61,7 @@ struct Student {
 	string classID;
 	int status; // 0: graduted; 1: studying; 2: reserved
 
-	int midtermGrade = 0, finalGrade = 0, bonusGrade = 0, totalGrade = 0;
+	double midtermGrade = 0, finalGrade = 0, bonusGrade = 0, totalGrade = 0;
 	int* attended = nullptr;
 
 	bool load();

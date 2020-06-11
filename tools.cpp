@@ -165,3 +165,14 @@ string AcademicYearCode(int academic_year) {
 string SemesterCode(int semester) {
 	return semester == 1 ? "HK1" : semester == 2 ? "HK2" : "HK3";
 }
+
+string weekdayCode(int day) {
+	switch (day) {
+		case 2: return "MON";
+		case 3: return "TUE";
+		case 4: return "WED";
+		case 5: return "THU";
+		case 6: return "FRI";
+		case 7: return "SAT";
+	}
+}

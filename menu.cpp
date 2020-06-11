@@ -52,7 +52,7 @@ int menuFunction(int start, User& user) {
 		numtag(start + 3); cout << "Edit attendance list\n";
 		numtag(start + 4); cout << "Import scoreboard\n";
 		numtag(start + 5); cout << "Edit student grade\n";
-		numtag(start + 6); cout << "View scoreboard\n";
+		numtag(start + 6); cout << "View scoreboard of a course\n";
 		return 7;
 	}
 	else {

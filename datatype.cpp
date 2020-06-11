@@ -396,19 +396,57 @@ bool Student::load() {
 }
 
 void Student::view_course_score(){
-    string tmp_class, tmp_course;
-    cout <<"Please enter your course ID : ";
-    getline(cin,tmp_course,'\n');
-    cout<<"Please enter the class of the course : ";
-    getline(cin,tmp_class, '\n');
-    int semester,academic_year;
-    cout <<"Please enter the academic year : ";
-    cin>>academic_year;
-    cout<<"Please enter the semester : ";
-    cin>>semester;
+	cout << "View course scores\n" << endl;
+
+	ifstream fi;
+
+	string classID;
+	string termCode;
+
+	const int max_turn = 3;
+	int turn = 0;
+	do {
+		int tturn = 0;
+		do {
+			cout << "Enter the academic year - the semester (ex. 1920-HK1): ";
+			getline(cin, termCode);
+
+			if (termCode.size() == 8 && termCode[4] == '-' && termCode[5] == 'H' && termCode[6] == 'K')
+				if ('1' <= termCode[7] && termCode[7] <= '3')
+					if (((termCode[0] - 48) * 10 + (termCode[1] - 48) + 1) % 100 == (termCode[2] - 48) * 10 + (termCode[3] - 48))
+						break;
+
+			cout << "Invalid code!\n" << endl;
+			++tturn;
+		} while (tturn < max_turn);
+		if (tturn == max_turn) {
+			system("pause");
+			return;
+		}
+
+		cout << "Enter the class: ";
+		getline(cin, classID);
+
+		fi.open("data/course/" + termCode + "-" + classID + "-schedule.gulu");
+		if (!fi.is_open()) {
+			cout << termCode << "-" << classID + "-schedule.gulu not found\n" << endl;
+			if (++turn == max_turn) break;
+		}
+	} while (!fi.is_open());
+	if (!fi.is_open()) {
+		system("pause");
+		return;
+	}
+
+	int academic_year = 2000 + (termCode[0] - 48) * 10 + (termCode[1] - 48);
+	int semester = termCode[7] - 48;
+
+	string course_ID;
+	cout << "Please enter the course ID : ";
+	getline(cin, course_ID, '\n');
+
     Course course;
-    course.studentList.loadCourse(academic_year,semester,tmp_class,tmp_course);
-    Student student;
+    course.studentList.loadCourse(academic_year,semester,classID,course_ID);
     for(auto iter=course.studentList.head; iter!=nullptr;iter=iter->next)
         if (iter->student.general.ID==general.ID) {
             midtermGrade=iter->student.midtermGrade;
@@ -422,26 +460,69 @@ void Student::view_course_score(){
         cout <<"Cannot find this student in this course ! ";
         return;
     }
-    cout<<"\n---Your scores in "<<tmp_course<<"---\n\n";
-    cout <<"Midterm : "<<student.midtermGrade<<endl
-    <<"Final : "<<student.finalGrade<<endl
-    <<"Bonus : "<<student.bonusGrade<<endl
-    <<"Total : "<<student.totalGrade<<endl;
+    cout<<"\n---Your scores in "<<course_ID<<"---\n\n";
+    cout <<"Midterm : "<<midtermGrade<<endl
+    <<"Final : "<<finalGrade<<endl
+    <<"Bonus : "<<bonusGrade<<endl
+    <<"Total : "<<totalGrade<<endl;
+
+	course.studentList._delete();
+	cout << endl;
+	system("pause");
 }
 
 void Student :: view_check_in(){
-    string course_ID,class_ID;
-    cout <<"Please enter the course ID : ";
-    getline(cin,course_ID,'\n');
-    cout <<"Please enter the class of the course : ";
-    getline(cin,class_ID,'\n');
-    int semester,academic_year;
-    cout <<"Please enter the academic year : ";
-    cin>>academic_year;
-    cout<<"Please enter the semester : ";
-    cin>>semester;
+	cout << "View check-in result\n" << endl;
+
+	ifstream fi;
+
+	string classID;
+	string termCode;
+
+	const int max_turn = 3;
+	int turn = 0;
+	do {
+		int tturn = 0;
+		do {
+			cout << "Enter the academic year - the semester (ex. 1920-HK1): ";
+			getline(cin, termCode);
+
+			if (termCode.size() == 8 && termCode[4] == '-' && termCode[5] == 'H' && termCode[6] == 'K')
+				if ('1' <= termCode[7] && termCode[7] <= '3')
+					if (((termCode[0] - 48) * 10 + (termCode[1] - 48) + 1) % 100 == (termCode[2] - 48) * 10 + (termCode[3] - 48))
+						break;
+
+			cout << "Invalid code!\n" << endl;
+			++tturn;
+		} while (tturn < max_turn);
+		if (tturn == max_turn) {
+			system("pause");
+			return;
+		}
+
+		cout << "Enter the class: ";
+		getline(cin, classID);
+
+		fi.open("data/course/" + termCode + "-" + classID + "-schedule.gulu");
+		if (!fi.is_open()) {
+			cout << termCode << "-" << classID + "-schedule.gulu not found\n" << endl;
+			if (++turn == max_turn) break;
+		}
+	} while (!fi.is_open());
+	if (!fi.is_open()) {
+		system("pause");
+		return;
+	}
+
+	int academic_year = 2000 + (termCode[0] - 48) * 10 + (termCode[1] - 48);
+	int semester = termCode[7] - 48;
+
+	string course_ID;
+	cout << "Please enter the course ID : ";
+	getline(cin, course_ID, '\n');
+
     Course course;
-    course.studentList.loadCourse(academic_year,semester,class_ID,course_ID);
+    course.studentList.loadCourse(academic_year,semester,classID,course_ID);
     for (auto iter=course.studentList.head;iter!=nullptr;iter=iter->next){
         if (iter->student.general.ID==general.ID){
             attended=iter->student.attended;
@@ -453,26 +534,69 @@ void Student :: view_check_in(){
         return;
     }
     cout <<"\n ---Check-in result--- \n\n";
-    cout <<"Day 1    2    3    4    5    6    7    8    9    10\n";
-    for(int i=0;i<10;i++) cout <<setw(5)<<attended[i];
-    cout <<endl;
+    cout <<"Week 1     2     3     4     5     6     7     8     9     10\n";
+    for(int i=0;i<10;i++) cout <<setw(6)<<attended[i];
+    cout << '\n' << endl;
+
+	course.studentList._delete();
+
+	system("pause");
 }
 
 void Student::check_in(){
-    string course_ID,class_ID;
+	cout << "Check-in\n" << endl;
+
+	ifstream fi;
+
+	string classID;
+	string termCode;
+
+	const int max_turn = 3;
+	int turn = 0;
+	do {
+		int tturn = 0;
+		do {
+			cout << "Enter the academic year - the semester (ex. 1920-HK1): ";
+			getline(cin, termCode);
+
+			if (termCode.size() == 8 && termCode[4] == '-' && termCode[5] == 'H' && termCode[6] == 'K')
+				if ('1' <= termCode[7] && termCode[7] <= '3')
+					if (((termCode[0] - 48) * 10 + (termCode[1] - 48) + 1) % 100 == (termCode[2] - 48) * 10 + (termCode[3] - 48))
+						break;
+
+			cout << "Invalid code!\n" << endl;
+			++tturn;
+		} while (tturn < max_turn);
+		if (tturn == max_turn) {
+			system("pause");
+			return;
+		}
+
+		cout << "Enter the class: ";
+		getline(cin, classID);
+
+		fi.open("data/course/" + termCode + "-" + classID + "-schedule.gulu");
+		if (!fi.is_open()) {
+			cout << termCode << "-" << classID + "-schedule.gulu not found\n" << endl;
+			if (++turn == max_turn) break;
+		}
+	} while (!fi.is_open());
+	if (!fi.is_open()) {
+		system("pause");
+		return;
+	}
+
+	int academic_year = 2000 + (termCode[0] - 48) * 10 + (termCode[1] - 48);
+	int semester = termCode[7] - 48;
+
+	string course_ID;
     cout <<"Please enter the course ID : ";
     getline(cin,course_ID,'\n');
-    cout <<"Please enter the class of the course : ";
-    getline(cin,class_ID,'\n');
-    int semester,academic_year;
-    cout <<"Please enter the academic year : ";
-    cin>>academic_year;
-    cout<<"Please enter the semester : ";
-    cin>>semester;
+
     Course course;
     CourseList courseList;
     Student student;
-    courseList.load(academic_year,semester,class_ID);
+    courseList.load(academic_year,semester,classID);
     for (auto iter=courseList.head;iter!=nullptr;iter=iter->next){
         if (iter->course.ID==course_ID) {
             course = iter->course;
@@ -483,7 +607,7 @@ void Student::check_in(){
         cout <<"This not does not exist ! "<<endl;
         return;
     }
-    course.studentList.loadCourse(academic_year,semester,class_ID,course_ID);
+    course.studentList.loadCourse(academic_year,semester,classID,course_ID);
 	
 	time_t now =time(0);
     tm *current= localtime(&now);
@@ -494,6 +618,7 @@ void Student::check_in(){
     int differ= differ_day(course.startDate, cur);
     if (differ%7 != 0 || differ%7>10){
         cout <<"Cannot check-in !! "<<endl;
+		system("pause");
         return;
     }
     else {
@@ -507,7 +632,7 @@ void Student::check_in(){
                     break;
                 }
             }
-            course.studentList.updateCourse(academic_year,semester,class_ID, course_ID);
+            course.studentList.updateCourse(academic_year,semester,classID, course_ID);
             if (attended[day-1]==0){
                 cout <<"This student does not exist in this course ! "<<endl;
                 return ;
@@ -515,16 +640,37 @@ void Student::check_in(){
             else cout <<"Check-in successfully ! "<<endl;
         }
     }
+
+	course.studentList._delete();
+
+	system("pause");
 }
 
 void Student::view_schedule(){
+	cout << "View schedules\n" << endl;
+
+	string termCode;
+
+	const int max_turn = 3;
+	int tturn = 0;
+	do {
+		cout << "Enter the academic year - the semester (ex. 1920-HK1): ";
+		getline(cin, termCode);
+
+		if (termCode.size() == 8 && termCode[4] == '-' && termCode[5] == 'H' && termCode[6] == 'K')
+			if ('1' <= termCode[7] && termCode[7] <= '3')
+				if (((termCode[0] - 48) * 10 + (termCode[1] - 48) + 1) % 100 == (termCode[2] - 48) * 10 + (termCode[3] - 48))
+					break;
+
+		cout << "Invalid code!\n" << endl;
+		++tturn;
+	} while (tturn < max_turn);
+
+	int academic_year = 2000 + (termCode[0] - 48) * 10 + (termCode[1] - 48);
+	int semester = termCode[7] - 48;
+
     ClassList classList;
     classList.load();
-    int semester,academic_year;
-    cout <<"Please enter the academic year : ";
-    cin>>academic_year;
-    cout<<"Please enter the semester : ";
-    cin>>semester;
     CourseList courseList;
     bool enroled=false;
     for(auto iter=classList.head;iter!=nullptr;iter=iter->next){
@@ -534,16 +680,23 @@ void Student::view_schedule(){
             i->course.studentList.loadCourse(academic_year,semester,iter->ID,i->course.ID);
             for(auto j=i->course.studentList.head;j!=nullptr;j=j->next){
                 if (j->student.general.ID==general.ID){
+					Lecturer lecturer;
+					lecturer.general.ID = i->course.lectureID;
+					lecturer.load();
+
                     enroled=true;
-                    cout<<i->course.ID<<endl
+                    cout<<"Course: "
+					<<i->course.ID<<endl
                     <<i->course.name<<endl
-                    <<i->course.lectureID<<endl
+                    <<"Lecturer: "
+					<<lecturer.general.fullname<<endl
                     <<i->course.startDate.year<<"/"
                     <<i->course.startDate.month<<"/"
                     <<i->course.startDate.day<<" - "
                     <<i->course.endDate.year<<"/"
                     <<i->course.endDate.month<<"/"
                     <<i->course.endDate.day<<endl
+					<<weekdayCode(i->course.sessionDay)<<" "
                     <<i->course.startTime.hour<<":"
                     <<i->course.startTime.minute<<" - "
                     <<i->course.endTime.hour<<":"
@@ -554,6 +707,7 @@ void Student::view_schedule(){
         }
     }
     if (!enroled) cout <<"You are not in any course in this semester !\n\n";
+	system("pause");
 }
 
 int StudentList::size() {
@@ -809,7 +963,7 @@ void Lecturer::view_course_list() {
 			return;
 		}
 
-		cout << "Enter the imported class: ";
+		cout << "Enter the class: ";
 		getline(cin, classID);
 
 		fi.open("data/course/" + termCode + "-" + classID + "-schedule.gulu");
@@ -869,7 +1023,7 @@ void Lecturer::edit_attendance() {
 			return;
 		}
 
-		cout << "Enter the imported class: ";
+		cout << "Enter the class: ";
 		getline(cin, classID);
 
 		fi.open("data/course/" + termCode + "-" + classID + "-schedule.gulu");
@@ -928,18 +1082,62 @@ void Lecturer::edit_attendance() {
 }
 
 void Lecturer::edit_student_grade() {
-    cout << "Please enter the academic year.\n";
-    int academic_year; cin>>academic_year;
-    cout <<"Please enter the semester (1,2 or 3)?\n";
-    int semester; cin>>semester;
-    cout <<"Please enter the code of the class?\n";
-    string classID; cin>>classID;
+	cout << "Edit student grade\n" << endl;
+
+	ifstream fi;
+
+	string classID;
+	string termCode;
+
+	const int max_turn = 3;
+	int turn = 0;
+	do {
+		int tturn = 0;
+		do {
+			cout << "Enter the academic year - the semester (ex. 1920-HK1): ";
+			getline(cin, termCode);
+
+			if (termCode.size() == 8 && termCode[4] == '-' && termCode[5] == 'H' && termCode[6] == 'K')
+				if ('1' <= termCode[7] && termCode[7] <= '3')
+					if (((termCode[0] - 48) * 10 + (termCode[1] - 48) + 1) % 100 == (termCode[2] - 48) * 10 + (termCode[3] - 48))
+						break;
+
+			cout << "Invalid code!\n" << endl;
+			++tturn;
+		} while (tturn < max_turn);
+		if (tturn == max_turn) {
+			system("pause");
+			return;
+		}
+
+		cout << "Enter the class: ";
+		getline(cin, classID);
+
+		fi.open("data/course/" + termCode + "-" + classID + "-schedule.gulu");
+		if (!fi.is_open()) {
+			cout << termCode << "-" << classID + "-schedule.gulu not found\n" << endl;
+			if (++turn == max_turn) break;
+		}
+	} while (!fi.is_open());
+	if (!fi.is_open()) {
+		system("pause");
+		return;
+	}
+
+	int academic_year = 2000 + (termCode[0] - 48) * 10 + (termCode[1] - 48);
+	int semester = termCode[7] - 48;
+
     cout << "Please enter the code of the course?\n";
-    string courseID; cin>>courseID;
+	string courseID; getline(cin, courseID);
+
     StudentList sl;
     if(!sl.loadCourse(academic_year, semester, classID, courseID)) return;
+
     cout << "Please enter the student ID of the student whose grades you want to edit?\n";
-    string SID; cin>>SID;
+	string SID; getline(cin, SID);
+
+	cout << '\n';
+
     StudentList::nodeStudent* cur = sl.head;
     bool found = false;
     while(cur!=nullptr) {
@@ -950,40 +1148,92 @@ void Lecturer::edit_student_grade() {
     }
     if(!found) {
         sl._delete();
-        cout << SID << " not found.\n";
+        cout << "Error: " << SID << " not found\n" << endl;
+		system("pause");
         return;
     }
     //now cur points to that student
-    cout << "The current grades of that student:\n";
-    cout << "Midterm: " << cur->student.midtermGrade << '\n';
-    cout << "Final: " << cur->student.finalGrade << '\n';
-    cout << "Bonus: " << cur->student.bonusGrade << '\n';
-    cout << "Total: " << cur->student.totalGrade << '\n';
+    cout << "The current grades of that student:\n\n";
+    
+	cout << "Midterm: " << cur->student.midtermGrade << '\n';
+	cout << "New grade: "; cin >> cur->student.midtermGrade;
+	cout << '\n';
 
-    cout << "Now enter the new grades of that student following the above order, sepearted by a space.\n";
-    cin>>cur->student.midtermGrade>>cur->student.finalGrade>>cur->student.bonusGrade>>cur->student.totalGrade;
+    cout << "Final: " << cur->student.finalGrade << '\n';
+	cout << "New grade: "; cin >> cur->student.finalGrade;
+	cout << '\n';
+
+    cout << "Bonus: " << cur->student.bonusGrade << '\n';
+	cout << "New grade: "; cin >> cur->student.bonusGrade;
+	cout << '\n';
+
+    cout << "Total: " << cur->student.totalGrade << '\n';
+	cout << "New grade: "; cin >> cur->student.totalGrade;
+	cout << '\n';
+
+	cin.ignore(100, '\n');
 
     sl.updateCourse(academic_year, semester, classID, courseID);
-    cout << "Change made sucessfully.\n";
+    cout << "Change made sucessfully.\n" << endl;
     sl._delete();
-    return;
+
+	system("pause");
 }
 
 void Lecturer::view_scoreboard() {
-    cout << "Please enter the academic year.\n";
-    int academic_year; cin>>academic_year;
-    cout <<"Please enter the semester (1,2 or 3)?\n";
-    int semester; cin>>semester;
-    cout <<"Please enter the code of the class?\n";
-    string classID; cin>>classID;
-    cout << "Please enter the code of the course?\n";
-    string courseID; cin>>courseID;
+	cout << "View scoreboard of a course\n" << endl;
+
+	ifstream fi;
+
+	string classID;
+	string termCode;
+
+	const int max_turn = 3;
+	int turn = 0;
+	do {
+		int tturn = 0;
+		do {
+			cout << "Enter the academic year - the semester (ex. 1920-HK1): ";
+			getline(cin, termCode);
+
+			if (termCode.size() == 8 && termCode[4] == '-' && termCode[5] == 'H' && termCode[6] == 'K')
+				if ('1' <= termCode[7] && termCode[7] <= '3')
+					if (((termCode[0] - 48) * 10 + (termCode[1] - 48) + 1) % 100 == (termCode[2] - 48) * 10 + (termCode[3] - 48))
+						break;
+
+			cout << "Invalid code!\n" << endl;
+			++tturn;
+		} while (tturn < max_turn);
+		if (tturn == max_turn) {
+			system("pause");
+			return;
+		}
+
+		cout << "Enter the class: ";
+		getline(cin, classID);
+
+		fi.open("data/course/" + termCode + "-" + classID + "-schedule.gulu");
+		if (!fi.is_open()) {
+			cout << termCode << "-" << classID + "-schedule.gulu not found\n" << endl;
+			if (++turn == max_turn) break;
+		}
+	} while (!fi.is_open());
+	if (!fi.is_open()) {
+		system("pause");
+		return;
+	}
+
+	int academic_year = 2000 + (termCode[0] - 48) * 10 + (termCode[1] - 48);
+	int semester = termCode[7] - 48;
+
+	cout << "Please enter the code of the course?\n";
+	string courseID; getline(cin, courseID);
+
     StudentList sl;
     if(!sl.loadCourse(academic_year, semester, classID, courseID)) return;
 
     StudentList::nodeStudent *ns = sl.head;
-    cout << "          This is the scoreboard of the course " << courseID << "\n\n";
-
+    cout << "\n          This is the scoreboard of the course " << courseID << "\n";
     cout << "Student's ID     Midterm      Final      Bonus       Total\n";
 
     while(ns!=nullptr)
@@ -991,11 +1241,13 @@ void Lecturer::view_scoreboard() {
         Student sd = ns->student;
         cout << "   "<<sd.general.ID << " ";
         cout << "        "<<sd.midtermGrade << "           " << sd.finalGrade << "           " << sd.bonusGrade << "           " << sd.totalGrade;
-        cout << "\n\n";
+        cout << "\n";
         ns = ns->next;
     }
 
     sl._delete();
+
+	system("pause");
 }
 
 void Lecturer::import_scoreboard() {
@@ -1027,7 +1279,7 @@ void Lecturer::import_scoreboard() {
 			return;
 		}
 
-		cout << "Enter the imported class: ";
+		cout << "Enter the class: ";
 		getline(cin, classID);
 
 		fi.open("data/course/" + termCode + "-" + classID + "-schedule.gulu");
@@ -1045,18 +1297,16 @@ void Lecturer::import_scoreboard() {
 	int semester = termCode[7] - 48;
 
     cout << "Please enter the code of the course?\n";
-    string courseID; cin>>courseID;
+	string courseID; getline(cin, courseID);
+
     StudentList sl;
     if(!sl.loadCourse(academic_year, semester, classID, courseID)) return;
-    cout << "Please enter the name of the file (including its extension .csv).\n";
-    string filename;
-    cin.ignore();
-    getline(cin, filename, '\n');
-    //Assuming that we already have the name of the file
-    ifstream myfile("csv files/"+filename);
+
+    ifstream myfile("csv files/" + termCode + "-" + classID + "-" + courseID + "-scoreboard.csv");
     if(!myfile.is_open()) {
-        cout << "Your path name is wrong!\n";
+		cout << "Error: Missing " << termCode << "-" << classID << "-" << courseID << "-scoreboard.csv file\n" << endl;
         sl._delete();
+		system("pause");
         return;
     }
     //skip the first line
@@ -1069,18 +1319,20 @@ void Lecturer::import_scoreboard() {
     while(!myfile.eof() and cur!=nullptr) {
         getline(myfile, sid, ',');
         getline(myfile, score, ',');
-        cur->student.midtermGrade = stoi(score);
+        cur->student.midtermGrade = stof(score);
         getline(myfile, score, ',');
-        cur->student.finalGrade = stoi(score);
+        cur->student.finalGrade = stof(score);
         getline(myfile, score, ',');
-        cur->student.bonusGrade = stoi(score);
+        cur->student.bonusGrade = stof(score);
         getline(myfile, score, '\n');
-        cur->student.totalGrade = stoi(score);
+        cur->student.totalGrade = stof(score);
         cur = cur->next;
     }
     sl.updateCourse(academic_year, semester, classID, courseID);
     sl._delete();
-    cout << "Update successfully.\n";
+
+	cout << "\nUpdate successfully.\n" << endl;
+	system("pause");
 }
 
 int LecturerList::size() {
