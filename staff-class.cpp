@@ -142,6 +142,7 @@ void import_student() {
 	accountList._delete();
 
 	cout << "Import " << classID << " data successfully!\n" << endl;
+	cin.ignore(100, '\n');
 	system("pause");
 }
 

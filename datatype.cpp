@@ -615,14 +615,16 @@ void Student::check_in(){
     cur.day=current->tm_mday;
     cur.month=current->tm_mon+1;
     cur.year=current->tm_year+1900;
-    int differ= differ_day(course.startDate, cur);
-    if (differ%7 != 0 || differ%7>10){
+	
+	int differ= differ_day(course.startDate, cur) - (course.sessionDay - 2);
+
+    if (differ%7 != 0 || differ/7>10){
         cout <<"Cannot check-in !! "<<endl;
 		system("pause");
         return;
     }
     else {
-        if (((current->tm_hour>course.startTime.hour && current->tm_hour<course.endTime.hour) || (current->tm_hour==course.startTime.hour && current->tm_min>course.startTime.minute) || (current->tm_hour==course.endTime.hour && current->tm_min<course.endTime.minute)))
+        if (((current->tm_hour>course.startTime.hour && current->tm_hour<course.endTime.hour) || (current->tm_hour==course.startTime.hour && current->tm_min>=course.startTime.minute) || (current->tm_hour==course.endTime.hour && current->tm_min<=course.endTime.minute)))
         {
             int day=differ/7;
             for (auto iter=course.studentList.head; iter!=nullptr;iter=iter->next){
@@ -632,9 +634,9 @@ void Student::check_in(){
                     break;
                 }
             }
-            course.studentList.updateCourse(academic_year,semester,classID, course_ID);
-            if (attended[day-1]==0){
-                cout <<"This student does not exist in this course ! "<<endl;
+			course.studentList.updateCourse(academic_year, semester, classID, course_ID);
+			if (attended[day] == 0) {
+				cout << "This student does not exist in this course !" << endl;
                 return ;
             }
             else cout <<"Check-in successfully ! "<<endl;
