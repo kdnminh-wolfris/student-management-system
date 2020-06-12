@@ -340,6 +340,8 @@ void edit_course() {
 		if (iter->course.ID == course.ID) {
 			course = iter->course; break;
 		}
+
+	string courseID = course.ID;
     
     string tmp;
     cout <<"Course ID (enter a blank to maintain the current)\n";
@@ -386,10 +388,21 @@ void edit_course() {
     if (tmp!="") course.room=tmp;
     
     for (auto iter=courseList.head;iter!=nullptr;iter=iter->next)
-    if (iter->course.ID==course.ID) {
+    if (iter->course.ID==courseID) {
         iter->course=course;
         break;
     }
+
+	string path = "data/course/" + termCode + "-" + classID + "-" + courseID + "-enrolled.gulu";
+	if (remove(path.c_str())) {
+		cout << "Error: Cannot remove " << termCode << "-" << classID << "-" << courseID << "-enrolled.gulu\n" << endl;
+		system("pause");
+		courseList._delete();
+		return;
+	}
+
+	course.studentList.updateCourse(course.academic_year, course.semester, classID, course.ID);
+
     courseList.update(course.academic_year,course.semester,course.classID);
     cout << "Edit " << course.ID << "'s information successfully!\n" << endl;
     courseList._delete();
@@ -694,7 +707,7 @@ void view_course_list() {
 }
 
 void view_student_list_of_course() {
-	cout << "View list of courses\n" << endl;
+	cout << "View list of students of courses\n" << endl;
 
 	ifstream fi;
 
