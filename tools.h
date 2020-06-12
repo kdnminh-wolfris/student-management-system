@@ -6,12 +6,11 @@
 #include <string>
 #include <conio.h>
 #include <iomanip>
+#include "option.h"
 
 using namespace std;
 
 void numtag(int num);
-int int_option(int numberChoice = 20); // using getch() for one-click choosing
-bool bool_option(string operation); // using getch() for one-click choosing
 void month_in_text(int num);
 bool valid_date(int year, int month, int day);
 string AcademicYearCode(int academic_year);

@@ -155,6 +155,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="datatype.cpp" />
+    <ClCompile Include="option.cpp" />
     <ClCompile Include="staff-attendancelist.cpp" />
     <ClCompile Include="staff-course.cpp" />
     <ClCompile Include="staff-class.cpp" />
@@ -164,6 +165,7 @@
   <ItemGroup>
     <ClInclude Include="admin.h" />
     <ClInclude Include="datatype.h" />
+    <ClInclude Include="option.h" />
     <ClInclude Include="staff-attendancelist.h" />
     <ClInclude Include="staff-course.h" />
     <ClInclude Include="staff-scoreboard.h" />

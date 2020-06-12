@@ -7,61 +7,6 @@ void numtag(int num) {
 	cout << num << " ] ";
 }
 
-int int_option(int numberChoice) {
-	int ret;
-	string tmp;
-
-	while (true) {
-		cout << "\nChoose an option to continue...: ";
-		cout.flush();
-
-		getline(cin, tmp);
-
-		ret = 0;
-
-		for (int i = 0; i < tmp.length(); ++i)
-			if ('0' <= tmp[i] && tmp[i] <= '9') {
-				ret = ret * 10 + (tmp[i] - 48);
-			}
-			else {
-				ret = -1; break;
-			}
-		
-		if (tmp.length() && 0 <= ret && ret < numberChoice)
-			break;
-		
-		cout << "Invalid option! Please type again your option.\n" << endl;
-	}
-
-	cout << endl;
-
-	return ret;
-}
-
-bool bool_option(string operation) {
-	if (operation != "")
-		cout << "Are you sure you want to " << operation << "?\n";
-	cout << "[Y]ES          [N]O\n\n";
-
-	string tmp;
-
-	while (true) {
-		cout << "Enter Y/N to continue... ";
-		cout.flush();
-
-		getline(cin, tmp);
-
-		if (tmp == "Y" || tmp == "y" || tmp == "N" || tmp == "n")
-			break;
-
-		cout << "Invalid option! Please type again your option.\n" << endl;
-	}
-
-	cout << endl;
-
-	return tmp[0] == 'Y' || tmp[0] == 'y';
-}
-
 void month_in_text(int num) {
 	switch (num) {
 		case 1: {
