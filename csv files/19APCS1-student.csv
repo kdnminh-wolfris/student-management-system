@@ -1,47 +1,47 @@
 No,Student ID,First Name,Lastname,Gender,DoB
-1,19125021,Nguyen Thanh,Dat,Male,19-02-01
-2,19125024,Mai Quoc,Khanh,Male,26-09-01
-3,19125026,Le Tran Hoang,Lam,Female,01-10-01
-4,19125034,Cao Thien,Tri,Male,11-10-01
-5,19125036,Truong Hoang,Vu,Male,30-11-01
-6,19125039,Dinh Dang,Dinh,Male,21-06-01
-7,19125047,Bui Quang,Huy,Male,27-01-01
-8,19125049,Vuong,Hy,Male,19-01-01
-9,19125054,Quach Minh,Khoi,Male,20-06-01
-10,19125059,Trinh Van,Minh,Male,04-06-01
-11,19125060,Nguyen Thanh,Ngan,Female,20-01-01
-12,19125076,Nguyen Phu,Van,Male,07-12-01
-13,19125077,Pham Quang,Vu,Male,08-03-01
-14,19125080,Duong Bao,Chan,Male,15-01-01
-15,19125083,Thai Ngoc Thanh,Dat,Male,04-05-01
-16,19125084,Tran Hai Anh,Dien,Male,09-01-01
-17,19125087,Vo Khuong,Duy,Male,01-08-01
-18,19125089,Pham Thi Ngoc,Ha,Female,28-10-01
-19,19125091,Nguyen Hoang,Hieu,Male,22-11-01
-20,19125094,Nguyen Cung Hoang,Huy,Male,23-01-01
-21,19125095,Phan Dinh,Huy,Male,13-05-01
-22,19125098,Nguyen Dinh,Khanh,Male,14-06-01
-23,19125099,Duong Van,Khoa,Male,15-03-01
-24,19125100,Ta Ngoc Minh,Khoa,Male,23-09-01
-25,19125101,Nguyen Truong,Lam,Male,25-09-01
-26,19125104,Pham Thien,Long,Male,16-07-01
-27,19125106,Huynh Tuan,Luc,Male,21-08-01
-28,19125111,Tran Minh,Nhut,Male,03-04-01
-29,19125114,Nguyen Lam Vinh,Phu,Male,01-02-01
-30,19125115,Dinh Duy,Phuoc,Male,03-09-01
-31,19125116,Le Chau Nhat,Quang,Male,08-10-01
-32,19125117,Nguyen Duy Anh,Quoc,Male,24-04-01
-33,19125118,Nguyen Hoang,Son,Male,08-02-01
-34,19125120,Nguyen Cong,Tai,Male,31-12-01
-35,19125121,Nguyen Duc,Thang,Male,23-01-01
-36,19125123,Nguyen Minh,Thu,Female,04-05-01
-37,19125124,Nguyen Van,Tien,Male,08-04-01
-38,19125125,Ho Ngoc,Ton,Male,02-11-01
-39,19125128,Vu Ngoc,Tuan,Male,13-11-01
-40,19125129,Do Thanh,Tung,Male,15-04-01
-41,19125130,Mai Thi Cam,Van,Female,13-09-01
-42,19125131,Le Dac,Vien,Male,11-09-01
-43,19125132,Pham Dang Quang,Vinh,Male,12-01-95
-44,19125135,Le Thanh,Danh,Male,19-01-01
-45,19125136,Le Thi Kim,My,Female,28-02-01
-46,18125146,Nguyen Minh,Thu,Female,10-08-00
+1,19125021,Nguyen Thanh,Dat,Male,19/02/2001
+2,19125024,Mai Quoc,Khanh,Male,26/09/2001
+3,19125026,Le Tran Hoang,Lam,Female,01/10/2001
+4,19125034,Cao Thien,Tri,Male,11/10/2001
+5,19125036,Truong Hoang,Vu,Male,30/11/2001
+6,19125039,Dinh Dang,Dinh,Male,21/06/2001
+7,19125047,Bui Quang,Huy,Male,27/01/2001
+8,19125049,Vuong,Hy,Male,19/01/2001
+9,19125054,Quach Minh,Khoi,Male,20/06/2001
+10,19125059,Trinh Van,Minh,Male,04/06/2001
+11,19125060,Nguyen Thanh,Ngan,Female,20/01/2001
+12,19125076,Nguyen Phu,Van,Male,07/12/2001
+13,19125077,Pham Quang,Vu,Male,08/03/2001
+14,19125080,Duong Bao,Chan,Male,15/01/2001
+15,19125083,Thai Ngoc Thanh,Dat,Male,04/05/2001
+16,19125084,Tran Hai Anh,Dien,Male,09/01/2001
+17,19125087,Vo Khuong,Duy,Male,01/08/2001
+18,19125089,Pham Thi Ngoc,Ha,Female,28/10/2001
+19,19125091,Nguyen Hoang,Hieu,Male,22/11/2001
+20,19125094,Nguyen Cung Hoang,Huy,Male,23/01/2001
+21,19125095,Phan Dinh,Huy,Male,13/05/2001
+22,19125098,Nguyen Dinh,Khanh,Male,14/06/2001
+23,19125099,Duong Van,Khoa,Male,15/03/2001
+24,19125100,Ta Ngoc Minh,Khoa,Male,23/09/2001
+25,19125101,Nguyen Truong,Lam,Male,25/09/2001
+26,19125104,Pham Thien,Long,Male,16/07/2001
+27,19125106,Huynh Tuan,Luc,Male,21/08/2001
+28,19125111,Tran Minh,Nhut,Male,03/04/2001
+29,19125114,Nguyen Lam Vinh,Phu,Male,01/02/2001
+30,19125115,Dinh Duy,Phuoc,Male,03/09/2001
+31,19125116,Le Chau Nhat,Quang,Male,08/10/2001
+32,19125117,Nguyen Duy Anh,Quoc,Male,24/04/2001
+33,19125118,Nguyen Hoang,Son,Male,08/02/2001
+34,19125120,Nguyen Cong,Tai,Male,31/12/2001
+35,19125121,Nguyen Duc,Thang,Male,23/01/2001
+36,19125123,Nguyen Minh,Thu,Female,04/05/2001
+37,19125124,Nguyen Van,Tien,Male,08/04/2001
+38,19125125,Ho Ngoc,Ton,Male,02/11/2001
+39,19125128,Vu Ngoc,Tuan,Male,13/11/2001
+40,19125129,Do Thanh,Tung,Male,15/04/2001
+41,19125130,Mai Thi Cam,Van,Female,13/09/2001
+42,19125131,Le Dac,Vien,Male,11/09/2001
+43,19125132,Pham Dang Quang,Vinh,Male,12/01/1995
+44,19125135,Le Thanh,Danh,Male,19/01/2001
+45,19125136,Le Thi Kim,My,Female,28/02/2001
+46,18125146,Nguyen Minh,Thu,Female,10/08/2000
