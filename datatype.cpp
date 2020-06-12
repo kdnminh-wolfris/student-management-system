@@ -216,6 +216,7 @@ bool User::get_info() {
 			fi.ignore(100, '\n');
 			if (tmpID == ID) {
 				found = true;
+				break;
 			}
 		}
 
