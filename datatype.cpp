@@ -1451,10 +1451,9 @@ bool ClassList::load() {
 
 	head = tail = nullptr;
 	while (!fi.eof()) {
-		string tmp;  getline(fi, tmp);
+		string tmp; getline(fi, tmp);
 		append(tmp);
 	}
-	_delete(tail);
 
 	fi.close();
 	return true;
