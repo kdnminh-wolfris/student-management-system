@@ -1454,6 +1454,7 @@ bool ClassList::load() {
 		string tmp; getline(fi, tmp);
 		append(tmp);
 	}
+	_delete(tail);
 
 	fi.close();
 	return true;
