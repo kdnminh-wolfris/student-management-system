@@ -15,7 +15,7 @@ void menu(User& user, Config& config) {
 	numtag(numberFunction + 1); cout << "Change password\n";
 	numtag(numberFunction + 2); cout << "Logout\n";
 
-	int option = int_option(numberFunction + 4);
+	int option = int_option(numberFunction + 3);
 
 	if (option == 0) user.view_profile();
 	else if (option == numberFunction + 1) {
